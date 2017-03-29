@@ -65,6 +65,7 @@ Game.Main.prototype = {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.camera.follow(this.player);
+        this.scoreText.fixedToCamera = true;
     },
 
     update: function () {
@@ -102,6 +103,7 @@ Game.Main.prototype = {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
+
     },
     collectStar: function (player, star) {
 
