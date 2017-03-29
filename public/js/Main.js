@@ -8,7 +8,8 @@ var platformLayer;
 Game.Main.prototype = {
 
     create: function () {
-
+        console.log('level');
+        console.log(Level);
         this.stage.backgroundColor = "#3A5963";
 
         map = this.add.tilemap('map', 64, 64);
@@ -58,13 +59,17 @@ Game.Main.prototype = {
             star.body.bounce.y = 0.7 + Math.random() * 0.2;
         }
 
+        // the level 
+        this.levelText = this.add.text(100, 70, 'Level:'+ Level, { fontSize: '32px', fill: '#000' });
+
         //  The score
-        this.scoreText = this.add.text(100, 100, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 100, 'Score: 0', { fontSize: '32px', fill: '#000' });
 
         //  Our controls.
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.camera.follow(this.player);
+        this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
     },
 

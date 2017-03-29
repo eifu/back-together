@@ -16,6 +16,9 @@ Game.Preloader.prototype = {
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
+        this.load.image('logo', 'assets/logo.jpg');
+        this.load.image('levelBtn', 'assets/levelBtn.png');
+        this.load.image('button', 'assets/button.png');
         this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
         this.load.tilemap('map', 'assets/test.json', null, Phaser.Tilemap.TILED_JSON);
 
@@ -24,7 +27,7 @@ Game.Preloader.prototype = {
     },
 
     create: function () {
-        this.state.start("Main");
+        this.state.start("Level");
     }
 
 }

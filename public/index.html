@@ -8,6 +8,7 @@
     <script type="text/javascript" src="js/Boot.js"></script>
     <script type="text/javascript" src="js/Preloader.js"></script>
     <script type="text/javascript" src="js/Main.js"></script>
+    <script type="text/javascript" src="js/Level.js"></script>
     <style type="text/css">
         * {
             margin: 0;
@@ -24,6 +25,7 @@
             game.state.add('Boot', Game.Boot);
             game.state.add('Preloader', Game.Preloader);
             game.state.add('Main', Game.Main);
+            game.state.add('Level', Game.Level);
 
             game.state.start('Boot');
         }
