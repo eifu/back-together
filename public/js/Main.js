@@ -2,42 +2,29 @@ Game.Main = function (game) {
 
 };
 
+var map;
+var platformLayer;
+
 Game.Main.prototype = {
 
     create: function () {
+
+        this.stage.backgroundColor = "#3A5963";
+
+        map = this.add.tilemap('map', 64, 64);
+        map.addTilesetImage('tileset');
+        platformLayer = map.createLayer('platformLayer');
+        platformLayer.resizeWorld();
+        map.setCollisionBetween(0,200)
+        
 
         this.score = 0;
 
         //  We're going to be using physics, so enable the Arcade Physics system
         this.physics.startSystem(Phaser.Physics.ARCADE);
 
-        //  A simple background for our game
-        this.add.sprite(0, 0, 'sky');
-
-        //  The platforms group contains the ground and the 2 ledges we can jump on
-        this.platforms = this.add.group();
-
-        //  We will enable physics for any object that is created in this group
-        this.platforms.enableBody = true;
-
-        // Here we create the ground.
-        var ground = this.platforms.create(0, this.world.height - 64, 'ground');
-
-        //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-        ground.scale.setTo(2, 2);
-
-        //  This stops it from falling away when you jump on it
-        ground.body.immovable = true;
-
-        //  Now let's create two ledges
-        var ledge = this.platforms.create(400, 400, 'ground');
-        ledge.body.immovable = true;
-
-        ledge = this.platforms.create(-150, 250, 'ground');
-        ledge.body.immovable = true;
-
         // The player and its settings
-        this.player = this.add.sprite(32, this.world.height - 150, 'dude');
+        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'dude');
 
         //  We need to enable physics on the player
         this.physics.arcade.enable(this.player);
@@ -70,16 +57,18 @@ Game.Main.prototype = {
         }
 
         //  The score
-        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 100, 'score: 0', { fontSize: '32px', fill: '#000' });
 
         //  Our controls.
         this.cursors = this.input.keyboard.createCursorKeys();
+
+        this.camera.follow(this.player);
     },
 
     update: function () {
         //  Collide the player and the stars with the platforms
-        this.physics.arcade.collide(this.player, this.platforms);
-        this.physics.arcade.collide(this.stars, this.platforms);
+        this.physics.arcade.collide(this.player, platformLayer);
+        this.physics.arcade.collide(this.stars, platformLayer);
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
@@ -107,7 +96,8 @@ Game.Main.prototype = {
         }
 
         //  Allow the player to jump if they are touching the ground.
-        if (this.cursors.up.isDown && this.player.body.touching.down) {
+        if (this.cursors.up.isDown && this.player.body.blocked.down) { 
+            // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
     },
