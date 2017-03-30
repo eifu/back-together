@@ -7,16 +7,15 @@ var platformLayer;
 
 Game.Main.prototype = {
 
-    create: function () {
-        console.log('level');
-        console.log(Level);
+    create: function (game) {
+
         this.stage.backgroundColor = "#3A5963";
 
         map = this.add.tilemap('map', 64, 64);
         map.addTilesetImage('tileset');
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
-        map.setCollisionBetween(1,1) 
+        map.setCollisionBetween(1, 1)
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position, 
         // (1,1) makes only BlackTile collidable.
@@ -24,53 +23,15 @@ Game.Main.prototype = {
         this.score = 0;
 
         //  We're going to be using physics, so enable the Arcade Physics system
-        this.physics.startSystem(Phaser.Physics.ARCADE);
+        game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        // The player and its settings
-        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'dude');
-
-        //  We need to enable physics on the player
-        this.physics.arcade.enable(this.player);
-
-        //  Player physics properties. Give the little guy a slight bounce.
-        this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 300;
-        this.player.body.collideWorldBounds = true;
-
-        //  Our two animations, walking left and right.
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
-
-        //  Finally some stars to collect
-        this.stars = this.add.group();
-
-        //  We will enable physics for any star that is created in this group
-        this.stars.enableBody = true;
-
-        //  Here we'll create 12 of them evenly spaced apart
-        for (var i = 0; i < 12; i++) {
-            //  Create a star inside of the 'stars' group
-            var star = this.stars.create(i * 70, 0, 'star');
-
-            //  Let gravity do its thing
-            star.body.gravity.y = 300;
-
-            //  This just gives each star a slightly random bounce value
-            star.body.bounce.y = 0.7 + Math.random() * 0.2;
-        }
-
-        // the level 
-        this.levelText = this.add.text(100, 70, 'Level:'+ Level, { fontSize: '32px', fill: '#000' });
-
-        //  The score
-        this.scoreText = this.add.text(100, 100, 'Score: 0', { fontSize: '32px', fill: '#000' });
+        this.initPlayer();
+        this.initStars();
+        this.initText();
 
         //  Our controls.
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        this.camera.follow(this.player);
-        this.levelText.fixedToCamera = true;
-        this.scoreText.fixedToCamera = true;
     },
 
     update: function () {
@@ -104,7 +65,7 @@ Game.Main.prototype = {
         }
 
         //  Allow the player to jump if they are touching the ground.
-        if (this.cursors.up.isDown && this.player.body.blocked.down) { 
+        if (this.cursors.up.isDown && this.player.body.blocked.down) {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
@@ -119,7 +80,53 @@ Game.Main.prototype = {
         this.score += 10;
         this.scoreText.text = 'Score: ' + this.score;
 
-    }
+    },
+    initPlayer: function () {
+        // The player and its settings
+        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'dude');
+
+        //  We need to enable physics on the player
+        this.physics.arcade.enable(this.player);
+
+        //  Player physics properties. Give the little guy a slight bounce.
+        this.player.body.bounce.y = 0.2;
+        this.player.body.gravity.y = 300;
+        this.player.body.collideWorldBounds = true;
+
+        //  Our two animations, walking left and right.
+        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.camera.follow(this.player);
+
+    },
+    initStars: function () {
+        //  Finally some stars to collect
+        this.stars = this.add.group();
+
+        //  We will enable physics for any star that is created in this group
+        this.stars.enableBody = true;
+
+        //  Here we'll create 12 of them evenly spaced apart
+        for (var i = 0; i < 12; i++) {
+            //  Create a star inside of the 'stars' group
+            var star = this.stars.create(i * 70, 0, 'star');
+
+            //  Let gravity do its thing
+            star.body.gravity.y = 300;
+
+            //  This just gives each star a slightly random bounce value
+            star.body.bounce.y = 0.7 + Math.random() * 0.2;
+        }
+    },
+    initText: function () {
+        // the level 
+        this.levelText = this.add.text(100, 70, 'Level:' + Level, { fontSize: '32px', fill: '#000' });
+
+        //  The score
+        this.scoreText = this.add.text(100, 100, 'Score: 0', { fontSize: '32px', fill: '#000' });
+        this.levelText.fixedToCamera = true;
+        this.scoreText.fixedToCamera = true;
+    },
 
 
 }
