@@ -55,7 +55,7 @@ Game.Main.prototype = {
             // Only act if paused
             if (game.paused) {
                 pausedLayer.destroy();
-
+                cancelBtn.destroy();
                 pausedBtnCard.destroy();
                 pausedBtnCardText.destroy();
                 resetBtn.destroy();
@@ -125,6 +125,10 @@ Game.Main.prototype = {
             pausedBtnCard.anchor.setTo(0.5, 0.5);
             pausedBtnCard.scale.setTo(2.5, 2.5);
 
+            cancelBtn = game.add.button(game.camera.view.centerX + 235 , game.camera.view.centerY-110, 'cancelIcon', resumeOnClick, this,2,1,0);
+            cancelBtn.anchor.setTo(0.5,0.5);
+            cancelBtn.scale.setTo(0.5,0.5);
+
             pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
             pausedBtnCardText.anchor.setTo(0.5, 0.5);
 
@@ -160,6 +164,20 @@ Game.Main.prototype = {
             }
             function settingOnClick() {
                 console.log('setting button clicked');
+            }
+            function resumeOnClick(){
+                pausedLayer.destroy();
+                cancelBtn.destroy();
+                pausedBtnCard.destroy();
+                pausedBtnCardText.destroy();
+                resetBtn.destroy();
+                resetIcon.destroy();
+                settingBtn.destroy();
+                settingIcon.destroy();
+                inventoryBtn.destroy();
+                inventoryTxt.destroy();
+                // Unpause the game
+                game.paused = false;
             }
 
         }
