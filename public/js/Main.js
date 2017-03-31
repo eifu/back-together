@@ -76,8 +76,12 @@ Game.Main.prototype = {
 
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
-        this.physics.arcade.collide(this.player, this.enemies);
         this.physics.arcade.collide(this.enemies, platformLayer);
+
+
+        this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
+
+
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
@@ -172,6 +176,14 @@ Game.Main.prototype = {
         this.scoreText.text = 'Score: ' + this.score;
 
     },
+    playerDamaged: function () {
+        if (this.player.damagedTime < this.time.now) {
+
+            console.log('damaged');
+            this.player.damagedTime = this.time.now + 1000;
+
+        }
+    },
     initPlayer: function () {
         // The player and its settings
         this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'dude');
@@ -189,6 +201,8 @@ Game.Main.prototype = {
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
         this.camera.follow(this.player);
 
+        this.player.damaged = false;
+        this.player.damagedTime = 0;
     },
     initStars: function () {
         //  Finally some stars to collect
@@ -220,51 +234,52 @@ Game.Main.prototype = {
     },
     initEnemies: function () {
 
-        this.enemymoves = ['right', 'left'];
-
         this.enemies = this.add.group()
         this.enemies.enableBody = true;
 
         this.enemy1 = this.enemies.create(64 * 1 + 16, 64 * 8 + 16, 'enemy');
-
         this.enemy1.animations.add('left', [0, 1, 2, 3], 10, true);
         this.enemy1.animations.add('right', [5, 6, 7, 8], 10, true);
         this.enemy1.animations.play('right');
         this.enemy1.body.velocity.x = 100;
-        this.enemy1.move = 0;
 
         this.enemy2 = this.enemies.create(64 * 7 + 16, 64 * 8 + 16, 'enemy');
-
         this.enemy2.animations.add('left', [0, 1, 2, 3], 10, true);
         this.enemy2.animations.add('right', [5, 6, 7, 8], 10, true);
         this.enemy2.animations.play('right');
         this.enemy2.body.velocity.x = 100;
-        this.enemy2.move = 0;
 
         this.enemy3 = this.enemies.create(64 * 13 + 16, 64 * 6 + 16, 'enemy');
-
         this.enemy3.animations.add('left', [0, 1, 2, 3], 10, true);
         this.enemy3.animations.add('right', [5, 6, 7, 8], 10, true);
         this.enemy3.animations.play('right');
         this.enemy3.body.velocity.x = 100;
-        this.enemy3.move = 0;
-        console.log(this.enemy3.body.x);
+
     },
     updateEnemies: function () {
-        if (this.enemy1.body.x < 64 * 1 + 2 || this.enemy1.body.x > 64 * 3 + 32 - 2) {
-            this.enemy1.body.velocity.x *= -1;
-            this.enemy1.move = (this.enemy1.move + 1) % 2
-            this.enemy1.animations.play(this.enemymoves[this.enemy1.move]);
+
+        if (this.enemy1.body.x < 64 * 1 + 2) {
+            this.enemy1.animations.play('right')
+            this.enemy1.body.velocity.x = 100;
+        } else if (this.enemy1.body.x > 64 * 3 + 32 - 2) {
+            this.enemy1.animations.play('left');
+            this.enemy1.body.velocity.x = -100;
         }
-        if (this.enemy2.body.x < 64 * 7 + 2 || this.enemy2.body.x > 64 * 8 + 32 - 2) {
-            this.enemy2.body.velocity.x *= -1;
-            this.enemy2.move = (this.enemy2.move + 1) % 2
-            this.enemy2.animations.play(this.enemymoves[this.enemy2.move]);
+
+        if (this.enemy2.body.x < 64 * 7 + 2) {
+            this.enemy2.animations.play('right');
+            this.enemy2.body.velocity.x = 100;
+        } else if (this.enemy2.body.x > 64 * 8 + 32 - 2) {
+            this.enemy2.animations.play('left');
+            this.enemy2.body.velocity.x = -100;
         }
-        if (this.enemy3.body.x < 64 * 13 + 2 || this.enemy3.body.x > 64 * 16 + 32 - 2) {
-            this.enemy3.body.velocity.x *= -1;
-            this.enemy3.move = (this.enemy3.move + 1) % 2
-            this.enemy3.animations.play(this.enemymoves[this.enemy3.move]);
+
+        if (this.enemy3.body.x < 64 * 13 + 2) {
+            this.enemy3.animations.play('right');
+            this.enemy3.body.velocity.x = 100;
+        } else if (this.enemy3.body.x > 64 * 16 + 32 - 2) {
+            this.enemy3.animations.play('left');
+            this.enemy3.body.velocity.x = -100;
         }
     }
 
