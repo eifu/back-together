@@ -30,6 +30,7 @@ Game.Main.prototype = {
         this.initPlayer();
         this.initStars();
         this.initText();
+        this.initEnemies();
 
         //  Our controls.
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -75,6 +76,8 @@ Game.Main.prototype = {
 
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
+        this.physics.arcade.collide(this.player, this.enemies);
+        this.physics.arcade.collide(this.enemies, platformLayer);
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
@@ -118,8 +121,8 @@ Game.Main.prototype = {
             pausedBtnCard.anchor.setTo(0.5, 0.5);
             pausedBtnCard.scale.setTo(2.5, 2.5);
 
-            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY+260, 'Press Spacebar to resume',{ font: '32px Aclonica', fill: '#FFF' });
-            pausedBtnCardText.anchor.setTo(0.5,0.5);
+            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
+            pausedBtnCardText.anchor.setTo(0.5, 0.5);
 
             settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
             settingBtn.anchor.setTo(0.5, 0.5);
@@ -136,7 +139,7 @@ Game.Main.prototype = {
 
             resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
             resetIcon.anchor.setTo(0.5, 0.5);
-            resetIcon.scale.setTo(0.8,0.8);
+            resetIcon.scale.setTo(0.8, 0.8);
 
 
             inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
@@ -156,6 +159,8 @@ Game.Main.prototype = {
             }
 
         }
+
+        this.updateEnemies();
     },
     collectStar: function (player, star) {
 
@@ -213,6 +218,54 @@ Game.Main.prototype = {
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
     },
+    initEnemies: function () {
 
+        this.enemymoves = ['right', 'left'];
+
+        this.enemies = this.add.group()
+        this.enemies.enableBody = true;
+
+        this.enemy1 = this.enemies.create(64 * 1 + 16, 64 * 8 + 16, 'enemy');
+
+        this.enemy1.animations.add('left', [0, 1, 2, 3], 10, true);
+        this.enemy1.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.enemy1.animations.play('right');
+        this.enemy1.body.velocity.x = 100;
+        this.enemy1.move = 0;
+
+        this.enemy2 = this.enemies.create(64 * 7 + 16, 64 * 8 + 16, 'enemy');
+
+        this.enemy2.animations.add('left', [0, 1, 2, 3], 10, true);
+        this.enemy2.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.enemy2.animations.play('right');
+        this.enemy2.body.velocity.x = 100;
+        this.enemy2.move = 0;
+
+        this.enemy3 = this.enemies.create(64 * 13 + 16, 64 * 6 + 16, 'enemy');
+
+        this.enemy3.animations.add('left', [0, 1, 2, 3], 10, true);
+        this.enemy3.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.enemy3.animations.play('right');
+        this.enemy3.body.velocity.x = 100;
+        this.enemy3.move = 0;
+        console.log(this.enemy3.body.x);
+    },
+    updateEnemies: function () {
+        if (this.enemy1.body.x < 64 * 1 + 2 || this.enemy1.body.x > 64 * 3 + 32 - 2) {
+            this.enemy1.body.velocity.x *= -1;
+            this.enemy1.move = (this.enemy1.move + 1) % 2
+            this.enemy1.animations.play(this.enemymoves[this.enemy1.move]);
+        }
+        if (this.enemy2.body.x < 64 * 7 + 2 || this.enemy2.body.x > 64 * 8 + 32 - 2) {
+            this.enemy2.body.velocity.x *= -1;
+            this.enemy2.move = (this.enemy2.move + 1) % 2
+            this.enemy2.animations.play(this.enemymoves[this.enemy2.move]);
+        }
+        if (this.enemy3.body.x < 64 * 13 + 2 || this.enemy3.body.x > 64 * 16 + 32 - 2) {
+            this.enemy3.body.velocity.x *= -1;
+            this.enemy3.move = (this.enemy3.move + 1) % 2
+            this.enemy3.animations.play(this.enemymoves[this.enemy3.move]);
+        }
+    }
 
 }
