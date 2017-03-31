@@ -10,7 +10,7 @@ var keys;
 Game.Main.prototype = {
 
     create: function (game) {
-
+        WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
 
         map = this.add.tilemap('map', 64, 64);
@@ -118,7 +118,7 @@ Game.Main.prototype = {
             pausedBtnCard.anchor.setTo(0.5, 0.5);
             pausedBtnCard.scale.setTo(2.5, 2.5);
 
-            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY+260, 'Press Spacebar to resume',{ fontSize: '32px', fill: '#FFF' });
+            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY+260, 'Press Spacebar to resume',{ font: '32px Aclonica', fill: '#FFF' });
             pausedBtnCardText.anchor.setTo(0.5,0.5);
 
             settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
@@ -143,7 +143,7 @@ Game.Main.prototype = {
             inventoryBtn.anchor.setTo(0.5, 0.5);
             inventoryBtn.scale.setTo(3.8, 3.8);
 
-            inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { fontSize: '32px', fill: '#000' });
+            inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
             inventoryTxt.anchor.setTo(0.5, 0.5);
 
             function resetOnClick(event) {
@@ -206,10 +206,10 @@ Game.Main.prototype = {
     },
     initText: function () {
         // the level 
-        this.levelText = this.add.text(100, 70, 'Level:' + Level, { fontSize: '32px', fill: '#000' });
+        this.levelText = this.add.text(100, 70, 'Level:' + Level, { font: '32px Aclonica', fill: '#000' });
 
         //  The score
-        this.scoreText = this.add.text(100, 100, 'Score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(100, 100, 'Score: 0', { font: '32px Aclonica', fill: '#000' });
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
     },
