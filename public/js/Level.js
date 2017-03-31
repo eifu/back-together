@@ -2,9 +2,17 @@ Game.Level = function (game) {
 
 };
 var Level;
+var wfconfig = {
+    google: {
+        families: ['Aclonica']
+    }
+};
+ 
+
+ 
 Game.Level.prototype = {
     create: function (game) {
-
+        WebFont.load(wfconfig);
         game.stage.backgroundColor = "#570e28";
 
         var l = game.add.sprite(game.world.centerX, game.world.centerY + 60, 'logo');
