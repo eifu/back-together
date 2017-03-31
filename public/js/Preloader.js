@@ -18,7 +18,10 @@ Game.Preloader.prototype = {
         this.load.image('star', 'assets/star.png');
         this.load.image('logo', 'assets/logo.jpg');
         this.load.image('levelBtn', 'assets/levelBtn.png');
-        this.load.image('button', 'assets/button.png');
+        this.load.image('pausedBtn', 'assets/pausedBtn.png');
+        this.load.image('pausedBtnCard', 'assets/pausedBtnCard.png');
+        this.load.image('resetIcon', 'assets/resetIcon.png');
+        this.load.image('settingIcon', 'assets/settingIcon.png');
         this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
         this.load.tilemap('map', 'assets/test.json', null, Phaser.Tilemap.TILED_JSON);
 

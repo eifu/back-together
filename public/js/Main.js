@@ -4,6 +4,8 @@ Game.Main = function (game) {
 
 var map;
 var platformLayer;
+var pausedLayer;
+var keys;
 
 Game.Main.prototype = {
 
@@ -31,11 +33,46 @@ Game.Main.prototype = {
 
         //  Our controls.
         this.cursors = this.input.keyboard.createCursorKeys();
+        var inputs = [
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.SPACEBAR,
+        ];
+        var name = [
+            'UP', 'LEFT', 'RIGHT', 'SPACE'
+        ]
+
+        keys = {};
+        inputs.forEach(function (input, i) {
+            keys[name[i]] = game.input.keyboard.addKey(input);
+        });
+
+        keys['SPACE'].onDown.add(unpause, self);
+
+        function unpause(event) {
+            // Only act if paused
+            if (game.paused) {
+                pausedLayer.destroy();
+
+                pausedBtnCard.destroy();
+                pausedBtnCardText.destroy();
+                resetBtn.destroy();
+                resetIcon.destroy();
+                settingBtn.destroy();
+                settingIcon.destroy();
+                inventoryBtn.destroy();
+                inventoryTxt.destroy();
+                // Unpause the game
+                game.paused = false;
+            }
+        }
 
     },
 
-    update: function () {
-        //  Collide the player and the stars with the platforms
+    update: function (game) {
+
+
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
 
@@ -45,13 +82,13 @@ Game.Main.prototype = {
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
 
-        if (this.cursors.left.isDown) {
+        if (keys['LEFT'].isDown) {
             //  Move to the left
             this.player.body.velocity.x = -150;
 
             this.player.animations.play('left');
         }
-        else if (this.cursors.right.isDown) {
+        else if (keys['RIGHT'].isDown) {
             //  Move to the right
             this.player.body.velocity.x = 150;
 
@@ -65,11 +102,59 @@ Game.Main.prototype = {
         }
 
         //  Allow the player to jump if they are touching the ground.
-        if (this.cursors.up.isDown && this.player.body.blocked.down) {
+        if (keys['UP'].isDown && this.player.body.blocked.down) {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
 
+        if (keys['SPACE'].isDown) {
+
+            pausedLayer = map.createLayer('pausedLayer');
+            pausedLayer.resizeWorld();
+            pausedLayer.alpha = 0.6;
+            game.paused = true;
+            console.log(this.camera);
+
+            pausedBtnCard = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'pausedBtnCard')
+            pausedBtnCard.anchor.setTo(0.5, 0.5);
+            pausedBtnCard.scale.setTo(2.5, 2.5);
+
+            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY+260, 'Enter Spacebar to resume',{ fontSize: '32px', fill: '#FFF' });
+            pausedBtnCardText.anchor.setTo(0.5,0.5);
+
+            settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
+            settingBtn.anchor.setTo(0.5, 0.5);
+            settingBtn.scale.setTo(1.6, 1.6);
+
+            settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
+            settingIcon.anchor.setTo(0.5, 0.5);
+
+
+            resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
+            resetBtn.anchor.setTo(0.5, 0.5);
+            resetBtn.scale.setTo(1.6, 1.6);
+
+            resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
+            resetIcon.anchor.setTo(0.5, 0.5);
+
+
+            inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
+            inventoryBtn.anchor.setTo(0.5, 0.5);
+            inventoryBtn.scale.setTo(3.8, 3.8);
+
+            inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { fontSize: '32px', fill: '#000' });
+            inventoryTxt.anchor.setTo(0.5, 0.5);
+
+            function resetOnClick(event) {
+                this.score = 0;
+                game.state.restart();
+                game.paused = false;
+            }
+            function settingOnClick() {
+                console.log('setting button clicked');
+            }
+
+        }
     },
     collectStar: function (player, star) {
 
