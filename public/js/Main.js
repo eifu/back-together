@@ -43,7 +43,7 @@ Game.Main.prototype = {
         this.physics.arcade.collide(this.pipe, platformLayer);
 //        this.physics.arcade.collide(this.pipe, this.holdme);
         
-        this.pipe1.animations.play('regular');
+        this.pipe1.frame = 0;
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
@@ -90,7 +90,7 @@ Game.Main.prototype = {
 
     },
     propUser: function(){
-        this.pipe1.animations.play('glow');
+        this.pipe1.frame = 1;
         
     },
     
@@ -109,9 +109,9 @@ Game.Main.prototype = {
 
             //  This just gives each star a slightly random bounce value
         this.pipe1.body.bounce.y = 0.7 + Math.random() * 0.2;
-        
-        this.pipe1.animations.add('regular', [0], 10, true);
-        this.pipe1.animations.add('glow', [1], 10, true);
+//        
+//        this.pipe1.animations.add('regular', [0], 10, true);
+//        this.pipe1.animations.add('glow', [1], 10, true);
         
 //        this.holdme = this.add.group();
 //        this.holdme.enableBody = true;
