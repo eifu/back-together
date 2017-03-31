@@ -84,8 +84,10 @@ Game.Main.prototype = {
         
         else{
             this.pipe1.releaseTime+=.166;
-            console.log(this.pipe1.releaseTime);
         }
+        
+        this.pipe1.holdbox1 = this.pipe1.body.x;
+        this.pipe1.holdbox2 = this.pipe1.body.x + this.pipe1.body.width;
 
     },
     collectStar: function (player, star) {
@@ -141,6 +143,10 @@ Game.Main.prototype = {
         
         this.pipe1.held = false;
         this.pipe1.releaseTime = 0;
+        
+        this.pipe1.holdbox1 = this.pipe1.body.x;
+        this.pipe1.holdbox2 = this.pipe1.body.x + this.pipe1.body.width;
+
     },
     initPlayer: function () {
         // The player and its settings
