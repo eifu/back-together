@@ -76,6 +76,10 @@ Game.Main.prototype = {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
+        if(this.pipe1.held){
+            this.pipe1.body.y = this.player.body.y;
+            this.pipe1.body.x = this.player.body.x;
+        }
 
     },
     collectStar: function (player, star) {
@@ -90,7 +94,15 @@ Game.Main.prototype = {
     },
     propUser: function(){
         this.pipe1.frame = 1;
-        
+        if(this.cursors.down.isDown){
+            if(!this.pipe1.held){
+                this.pipe1.held = true;
+                this.pipe1.frame = 0;
+                this.pipe1.body.x = this.player.x;
+                this.pipe1.body.y = this.player.y;
+                this.pipe1.body.gravity = 0;
+            }
+        }
     },
     
     initPipe: function(){
@@ -106,6 +118,8 @@ Game.Main.prototype = {
 
             //  This just gives each star a slightly random bounce value
         this.pipe1.body.bounce.y = .1;
+        
+        this.pipe1.held = false;
     },
     initPlayer: function () {
         // The player and its settings
