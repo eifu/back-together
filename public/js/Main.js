@@ -41,7 +41,6 @@ Game.Main.prototype = {
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
         this.physics.arcade.collide(this.pipe, platformLayer);
-//        this.physics.arcade.collide(this.pipe, this.holdme);
         
         this.pipe1.frame = 0;
 
@@ -97,27 +96,16 @@ Game.Main.prototype = {
     initPipe: function(){
         this.pipe = this.add.group();
 
-        //  We will enable physics for any star that is created in this group
+        //  enable physics for pipe
         this.pipe.enableBody = true;
-
         
-            //  Create a star inside of the 'stars' group
         this.pipe1 = this.pipe.create(300, 100, 'pipe');
 
             //  Let gravity do its thing
         this.pipe1.body.gravity.y = 300;
 
             //  This just gives each star a slightly random bounce value
-        this.pipe1.body.bounce.y = 0.7 + Math.random() * 0.2;
-//        
-//        this.pipe1.animations.add('regular', [0], 10, true);
-//        this.pipe1.animations.add('glow', [1], 10, true);
-        
-//        this.holdme = this.add.group();
-//        this.holdme.enableBody = true;
-//        this.holdme1 = this.holdme.create(300, 0, 'hold');
-//        this.holdme1.body.gravity.y = this.pipe1.body.gravity.y;
-//        this.holdme1.body.bounce.y = 0;
+        this.pipe1.body.bounce.y = .1;
     },
     initPlayer: function () {
         // The player and its settings
