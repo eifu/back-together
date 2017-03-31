@@ -17,7 +17,7 @@ Game.Preloader.prototype = {
         this.load.image('ground', 'assets/platform.png');
         this.load.image('star', 'assets/star.png');
         this.load.image('logo', 'assets/logo.jpg');
-        this.load.image('levelBtn', 'assets/levelBtn.png');
+        this.load.spritesheet('levelBtn', 'assets/levelBtn.png',110,60);
         this.load.image('pausedBtn', 'assets/pausedBtn.png');
         this.load.image('pausedBtnCard', 'assets/pausedBtnCard.png');
         this.load.image('resetIcon', 'assets/resetIcon.png');
