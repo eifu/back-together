@@ -113,7 +113,6 @@ Game.Main.prototype = {
             pausedLayer.resizeWorld();
             pausedLayer.alpha = 0.6;
             game.paused = true;
-            console.log(this.camera);
 
             pausedBtnCard = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'pausedBtnCard')
             pausedBtnCard.anchor.setTo(0.5, 0.5);
@@ -129,6 +128,7 @@ Game.Main.prototype = {
             settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
             settingIcon.anchor.setTo(0.5, 0.5);
             settingIcon.scale.setTo(0.8, 0.8);
+
 
             resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
             resetBtn.anchor.setTo(0.5, 0.5);
