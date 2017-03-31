@@ -110,6 +110,7 @@ Game.Main.prototype = {
                 this.pipe1.body.y = this.player.y;
                 this.pipe1.body.gravity.y = 0;
                 this.pipe1.frame = 0;
+                this.pipe1.releaseTime = 0;
                 this.pipe1.holdTime = 0;
             }
             else{
@@ -118,6 +119,7 @@ Game.Main.prototype = {
                     this.pipe1.frame = 1;
                     this.pipe1.body.gravity.y = 300;
                     this.pipe1.releaseTime = 0;
+                    this.pipe1.holdTime = 0;
                 }
             }
         }
