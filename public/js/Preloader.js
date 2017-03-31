@@ -21,13 +21,15 @@ Game.Preloader.prototype = {
         this.load.image('button', 'assets/button.png');
         this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
         this.load.tilemap('map', 'assets/test.json', null, Phaser.Tilemap.TILED_JSON);
-
+        this.load.spritesheet('pipe', 'assets/pipe.png', 64, 16);
+        this.load.image('hold', 'assets/hold.png');
         this.load.image('tileset', 'assets/tileset.png');
 
     },
 
     create: function () {
         this.state.start("Level");
+        
     }
 
 }

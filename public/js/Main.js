@@ -4,6 +4,7 @@ Game.Main = function (game) {
 
 var map;
 var platformLayer;
+var touching;
 
 Game.Main.prototype = {
 
@@ -27,6 +28,7 @@ Game.Main.prototype = {
 
         this.initPlayer();
         this.initStars();
+        this.initPipe();
         this.initText();
 
         //  Our controls.
@@ -38,9 +40,15 @@ Game.Main.prototype = {
         //  Collide the player and the stars with the platforms
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
+        this.physics.arcade.collide(this.pipe, platformLayer);
+//        this.physics.arcade.collide(this.pipe, this.holdme);
+        
+        this.pipe1.animations.play('regular');
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+        
+        touching = this.physics.arcade.overlap(this.player, this.pipe, this.propUser, null, this);
 
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
@@ -80,6 +88,36 @@ Game.Main.prototype = {
         this.score += 10;
         this.scoreText.text = 'Score: ' + this.score;
 
+    },
+    propUser: function(){
+        this.pipe1.animations.play('glow');
+        
+    },
+    
+    initPipe: function(){
+        this.pipe = this.add.group();
+
+        //  We will enable physics for any star that is created in this group
+        this.pipe.enableBody = true;
+
+        
+            //  Create a star inside of the 'stars' group
+        this.pipe1 = this.pipe.create(300, 100, 'pipe');
+
+            //  Let gravity do its thing
+        this.pipe1.body.gravity.y = 300;
+
+            //  This just gives each star a slightly random bounce value
+        this.pipe1.body.bounce.y = 0.7 + Math.random() * 0.2;
+        
+        this.pipe1.animations.add('regular', [0], 10, true);
+        this.pipe1.animations.add('glow', [1], 10, true);
+        
+//        this.holdme = this.add.group();
+//        this.holdme.enableBody = true;
+//        this.holdme1 = this.holdme.create(300, 0, 'hold');
+//        this.holdme1.body.gravity.y = this.pipe1.body.gravity.y;
+//        this.holdme1.body.bounce.y = 0;
     },
     initPlayer: function () {
         // The player and its settings
