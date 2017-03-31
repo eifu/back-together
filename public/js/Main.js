@@ -119,7 +119,7 @@ Game.Main.prototype = {
             pausedBtnCard.anchor.setTo(0.5, 0.5);
             pausedBtnCard.scale.setTo(2.5, 2.5);
 
-            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY+260, 'Enter Spacebar to resume',{ fontSize: '32px', fill: '#FFF' });
+            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY+260, 'Press Spacebar to resume',{ fontSize: '32px', fill: '#FFF' });
             pausedBtnCardText.anchor.setTo(0.5,0.5);
 
             settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
@@ -128,7 +128,7 @@ Game.Main.prototype = {
 
             settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
             settingIcon.anchor.setTo(0.5, 0.5);
-
+            settingIcon.scale.setTo(0.8, 0.8);
 
             resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
             resetBtn.anchor.setTo(0.5, 0.5);
@@ -136,6 +136,7 @@ Game.Main.prototype = {
 
             resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
             resetIcon.anchor.setTo(0.5, 0.5);
+            resetIcon.scale.setTo(0.8,0.8);
 
 
             inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
