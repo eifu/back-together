@@ -79,6 +79,12 @@ Game.Main.prototype = {
         if(this.pipe1.held){
             this.pipe1.body.y = this.player.body.y;
             this.pipe1.body.x = this.player.body.x;
+            this.pipe1.holdTime+=.166;
+        }
+        
+        else{
+            this.pipe1.releaseTime+=.166;
+            console.log(this.pipe1.releaseTime);
         }
 
     },
@@ -93,14 +99,26 @@ Game.Main.prototype = {
 
     },
     propUser: function(){
+        if(!this.pipe1.held){
         this.pipe1.frame = 1;
+        }
         if(this.cursors.down.isDown){
-            if(!this.pipe1.held){
+            if(!this.pipe1.held && this.pipe1.releaseTime > 10){
                 this.pipe1.held = true;
                 this.pipe1.frame = 0;
                 this.pipe1.body.x = this.player.x;
                 this.pipe1.body.y = this.player.y;
-                this.pipe1.body.gravity = 0;
+                this.pipe1.body.gravity.y = 0;
+                this.pipe1.frame = 0;
+                this.pipe1.holdTime = 0;
+            }
+            else{
+                if(this.pipe1.holdTime > 10){
+                    this.pipe1.held = false;
+                    this.pipe1.frame = 1;
+                    this.pipe1.body.gravity.y = 300;
+                    this.pipe1.releaseTime = 0;
+                }
             }
         }
     },
@@ -120,6 +138,7 @@ Game.Main.prototype = {
         this.pipe1.body.bounce.y = .1;
         
         this.pipe1.held = false;
+        this.pipe1.releaseTime = 0;
     },
     initPlayer: function () {
         // The player and its settings
