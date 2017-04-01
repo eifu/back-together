@@ -108,8 +108,6 @@ Game.Main.prototype = {
             if(!this.pipe1.held && this.pipe1.releaseTime > 10){
                 this.pipe1.held = true;
                 this.pipe1.frame = 0;
-                this.pipe1.body.x = this.player.x;
-                this.pipe1.body.y = this.player.y;
                 this.pipe1.body.gravity.y = 0;
                 this.pipe1.frame = 0;
                 this.pipe1.releaseTime = 0;
@@ -161,8 +159,8 @@ Game.Main.prototype = {
         this.player.body.collideWorldBounds = true;
 
         //  Our two animations, walking left and right.
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.player.animations.add('right', [0, 1, 2, 3, 4], 10, true);
+        this.player.animations.add('left', [5, 6, 7, 8, 9], 10, true);
         this.camera.follow(this.player);
 
     },
