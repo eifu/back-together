@@ -78,7 +78,7 @@ Game.Main.prototype = {
         }
         if(this.pipe1.held){
             this.pipe1.body.y = this.player.body.y;
-            this.pipe1.body.x = this.player.body.x;
+            this.pipe1.body.x = this.player.body.x - this.pipe1.offset*(7/10);
             this.pipe1.holdTime+=.166;
         }
         
@@ -112,6 +112,15 @@ Game.Main.prototype = {
                 this.pipe1.frame = 0;
                 this.pipe1.releaseTime = 0;
                 this.pipe1.holdTime = 0;
+                var dist1 = Math.abs(this.player.body.x - this.pipe1.holdbox1);
+                var dist2 = Math.abs(this.player.body.x - this.pipe1.holdbox2);
+                
+                if(dist2 < dist1){
+                    this.pipe1.offset = this.pipe1.body.width;
+                }
+                else{
+                    this.pipe1.offset = 0;
+                }
             }
             else{
                 if(this.pipe1.holdTime > 10){
