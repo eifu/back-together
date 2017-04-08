@@ -7,6 +7,8 @@ var platformLayer;
 var touching;
 var pausedLayer;
 var keys;
+var touching;
+
 
 Game.Main.prototype = {
 
@@ -82,11 +84,9 @@ Game.Main.prototype = {
         
         this.pipe1.frame = 0;
 
+
         this.physics.arcade.collide(this.enemies, platformLayer);
-
-
         this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
-
 
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
@@ -276,6 +276,14 @@ Game.Main.prototype = {
 
         }
 
+    },
+    playerDamaged: function () {
+        if (this.player.damagedTime < this.time.now) {
+
+            console.log('damaged');
+            this.player.damagedTime = this.time.now + 1000;
+
+        }
     },
     initPlayer: function () {
         // The player and its settings
