@@ -2,10 +2,12 @@ Game.Main = function (game) {
 
 };
 
-var map;
+
 var platformLayer;
 var pausedLayer;
+
 var keys;
+
 
 Game.Main.prototype = {
 
@@ -13,8 +15,6 @@ Game.Main.prototype = {
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
 
-        map = this.add.tilemap('map', 64, 64);
-        map.addTilesetImage('tileset');
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
         map.setCollisionBetween(1, 1)
@@ -28,7 +28,7 @@ Game.Main.prototype = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.initPlayer();
-        this.initStars();
+        // this.initStars();
         this.initItem();
         this.initText();
         this.initEnemies();
@@ -76,7 +76,7 @@ Game.Main.prototype = {
 
 
         this.physics.arcade.collide(this.player, platformLayer);
-        this.physics.arcade.collide(this.stars, platformLayer);
+        // this.physics.arcade.collide(this.stars, platformLayer);
         this.physics.arcade.collide(this.item, platformLayer);
 
         this.physics.arcade.collide(this.enemies, platformLayer);
@@ -84,7 +84,7 @@ Game.Main.prototype = {
 
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-        this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+        // this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
 
         for (var i = 0; i < this.item.length; i++) {
             this.item.children[i].frame = 0;
