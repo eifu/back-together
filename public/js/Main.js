@@ -276,14 +276,6 @@ Game.Main.prototype = {
         }
 
     },
-    playerDamaged: function () {
-        if (this.player.damagedTime < this.time.now) {
-
-            console.log('damaged');
-            this.player.damagedTime = this.time.now + 1000;
-
-        }
-    },
     initPlayer: function () {
         // The player and its settings
         this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'dude');
