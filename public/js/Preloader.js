@@ -29,6 +29,8 @@ Game.Preloader.prototype = {
 
         this.load.atlasJSONArray('hand', 'assets/hand.png', 'assets/hand.json');
 
+        this.load.spritesheet('pipe', 'assets/pipe.png', 64, 16);
+        this.load.image('hold', 'assets/hold.png');
         this.load.image('tileset', 'assets/tileset.png');
 
         this.load.script("webfont", "//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js");
@@ -46,6 +48,7 @@ Game.Preloader.prototype = {
 
     create: function () {
         this.state.start("Level");
+        
     }
 
 }

@@ -29,6 +29,7 @@ Game.Main.prototype = {
 
         this.initPlayer();
         this.initStars();
+        this.initItem();
         this.initText();
         this.initEnemies();
 
@@ -76,15 +77,20 @@ Game.Main.prototype = {
 
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
+        this.physics.arcade.collide(this.item, platformLayer);
+        
         this.physics.arcade.collide(this.enemies, platformLayer);
-
-
         this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
-
 
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+        
+        for(var i = 0; i < this.item.length; i++){
+            this.item.children[i].frame = 0;
+        }
+        
+        this.physics.arcade.overlap(this.player, this.item, this.propUser, null, this);
 
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
@@ -111,7 +117,23 @@ Game.Main.prototype = {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
+        
+        for(var i = 0; i < this.item.length; i++){
+        if(this.item.children[i].held){
+            this.item.children[i].body.y = this.player.body.y;
+            this.item.children[i].body.x = this.player.body.x - this.pipe1.offset*(7/10);
+            this.item.children[i].holdTime+=.166;
+        }
+        
+        else{
+            this.item.children[i].releaseTime+=.166;
+        }
+            
+        this.item.children[i].holdbox1 = this.item.children[i].body.x;
+        this.item.children[i].holdbox2 = this.item.children[i].body.x + this.item.children[i].body.width;
 
+    }
+        
         if (keys['SPACE'].isDown) {
 
             pausedLayer = map.createLayer('pausedLayer');
@@ -190,6 +212,66 @@ Game.Main.prototype = {
         //  Add and update the score
         this.score += 10;
         this.scoreText.text = 'Score: ' + this.score;
+
+    },
+    propUser: function(){
+        for(var i = 0; i < this.item.length; i++){
+        if(!this.item.children[i].held){
+        this.item.children[i].frame = 1;
+        }
+        if(this.cursors.down.isDown){
+            if(!this.item.children[i].held &&  this.item.children[i].releaseTime > 10){
+                this.item.children[i].held = true;
+                this.item.children[i].frame = 0;
+                this.item.children[i].body.gravity.y = 0;
+                this.item.children[i].frame = 0;
+                this.item.children[i].releaseTime = 0;
+                this.item.children[i].holdTime = 0;
+                var dist1 = Math.abs(this.player.body.x - this.item.children[i].holdbox1);
+                var dist2 = Math.abs(this.player.body.x - this.item.children[i].holdbox2);
+                
+                if(dist2 < dist1){
+                    this.item.children[i].offset = this.item.children[i].body.width;
+                }
+                else{
+                    this.item.children[i].offset = 0;
+                }
+            }
+            else{
+                if(this.item.children[i].holdTime > 10){
+                    this.item.children[i].held = false;
+                    this.item.children[i].frame = 1;
+                    this.item.children[i].body.gravity.y = 300;
+                    this.item.children[i].releaseTime = 0;
+                    this.item.children[i].holdTime = 0;
+                }
+            }
+        
+        }
+        }
+    },
+    
+    initItem: function(){
+        this.item = this.add.group();
+
+        //  enable physics for pipe
+        this.item.enableBody = true;
+        
+        this.pipe1 = this.item.create(300, 100, 'pipe');
+        this.pipe1.body.gravity.y = 300;
+        this.pipe1.body.bounce.y = .1;
+        this.pipe1.held = false;
+        this.pipe1.releaseTime = 0;
+        this.pipe1.holdbox1 = this.pipe1.body.x;
+        this.pipe1.holdbox2 = this.pipe1.body.x + this.pipe1.body.width;
+    },
+    playerDamaged: function () {
+        if (this.player.damagedTime < this.time.now) {
+
+            console.log('damaged');
+            this.player.damagedTime = this.time.now + 1000;
+
+        }
 
     },
     playerDamaged: function () {
