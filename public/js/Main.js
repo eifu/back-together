@@ -78,18 +78,18 @@ Game.Main.prototype = {
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
         this.physics.arcade.collide(this.item, platformLayer);
-        
+
         this.physics.arcade.collide(this.enemies, platformLayer);
         this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
 
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
-        
-        for(var i = 0; i < this.item.length; i++){
+
+        for (var i = 0; i < this.item.length; i++) {
             this.item.children[i].frame = 0;
         }
-        
+
         this.physics.arcade.overlap(this.player, this.item, this.propUser, null, this);
 
         //  Reset the players velocity (movement)
@@ -117,23 +117,23 @@ Game.Main.prototype = {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
-        
-        for(var i = 0; i < this.item.length; i++){
-        if(this.item.children[i].held){
-            this.item.children[i].body.y = this.player.body.y;
-            this.item.children[i].body.x = this.player.body.x - this.pipe1.offset*(7/10);
-            this.item.children[i].holdTime+=.166;
-        }
-        
-        else{
-            this.item.children[i].releaseTime+=.166;
-        }
-            
-        this.item.children[i].holdbox1 = this.item.children[i].body.x;
-        this.item.children[i].holdbox2 = this.item.children[i].body.x + this.item.children[i].body.width;
 
-    }
-        
+        for (var i = 0; i < this.item.length; i++) {
+            if (this.item.children[i].held) {
+                this.item.children[i].body.y = this.player.body.y;
+                this.item.children[i].body.x = this.player.body.x - this.pipe1.offset * (7 / 10);
+                this.item.children[i].holdTime += .166;
+            }
+
+            else {
+                this.item.children[i].releaseTime += .166;
+            }
+
+            this.item.children[i].holdbox1 = this.item.children[i].body.x;
+            this.item.children[i].holdbox2 = this.item.children[i].body.x + this.item.children[i].body.width;
+
+        }
+
         if (keys['SPACE'].isDown) {
 
             pausedLayer = map.createLayer('pausedLayer');
@@ -145,9 +145,9 @@ Game.Main.prototype = {
             pausedBtnCard.anchor.setTo(0.5, 0.5);
             pausedBtnCard.scale.setTo(2.5, 2.5);
 
-            cancelBtn = game.add.button(game.camera.view.centerX + 235 , game.camera.view.centerY-110, 'cancelIcon', resumeOnClick, this,2,1,0);
-            cancelBtn.anchor.setTo(0.5,0.5);
-            cancelBtn.scale.setTo(0.3,0.3);
+            cancelBtn = game.add.button(game.camera.view.centerX + 235, game.camera.view.centerY - 110, 'cancelIcon', resumeOnClick, this, 2, 1, 0);
+            cancelBtn.anchor.setTo(0.5, 0.5);
+            cancelBtn.scale.setTo(0.3, 0.3);
 
             pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
             pausedBtnCardText.anchor.setTo(0.5, 0.5);
@@ -185,7 +185,7 @@ Game.Main.prototype = {
             function settingOnClick() {
                 console.log('setting button clicked');
             }
-            function resumeOnClick(){
+            function resumeOnClick() {
                 pausedLayer.destroy();
                 cancelBtn.destroy();
                 pausedBtnCard.destroy();
@@ -214,49 +214,49 @@ Game.Main.prototype = {
         this.scoreText.text = 'Score: ' + this.score;
 
     },
-    propUser: function(){
-        for(var i = 0; i < this.item.length; i++){
-        if(!this.item.children[i].held){
-        this.item.children[i].frame = 1;
-        }
-        if(this.cursors.down.isDown){
-            if(!this.item.children[i].held &&  this.item.children[i].releaseTime > 10){
-                this.item.children[i].held = true;
-                this.item.children[i].frame = 0;
-                this.item.children[i].body.gravity.y = 0;
-                this.item.children[i].frame = 0;
-                this.item.children[i].releaseTime = 0;
-                this.item.children[i].holdTime = 0;
-                var dist1 = Math.abs(this.player.body.x - this.item.children[i].holdbox1);
-                var dist2 = Math.abs(this.player.body.x - this.item.children[i].holdbox2);
-                
-                if(dist2 < dist1){
-                    this.item.children[i].offset = this.item.children[i].body.width;
-                }
-                else{
-                    this.item.children[i].offset = 0;
-                }
+    propUser: function () {
+        for (var i = 0; i < this.item.length; i++) {
+            if (!this.item.children[i].held) {
+                this.item.children[i].frame = 1;
             }
-            else{
-                if(this.item.children[i].holdTime > 10){
-                    this.item.children[i].held = false;
-                    this.item.children[i].frame = 1;
-                    this.item.children[i].body.gravity.y = 300;
+            if (this.cursors.down.isDown) {
+                if (!this.item.children[i].held && this.item.children[i].releaseTime > 10) {
+                    this.item.children[i].held = true;
+                    this.item.children[i].frame = 0;
+                    this.item.children[i].body.gravity.y = 0;
+                    this.item.children[i].frame = 0;
                     this.item.children[i].releaseTime = 0;
                     this.item.children[i].holdTime = 0;
+                    var dist1 = Math.abs(this.player.body.x - this.item.children[i].holdbox1);
+                    var dist2 = Math.abs(this.player.body.x - this.item.children[i].holdbox2);
+
+                    if (dist2 < dist1) {
+                        this.item.children[i].offset = this.item.children[i].body.width;
+                    }
+                    else {
+                        this.item.children[i].offset = 0;
+                    }
                 }
+                else {
+                    if (this.item.children[i].holdTime > 10) {
+                        this.item.children[i].held = false;
+                        this.item.children[i].frame = 1;
+                        this.item.children[i].body.gravity.y = 300;
+                        this.item.children[i].releaseTime = 0;
+                        this.item.children[i].holdTime = 0;
+                    }
+                }
+
             }
-        
-        }
         }
     },
-    
-    initItem: function(){
+
+    initItem: function () {
         this.item = this.add.group();
 
         //  enable physics for pipe
         this.item.enableBody = true;
-        
+
         this.pipe1 = this.item.create(300, 100, 'pipe');
         this.pipe1.body.gravity.y = 300;
         this.pipe1.body.bounce.y = .1;
@@ -296,9 +296,7 @@ Game.Main.prototype = {
         this.player.body.gravity.y = 300;
         this.player.body.collideWorldBounds = true;
 
-        // this.player.animations.add('left', [
-        // 'hand_left',
-        // ], 10, true, false);
+        this.player.scale.setTo(0.5, 0.5);
 
         this.player.animations.add('left', Phaser.Animation.generateFrameNames('hand_left', 1, 6), 10, true);
         this.player.animations.add('right', Phaser.Animation.generateFrameNames('hand_right', 1, 5), 10, true);
@@ -325,7 +323,7 @@ Game.Main.prototype = {
             var star = this.stars.create(i * 70, 0, 'star');
 
             //  Let gravity do its thing
-            star.body.gravity.y = 300;
+            star.body.gravity.y = 500;
 
             //  This just gives each star a slightly random bounce value
             star.body.bounce.y = 0.7 + Math.random() * 0.2;
@@ -345,24 +343,28 @@ Game.Main.prototype = {
         this.enemies = this.add.group()
         this.enemies.enableBody = true;
 
-        this.enemy1 = this.enemies.create(64 * 1 + 16, 64 * 8 + 16, 'enemy');
-        this.enemy1.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.enemy1.animations.add('right', [5, 6, 7, 8], 10, true);
-        this.enemy1.animations.play('right');
+        this.enemy1 = this.enemies.create(64 * 1 + 16, 0, 'enemy1');
+        this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
         this.enemy1.body.velocity.x = 100;
+        this.enemy1.scale.setTo(0.5, 0.5);
+        this.enemy1.body.gravity.y = 500;
 
-        this.enemy2 = this.enemies.create(64 * 7 + 16, 64 * 8 + 16, 'enemy');
-        this.enemy2.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.enemy2.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
+        this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
         this.enemy2.animations.play('right');
         this.enemy2.body.velocity.x = 100;
+        this.enemy2.scale.setTo(0.5, 0.5);
+        this.enemy2.body.gravity.y = 500;
 
-        this.enemy3 = this.enemies.create(64 * 13 + 16, 64 * 6 + 16, 'enemy');
-        this.enemy3.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.enemy3.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
+        this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
         this.enemy3.animations.play('right');
         this.enemy3.body.velocity.x = 100;
-
+        this.enemy3.scale.setTo(0.5, 0.5);
+        this.enemy3.body.gravity.y = 500;
     },
     updateEnemies: function () {
 
