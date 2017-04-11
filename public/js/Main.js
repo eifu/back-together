@@ -32,12 +32,11 @@ Game.Main.prototype = {
         this.initText();
         this.initEnemies();
 
-        //  Our controls.
-        this.cursors = this.input.keyboard.createCursorKeys();
         var inputs = [
             Phaser.Keyboard.UP,
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.DOWN,
             Phaser.Keyboard.SPACEBAR,
             Phaser.Keyboard.W,
             Phaser.Keyboard.A,
@@ -45,7 +44,7 @@ Game.Main.prototype = {
             Phaser.Keyboard.D
         ];
         var name = [
-            'UP', 'LEFT', 'RIGHT', 'SPACE', 'W', 'A', 'S', 'D'
+            'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D'
         ]
 
         keys = {};
@@ -102,7 +101,7 @@ Game.Main.prototype = {
         else if (keys['RIGHT'].isDown || keys['D'].isDown) {
             //  Move to the right
             this.player.body.velocity.x = 150;
-            this.player.animations.play('left');
+            this.player.animations.play('right');
         }
 
         if (this.time.now < this.player.damagedTime) {
@@ -135,13 +134,16 @@ Game.Main.prototype = {
                     this.player.animations.play('right');
                 }
             }
+
+            // Allow the player to jump if they are touching the ground.
+            // and if the player is not damaged. 
+            if ((keys['UP'].isDown || keys['W'].isDown) && this.player.body.blocked.down) {
+                // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
+                this.player.body.velocity.y = -350;
+            }
+
         }
 
-        //  Allow the player to jump if they are touching the ground.
-        if ((keys['UP'].isDown || keys['W'].isDown) && this.player.body.blocked.down) {
-            // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
-            this.player.body.velocity.y = -350;
-        }
         for (var i = 0; i < this.item.length; i++) {
             if (this.item.children[i].held) {
                 this.item.children[i].body.y = this.player.body.y;
@@ -158,71 +160,7 @@ Game.Main.prototype = {
 
         }
         if (keys['SPACE'].isDown) {
-
-            pausedLayer = map.createLayer('pausedLayer');
-            pausedLayer.resizeWorld();
-            pausedLayer.alpha = 0.6;
-            game.paused = true;
-
-            pausedBtnCard = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'pausedBtnCard')
-            pausedBtnCard.anchor.setTo(0.5, 0.5);
-            pausedBtnCard.scale.setTo(2.5, 2.5);
-
-            cancelBtn = game.add.button(game.camera.view.centerX + 235, game.camera.view.centerY - 110, 'cancelIcon', resumeOnClick, this, 2, 1, 0);
-            cancelBtn.anchor.setTo(0.5, 0.5);
-            cancelBtn.scale.setTo(0.3, 0.3);
-
-            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
-            pausedBtnCardText.anchor.setTo(0.5, 0.5);
-
-            settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
-            settingBtn.anchor.setTo(0.5, 0.5);
-            settingBtn.scale.setTo(1.6, 1.6);
-
-            settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
-            settingIcon.anchor.setTo(0.5, 0.5);
-            settingIcon.scale.setTo(0.8, 0.8);
-
-
-            resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
-            resetBtn.anchor.setTo(0.5, 0.5);
-            resetBtn.scale.setTo(1.6, 1.6);
-
-            resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
-            resetIcon.anchor.setTo(0.5, 0.5);
-            resetIcon.scale.setTo(0.8, 0.8);
-
-
-            inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
-            inventoryBtn.anchor.setTo(0.5, 0.5);
-            inventoryBtn.scale.setTo(3.8, 3.8);
-
-            inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
-            inventoryTxt.anchor.setTo(0.5, 0.5);
-
-            function resetOnClick(event) {
-                this.score = 0;
-                game.state.restart();
-                game.paused = false;
-            }
-            function settingOnClick() {
-                console.log('setting button clicked');
-            }
-            function resumeOnClick() {
-                pausedLayer.destroy();
-                cancelBtn.destroy();
-                pausedBtnCard.destroy();
-                pausedBtnCardText.destroy();
-                resetBtn.destroy();
-                resetIcon.destroy();
-                settingBtn.destroy();
-                settingIcon.destroy();
-                inventoryBtn.destroy();
-                inventoryTxt.destroy();
-                // Unpause the game
-                game.paused = false;
-            }
-
+            this.initPausedScreen(game);
         }
 
         this.updateEnemies();
@@ -233,7 +171,7 @@ Game.Main.prototype = {
             if (!this.item.children[i].held) {
                 this.item.children[i].frame = 1;
             }
-            if (this.cursors.down.isDown) {
+            if (keys['DOWN'].isDown || keys['S'].isDown) {
                 if (!this.item.children[i].held && this.item.children[i].releaseTime > 10) {
                     this.item.children[i].held = true;
                     this.item.children[i].frame = 0;
@@ -378,6 +316,69 @@ Game.Main.prototype = {
             this.enemy3.animations.play('left');
             this.enemy3.body.velocity.x = -100;
         }
-    }
+    },
+    initPausedScreen: function (game) {
+        pausedLayer = map.createLayer('pausedLayer');
+        pausedLayer.resizeWorld();
+        pausedLayer.alpha = 0.6;
+        game.paused = true;
 
+        pausedBtnCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'pausedBtnCard')
+        pausedBtnCard.anchor.setTo(0.5, 0.5);
+        pausedBtnCard.scale.setTo(2.5, 2.5);
+
+        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, this, 2, 1, 0);
+        cancelBtn.anchor.setTo(0.5, 0.5);
+        cancelBtn.scale.setTo(0.3, 0.3);
+
+        pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
+        pausedBtnCardText.anchor.setTo(0.5, 0.5);
+
+        settingBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.settingOnClick, this, 2, 1, 0);
+        settingBtn.anchor.setTo(0.5, 0.5);
+        settingBtn.scale.setTo(1.6, 1.6);
+
+        settingIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'settingIcon');
+        settingIcon.anchor.setTo(0.5, 0.5);
+        settingIcon.scale.setTo(0.8, 0.8);
+
+
+        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, this, 2, 1, 0);
+        resetBtn.anchor.setTo(0.5, 0.5);
+        resetBtn.scale.setTo(1.6, 1.6);
+
+        resetIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'resetIcon');
+        resetIcon.anchor.setTo(0.5, 0.5);
+        resetIcon.scale.setTo(0.8, 0.8);
+
+
+        inventoryBtn = this.add.image(this.camera.view.centerX + 79, this.camera.view.centerY, 'pausedBtn');
+        inventoryBtn.anchor.setTo(0.5, 0.5);
+        inventoryBtn.scale.setTo(3.8, 3.8);
+
+        inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
+        inventoryTxt.anchor.setTo(0.5, 0.5);
+    },
+    resetOnClick: function (game) {
+        this.score = 0;
+        this.state.restart();
+        game.paused = false;
+    },
+    settingOnClick: function () {
+        console.log('setting button clicked');
+    },
+    resumeOnClick: function (game) {
+        pausedLayer.destroy();
+        cancelBtn.destroy();
+        pausedBtnCard.destroy();
+        pausedBtnCardText.destroy();
+        resetBtn.destroy();
+        resetIcon.destroy();
+        settingBtn.destroy();
+        settingIcon.destroy();
+        inventoryBtn.destroy();
+        inventoryTxt.destroy();
+        // Unpause the game
+        game.paused = false;
+    }
 }
