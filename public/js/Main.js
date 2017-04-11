@@ -76,15 +76,11 @@ Game.Main.prototype = {
 
 
         this.physics.arcade.collide(this.player, platformLayer);
-        // this.physics.arcade.collide(this.stars, platformLayer);
         this.physics.arcade.collide(this.item, platformLayer);
 
         this.physics.arcade.collide(this.enemies, platformLayer);
         this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
 
-
-        //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-        // this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
 
         for (var i = 0; i < this.item.length; i++) {
             this.item.children[i].frame = 0;
@@ -95,27 +91,42 @@ Game.Main.prototype = {
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
 
-        if (keys['LEFT'].isDown) {
-            //  Move to the left
-            this.player.body.velocity.x = -150;
 
-            this.player.animations.play('left');
-        }
-        else if (keys['RIGHT'].isDown) {
-            //  Move to the right
-            this.player.body.velocity.x = 150;
+        if (this.time.now < this.player.damagedTime) {
+            if (this.player.face == 'left'){
+                this.player.animations.play('left_damaged')
+                this.player.body.velocity.x = 100;
+            }else{
+                this.player.animations.play("right_damaged")
+                this.player.body.velocity.x = -100;
+            }
 
-            this.player.animations.play('right');
-        }
-        else {
-            //  Stand still
-            // this.player.animations.stop();
-        }
+        } else {
+            if (keys['LEFT'].isDown) {
+                //  Move to the left
+                this.player.body.velocity.x = -150;
 
-        //  Allow the player to jump if they are touching the ground.
-        if (keys['UP'].isDown && this.player.body.blocked.down) {
-            // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
-            this.player.body.velocity.y = -350;
+                this.player.animations.play('left');
+                this.player.face ='left';
+            }
+            else if (keys['RIGHT'].isDown) {
+                //  Move to the right
+                this.player.body.velocity.x = 150;
+
+                this.player.animations.play('right');
+                this.player.face = 'right';
+            }else {
+                if (this.player.face == 'left'){
+                    this.player.animations.play('left');
+                }else{
+                    this.player.animations.play('right');
+                }
+            }
+            //  Allow the player to jump if they are touching the ground.
+            if (keys['UP'].isDown && this.player.body.blocked.down) {
+                // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
+                this.player.body.velocity.y = -350;
+            }
         }
 
         for (var i = 0; i < this.item.length; i++) {
@@ -204,16 +215,6 @@ Game.Main.prototype = {
 
         this.updateEnemies();
     },
-    collectStar: function (player, star) {
-
-        // Removes the star from the screen
-        star.kill();
-
-        //  Add and update the score
-        this.score += 10;
-        this.scoreText.text = 'Score: ' + this.score;
-
-    },
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
             if (!this.item.children[i].held) {
@@ -257,7 +258,7 @@ Game.Main.prototype = {
         //  enable physics for pipe
         this.item.enableBody = true;
 
-        this.pipe1 = this.item.create(300, 100, 'pipe');
+        this.pipe1 = this.item.create(this.camera.view.centerX+200, this.camera.view.centerY, 'pipe');
         this.pipe1.body.gravity.y = 300;
         this.pipe1.body.bounce.y = .1;
         this.pipe1.held = false;
@@ -269,18 +270,10 @@ Game.Main.prototype = {
         if (this.player.damagedTime < this.time.now) {
 
             console.log('damaged');
-            this.player.damagedTime = this.time.now + 1000;
+            this.player.damagedTime = this.time.now + 200;
 
         }
 
-    },
-    playerDamaged: function () {
-        if (this.player.damagedTime < this.time.now) {
-
-            console.log('damaged');
-            this.player.damagedTime = this.time.now + 1000;
-
-        }
     },
     initPlayer: function () {
         // The player and its settings
@@ -303,6 +296,10 @@ Game.Main.prototype = {
         this.player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('hand_left_damaged', 1, 4), 10, true);
         this.player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('hand_right_damaged', 1, 4), 10, true);
         this.player.animations.add('dying', Phaser.Animation.generateFrameNames('dying', 1, 12), 10, true);
+
+
+        this.player.animations.play('left');
+        this.player.face = 'left';
 
         // this.player.animations.add('right', [5, 6, 7, 8], 10, true);
         this.camera.follow(this.player);
