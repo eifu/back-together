@@ -28,7 +28,6 @@ Game.Main.prototype = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.initPlayer();
-        // this.initStars();
         this.initItem();
         this.initText();
         this.initEnemies();
@@ -136,104 +135,98 @@ Game.Main.prototype = {
                     this.player.animations.play('right');
                 }
             }
-            //  Allow the player to jump if they are touching the ground.
-            if (keys['UP'].isDown && this.player.body.blocked.down) {
-                // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
-                this.player.body.velocity.y = -350;
-            }
         }
 
         //  Allow the player to jump if they are touching the ground.
         if ((keys['UP'].isDown || keys['W'].isDown) && this.player.body.blocked.down) {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
-
-            for (var i = 0; i < this.item.length; i++) {
-                if (this.item.children[i].held) {
-                    this.item.children[i].body.y = this.player.body.y;
-                    this.item.children[i].body.x = this.player.body.x - this.pipe1.offset * (7 / 10);
-                    this.item.children[i].holdTime += .166;
-                }
-
-                else {
-                    this.item.children[i].releaseTime += .166;
-                }
-
-                this.item.children[i].holdbox1 = this.item.children[i].body.x;
-                this.item.children[i].holdbox2 = this.item.children[i].body.x + this.item.children[i].body.width;
-
-            }
-
-            if (keys['SPACE'].isDown) {
-
-                pausedLayer = map.createLayer('pausedLayer');
-                pausedLayer.resizeWorld();
-                pausedLayer.alpha = 0.6;
-                game.paused = true;
-
-                pausedBtnCard = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'pausedBtnCard')
-                pausedBtnCard.anchor.setTo(0.5, 0.5);
-                pausedBtnCard.scale.setTo(2.5, 2.5);
-
-                cancelBtn = game.add.button(game.camera.view.centerX + 235, game.camera.view.centerY - 110, 'cancelIcon', resumeOnClick, this, 2, 1, 0);
-                cancelBtn.anchor.setTo(0.5, 0.5);
-                cancelBtn.scale.setTo(0.3, 0.3);
-
-                pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
-                pausedBtnCardText.anchor.setTo(0.5, 0.5);
-
-                settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
-                settingBtn.anchor.setTo(0.5, 0.5);
-                settingBtn.scale.setTo(1.6, 1.6);
-
-                settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
-                settingIcon.anchor.setTo(0.5, 0.5);
-                settingIcon.scale.setTo(0.8, 0.8);
-
-
-                resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
-                resetBtn.anchor.setTo(0.5, 0.5);
-                resetBtn.scale.setTo(1.6, 1.6);
-
-                resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
-                resetIcon.anchor.setTo(0.5, 0.5);
-                resetIcon.scale.setTo(0.8, 0.8);
-
-
-                inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
-                inventoryBtn.anchor.setTo(0.5, 0.5);
-                inventoryBtn.scale.setTo(3.8, 3.8);
-
-                inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
-                inventoryTxt.anchor.setTo(0.5, 0.5);
-
-                function resetOnClick(event) {
-                    this.score = 0;
-                    game.state.restart();
-                    game.paused = false;
-                }
-                function settingOnClick() {
-                    console.log('setting button clicked');
-                }
-                function resumeOnClick() {
-                    pausedLayer.destroy();
-                    cancelBtn.destroy();
-                    pausedBtnCard.destroy();
-                    pausedBtnCardText.destroy();
-                    resetBtn.destroy();
-                    resetIcon.destroy();
-                    settingBtn.destroy();
-                    settingIcon.destroy();
-                    inventoryBtn.destroy();
-                    inventoryTxt.destroy();
-                    // Unpause the game
-                    game.paused = false;
-                }
-
-            }
-
-            this.updateEnemies();
         }
+        for (var i = 0; i < this.item.length; i++) {
+            if (this.item.children[i].held) {
+                this.item.children[i].body.y = this.player.body.y;
+                this.item.children[i].body.x = this.player.body.x - this.pipe1.offset * (7 / 10);
+                this.item.children[i].holdTime += .166;
+            }
+
+            else {
+                this.item.children[i].releaseTime += .166;
+            }
+
+            this.item.children[i].holdbox1 = this.item.children[i].body.x;
+            this.item.children[i].holdbox2 = this.item.children[i].body.x + this.item.children[i].body.width;
+
+        }
+        if (keys['SPACE'].isDown) {
+
+            pausedLayer = map.createLayer('pausedLayer');
+            pausedLayer.resizeWorld();
+            pausedLayer.alpha = 0.6;
+            game.paused = true;
+
+            pausedBtnCard = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'pausedBtnCard')
+            pausedBtnCard.anchor.setTo(0.5, 0.5);
+            pausedBtnCard.scale.setTo(2.5, 2.5);
+
+            cancelBtn = game.add.button(game.camera.view.centerX + 235, game.camera.view.centerY - 110, 'cancelIcon', resumeOnClick, this, 2, 1, 0);
+            cancelBtn.anchor.setTo(0.5, 0.5);
+            cancelBtn.scale.setTo(0.3, 0.3);
+
+            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
+            pausedBtnCardText.anchor.setTo(0.5, 0.5);
+
+            settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
+            settingBtn.anchor.setTo(0.5, 0.5);
+            settingBtn.scale.setTo(1.6, 1.6);
+
+            settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
+            settingIcon.anchor.setTo(0.5, 0.5);
+            settingIcon.scale.setTo(0.8, 0.8);
+
+
+            resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
+            resetBtn.anchor.setTo(0.5, 0.5);
+            resetBtn.scale.setTo(1.6, 1.6);
+
+            resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
+            resetIcon.anchor.setTo(0.5, 0.5);
+            resetIcon.scale.setTo(0.8, 0.8);
+
+
+            inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
+            inventoryBtn.anchor.setTo(0.5, 0.5);
+            inventoryBtn.scale.setTo(3.8, 3.8);
+
+            inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
+            inventoryTxt.anchor.setTo(0.5, 0.5);
+
+            function resetOnClick(event) {
+                this.score = 0;
+                game.state.restart();
+                game.paused = false;
+            }
+            function settingOnClick() {
+                console.log('setting button clicked');
+            }
+            function resumeOnClick() {
+                pausedLayer.destroy();
+                cancelBtn.destroy();
+                pausedBtnCard.destroy();
+                pausedBtnCardText.destroy();
+                resetBtn.destroy();
+                resetIcon.destroy();
+                settingBtn.destroy();
+                settingIcon.destroy();
+                inventoryBtn.destroy();
+                inventoryTxt.destroy();
+                // Unpause the game
+                game.paused = false;
+            }
+
+        }
+
+        this.updateEnemies();
+
     },
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
@@ -267,7 +260,6 @@ Game.Main.prototype = {
                         this.item.children[i].holdTime = 0;
                     }
                 }
-
             }
         }
     },
@@ -289,7 +281,6 @@ Game.Main.prototype = {
     playerDamaged: function () {
         if (this.player.damagedTime < this.time.now) {
 
-            console.log('damaged');
             this.player.damagedTime = this.time.now + 200;
 
         }
@@ -301,8 +292,6 @@ Game.Main.prototype = {
 
         //  We need to enable physics on the player
         this.physics.arcade.enable(this.player);
-
-
 
         //  Player physics properties. Give the little guy a slight bounce.
         this.player.body.bounce.y = 0.2;
@@ -326,25 +315,6 @@ Game.Main.prototype = {
 
         this.player.damaged = false;
         this.player.damagedTime = 0;
-    },
-    initStars: function () {
-        //  Finally some stars to collect
-        this.stars = this.add.group();
-
-        //  We will enable physics for any star that is created in this group
-        this.stars.enableBody = true;
-
-        //  Here we'll create 12 of them evenly spaced apart
-        for (var i = 0; i < 12; i++) {
-            //  Create a star inside of the 'stars' group
-            var star = this.stars.create(i * 70, 0, 'star');
-
-            //  Let gravity do its thing
-            star.body.gravity.y = 500;
-
-            //  This just gives each star a slightly random bounce value
-            star.body.bounce.y = 0.7 + Math.random() * 0.2;
-        }
     },
     initText: function () {
         // the level
