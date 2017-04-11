@@ -19,7 +19,7 @@ Game.Main.prototype = {
         platformLayer.resizeWorld();
         map.setCollisionBetween(1, 1)
         // setCollisionBetween takes two indexes, starting and ending position.
-        // BlackTile is at 1st position, RedTile is at 2nd position, 
+        // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
 
         this.score = 0;
@@ -103,9 +103,7 @@ Game.Main.prototype = {
         }
         else {
             //  Stand still
-            this.player.animations.stop();
-
-            this.player.frame = 4;
+            // this.player.animations.stop();
         }
 
         //  Allow the player to jump if they are touching the ground.
@@ -127,7 +125,7 @@ Game.Main.prototype = {
 
             cancelBtn = game.add.button(game.camera.view.centerX + 235 , game.camera.view.centerY-110, 'cancelIcon', resumeOnClick, this,2,1,0);
             cancelBtn.anchor.setTo(0.5,0.5);
-            cancelBtn.scale.setTo(0.5,0.5);
+            cancelBtn.scale.setTo(0.3,0.3);
 
             pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
             pausedBtnCardText.anchor.setTo(0.5, 0.5);
@@ -204,19 +202,29 @@ Game.Main.prototype = {
     },
     initPlayer: function () {
         // The player and its settings
-        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'dude');
+        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'hand');
 
         //  We need to enable physics on the player
         this.physics.arcade.enable(this.player);
+
+
 
         //  Player physics properties. Give the little guy a slight bounce.
         this.player.body.bounce.y = 0.2;
         this.player.body.gravity.y = 300;
         this.player.body.collideWorldBounds = true;
 
-        //  Our two animations, walking left and right.
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        // this.player.animations.add('left', [
+        // 'hand_left',
+        // ], 10, true, false);
+
+        this.player.animations.add('left', Phaser.Animation.generateFrameNames('hand_left', 1, 6), 10, true);
+        this.player.animations.add('right', Phaser.Animation.generateFrameNames('hand_right', 1, 5), 10, true);
+        this.player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('hand_left_damaged', 1, 4), 10, true);
+        this.player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('hand_right_damaged', 1, 4), 10, true);
+        this.player.animations.add('dying', Phaser.Animation.generateFrameNames('dying', 1, 12), 10, true);
+
+        // this.player.animations.add('right', [5, 6, 7, 8], 10, true);
         this.camera.follow(this.player);
 
         this.player.damaged = false;
@@ -242,7 +250,7 @@ Game.Main.prototype = {
         }
     },
     initText: function () {
-        // the level 
+        // the level
         this.levelText = this.add.text(100, 70, 'Level:' + Level, { font: '32px Aclonica', fill: '#000' });
 
         //  The score

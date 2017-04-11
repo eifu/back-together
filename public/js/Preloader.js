@@ -27,6 +27,8 @@ Game.Preloader.prototype = {
         this.load.spritesheet('enemy', 'assets/enemy.png', 32, 48);
         this.load.tilemap('map', 'assets/test.json', null, Phaser.Tilemap.TILED_JSON);
 
+        this.load.atlasJSONArray('hand', 'assets/hand.png', 'assets/hand.json');
+
         this.load.image('tileset', 'assets/tileset.png');
 
         this.load.script("webfont", "//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js");
