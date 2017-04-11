@@ -78,18 +78,18 @@ Game.Main.prototype = {
         this.physics.arcade.collide(this.player, platformLayer);
         this.physics.arcade.collide(this.stars, platformLayer);
         this.physics.arcade.collide(this.items, platformLayer);
-        
+
         this.physics.arcade.collide(this.enemies, platformLayer);
         this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
 
 
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
-        
-        for(var i = 0; i < this.items.length; i++){
+
+        for (var i = 0; i < this.items.length; i++) {
             this.items.children[i].frame = 0;
         }
-        
+
         this.physics.arcade.overlap(this.player, this.items, this.propUser, null, this);
 
         //  Reset the players velocity (movement)
@@ -119,23 +119,23 @@ Game.Main.prototype = {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
-        
-        for(var i = 0; i < this.items.length; i++){
-        if(this.items.children[i].held){
-            this.items.children[i].body.y = this.player.body.y;
-            this.items.children[i].body.x = this.player.body.x - this.pipe1.offset*(7/10);
-            this.items.children[i].holdTime+=.166;
-        }
-        
-        else{
-            this.items.children[i].releaseTime+=.166;
-        }
-            
-        this.items.children[i].holdbox1 = this.items.children[i].body.x;
-        this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
 
-    }
-        
+        for (var i = 0; i < this.items.length; i++) {
+            if (this.items.children[i].held) {
+                this.items.children[i].body.y = this.player.body.y;
+                this.items.children[i].body.x = this.player.body.x - this.pipe1.offset * (7 / 10);
+                this.items.children[i].holdTime += .166;
+            }
+
+            else {
+                this.items.children[i].releaseTime += .166;
+            }
+
+            this.items.children[i].holdbox1 = this.items.children[i].body.x;
+            this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
+
+        }
+
         if (keys['SPACE'].isDown) {
 
             pausedLayer = map.createLayer('pausedLayer');
@@ -147,9 +147,9 @@ Game.Main.prototype = {
             pausedBtnCard.anchor.setTo(0.5, 0.5);
             pausedBtnCard.scale.setTo(2.5, 2.5);
 
-            cancelBtn = game.add.button(game.camera.view.centerX + 235 , game.camera.view.centerY-110, 'cancelIcon', resumeOnClick, this,2,1,0);
-            cancelBtn.anchor.setTo(0.5,0.5);
-            cancelBtn.scale.setTo(0.5,0.5);
+            cancelBtn = game.add.button(game.camera.view.centerX + 235, game.camera.view.centerY - 110, 'cancelIcon', resumeOnClick, this, 2, 1, 0);
+            cancelBtn.anchor.setTo(0.5, 0.5);
+            cancelBtn.scale.setTo(0.5, 0.5);
 
             pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
             pausedBtnCardText.anchor.setTo(0.5, 0.5);
@@ -187,7 +187,7 @@ Game.Main.prototype = {
             function settingOnClick() {
                 console.log('setting button clicked');
             }
-            function resumeOnClick(){
+            function resumeOnClick() {
                 pausedLayer.destroy();
                 cancelBtn.destroy();
                 pausedBtnCard.destroy();
@@ -216,49 +216,51 @@ Game.Main.prototype = {
         this.scoreText.text = 'Score: ' + this.score;
 
     },
-    propUser: function(){
-        for(var i = 0; i < this.items.length; i++){
-        if(!this.items.children[i].held){
-        this.items.children[i].frame = 1;
-        }
-        if(this.cursors.down.isDown){
-            if(!this.items.children[i].held &&  this.items.children[i].releaseTime > 10){
-                this.items.children[i].held = true;
-                this.items.children[i].frame = 0;
-                this.items.children[i].body.gravity.y = 0;
-                this.items.children[i].frame = 0;
-                this.items.children[i].releaseTime = 0;
-                this.items.children[i].holdTime = 0;
-                var dist1 = Math.abs(this.player.body.x - this.items.children[i].holdbox1);
-                var dist2 = Math.abs(this.player.body.x - this.items.children[i].holdbox2);
-                
-                if(dist2 < dist1){
-                    this.items.children[i].offset = this.items.children[i].body.width;
-                }
-                else{
-                    this.items.children[i].offset = 0;
-                }
+    propUser: function () {
+        for (var i = 0; i < this.items.length; i++) {
+            if (!this.items.children[i].held) {
+                this.items.children[i].frame = 1;
             }
-            else{
-                if(this.items.children[i].holdTime > 10){
-                    this.items.children[i].held = false;
-                    this.items.children[i].frame = 1;
-                    this.items.children[i].body.gravity.y = 300;
+            if (this.cursors.down.isDown) {
+
+                if (!this.items.children[i].held && this.items.children[i].releaseTime > 10) {
+                    this.items.children[i].held = true;
+                    this.items.children[i].frame = 0;
+                    this.items.children[i].body.gravity.y = 0;
+                    this.items.children[i].frame = 0;
                     this.items.children[i].releaseTime = 0;
                     this.items.children[i].holdTime = 0;
+                    var dist1 = Math.abs(this.player.body.x - this.items.children[i].holdbox1);
+                    var dist2 = Math.abs(this.player.body.x - this.items.children[i].holdbox2);
+
+
+                    if (dist2 < dist1) {
+                        this.items.children[i].offset = this.items.children[i].body.width;
+                    }
+                    else {
+                        this.items.children[i].offset = 0;
+                    }
                 }
+                else {
+                    if (this.items.children[i].holdTime > 10) {
+                        this.items.children[i].held = false;
+                        this.items.children[i].frame = 1;
+                        this.items.children[i].body.gravity.y = 300;
+                        this.items.children[i].releaseTime = 0;
+                        this.items.children[i].holdTime = 0;
+                    }
+                }
+
             }
-        
-        }
         }
     },
-    
-    initItems: function(){
+
+    initItems: function () {
         this.items = this.add.group();
 
         //  enable physics for pipe
         this.items.enableBody = true;
-        
+
         this.pipe1 = this.items.create(300, 100, 'pipe');
         this.pipe1.body.gravity.y = 300;
         this.pipe1.body.bounce.y = .1;
