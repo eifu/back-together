@@ -39,9 +39,13 @@ Game.Main.prototype = {
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
             Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.W,
+            Phaser.Keyboard.A,
+            Phaser.Keyboard.S,
+            Phaser.Keyboard.D
         ];
         var name = [
-            'UP', 'LEFT', 'RIGHT', 'SPACE'
+            'UP', 'LEFT', 'RIGHT', 'SPACE', 'W', 'A', 'S', 'D'
         ]
 
         keys = {};
@@ -89,13 +93,13 @@ Game.Main.prototype = {
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
 
-        if (keys['LEFT'].isDown) {
+        if (keys['LEFT'].isDown || keys['A'].isDown) {
             //  Move to the left
             this.player.body.velocity.x = -150;
 
             this.player.animations.play('left');
         }
-        else if (keys['RIGHT'].isDown) {
+        else if (keys['RIGHT'].isDown || keys['D'].isDown) {
             //  Move to the right
             this.player.body.velocity.x = 150;
 
@@ -109,7 +113,7 @@ Game.Main.prototype = {
         }
 
         //  Allow the player to jump if they are touching the ground.
-        if (keys['UP'].isDown && this.player.body.blocked.down) {
+        if ( (keys['UP'].isDown || keys['W'].isDown) && this.player.body.blocked.down) {
             // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
             this.player.body.velocity.y = -350;
         }
