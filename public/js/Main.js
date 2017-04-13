@@ -12,6 +12,9 @@ var keys;
 Game.Main.prototype = {
 
     create: function (game) {
+
+        game.physics.startSystem(Phaser.Physics.P2JS);
+
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
 
@@ -24,8 +27,10 @@ Game.Main.prototype = {
 
         this.score = 0;
 
-        //  We're going to be using physics, so enable the Arcade Physics system
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.physics.p2.convertTilemap(map, platformLayer);
+
+        this.physics.p2.restitution = 0;
+        this.physics.p2.gravity.y = 300;
 
         this.initPlayer();
         this.initItem();
@@ -76,19 +81,11 @@ Game.Main.prototype = {
 
     update: function (game) {
 
-
-        this.physics.arcade.collide(this.player, platformLayer);
-        this.physics.arcade.collide(this.item, platformLayer);
-
-        this.physics.arcade.collide(this.enemies, platformLayer);
-        this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
-
-
         for (var i = 0; i < this.item.length; i++) {
             this.item.children[i].frame = 0;
         }
 
-        this.physics.arcade.overlap(this.player, this.item, this.propUser, null, this);
+        // this.physics.arcade.overlap(this.player, this.item, this.propUser, null, this);
 
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
@@ -137,9 +134,13 @@ Game.Main.prototype = {
 
             // Allow the player to jump if they are touching the ground.
             // and if the player is not damaged. 
-            if ((keys['UP'].isDown || keys['W'].isDown) && this.player.body.blocked.down) {
-                // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
-                this.player.body.velocity.y = -350;
+
+            if ((keys['UP'].isDown || keys['W'].isDown)) {
+                console.log(this.player.body);
+                if (this.player.body.blocked.down) {
+                    // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
+                    this.player.body.velocity.y = -350;
+                }
             }
 
         }
@@ -229,26 +230,21 @@ Game.Main.prototype = {
         this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'hand');
 
         //  We need to enable physics on the player
-        this.physics.arcade.enable(this.player);
+        this.physics.p2.enable(this.player, true);
 
-        //  Player physics properties. Give the little guy a slight bounce.
-        this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 300;
-        this.player.body.collideWorldBounds = true;
-
-        this.player.scale.setTo(0.5, 0.5);
-
-        this.player.animations.add('left', Phaser.Animation.generateFrameNames('hand_left', 1, 6), 10, true);
-        this.player.animations.add('right', Phaser.Animation.generateFrameNames('hand_right', 1, 5), 10, true);
-        this.player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('hand_left_damaged', 1, 4), 10, true);
-        this.player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('hand_right_damaged', 1, 4), 10, true);
-        this.player.animations.add('dying', Phaser.Animation.generateFrameNames('dying', 1, 12), 10, true);
+        this.player.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 5), 10, true);
+        this.player.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
+        this.player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('left_damaged', 1, 2), 10, true);
+        this.player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('right_damaged', 1, 2), 10, true);
 
 
         this.player.animations.play('left');
         this.player.face = 'left';
 
-        // this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.player.body.clearShapes();
+        this.player.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
+
+
         this.camera.follow(this.player);
 
         this.player.damaged = false;
@@ -266,30 +262,43 @@ Game.Main.prototype = {
     initEnemies: function () {
 
         this.enemies = this.add.group()
-        this.enemies.enableBody = true;
 
-        this.enemy1 = this.enemies.create(64 * 1 + 16, 0, 'enemy1');
+
+        this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
+        this.physics.p2.enable(this.enemy1, true);
         this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
         this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        this.enemy1.body.velocity.x = 100;
-        this.enemy1.scale.setTo(0.5, 0.5);
-        this.enemy1.body.gravity.y = 500;
+        this.enemy1.body.clearShapes();
+        this.enemy1.body.addRectangle(86, 256, 5, 11);
+        this.enemy1.body.addRectangle(86, 256, 5, 11);
+        this.enemy1.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy1.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy1.body.fixedRotation = true;
+
+
 
         this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
+        this.physics.p2.enable(this.enemy2, true);
         this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
         this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
         this.enemy2.animations.play('right');
-        this.enemy2.body.velocity.x = 100;
-        this.enemy2.scale.setTo(0.5, 0.5);
-        this.enemy2.body.gravity.y = 500;
+        this.enemy2.body.clearShapes();
+        this.enemy2.body.addRectangle(86, 256, 5, 11);
+        this.enemy2.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy2.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy2.body.fixedRotation = true;
 
         this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
+        this.physics.p2.enable(this.enemy3, true);
         this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
         this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
         this.enemy3.animations.play('right');
-        this.enemy3.body.velocity.x = 100;
-        this.enemy3.scale.setTo(0.5, 0.5);
-        this.enemy3.body.gravity.y = 500;
+        this.enemy3.body.clearShapes();
+        this.enemy3.body.addRectangle(86, 256, 5, 11);
+        this.enemy3.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy3.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy3.body.fixedRotation = true;
+
     },
     updateEnemies: function () {
 
