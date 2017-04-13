@@ -88,18 +88,7 @@ Game.Main.prototype = {
         // this.physics.arcade.overlap(this.player, this.item, this.propUser, null, this);
 
         //  Reset the players velocity (movement)
-        this.player.body.velocity.x = 0;
-
-        if (keys['LEFT'].isDown || keys['A'].isDown) {
-            //  Move to the left
-            this.player.body.velocity.x = -150;
-            this.player.animations.play('left');
-        }
-        else if (keys['RIGHT'].isDown || keys['D'].isDown) {
-            //  Move to the right
-            this.player.body.velocity.x = 150;
-            this.player.animations.play('right');
-        }
+        this.player.body.velocity.x = 0; 
 
         if (this.time.now < this.player.damagedTime) {
             if (this.player.face == 'left') {
@@ -111,14 +100,14 @@ Game.Main.prototype = {
             }
 
         } else {
-            if (keys['LEFT'].isDown) {
+            if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
                 this.player.body.velocity.x = -150;
 
                 this.player.animations.play('left');
                 this.player.face = 'left';
             }
-            else if (keys['RIGHT'].isDown) {
+            else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
                 this.player.body.velocity.x = 150;
 
@@ -129,17 +118,6 @@ Game.Main.prototype = {
                     this.player.animations.play('left');
                 } else {
                     this.player.animations.play('right');
-                }
-            }
-
-            // Allow the player to jump if they are touching the ground.
-            // and if the player is not damaged. 
-
-            if ((keys['UP'].isDown || keys['W'].isDown)) {
-                console.log(this.player.body);
-                if (this.player.body.blocked.down) {
-                    // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
-                    this.player.body.velocity.y = -350;
                 }
             }
 

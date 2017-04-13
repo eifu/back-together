@@ -13,9 +13,6 @@ Game.Preloader.prototype = {
         this.time.advancedTiming = true;
 
         this.load.setPreloadSprite(this.preloadBar);
-        this.load.image('sky', 'assets/sky.png');
-        this.load.image('ground', 'assets/platform.png');
-        this.load.image('star', 'assets/star.png');
         this.load.image('logo', 'assets/logo.jpg');
         this.load.image('menuBtnCard', 'assets/menuBtnCard.png');
         this.load.spritesheet('levelBtn', 'assets/levelBtn.png', 110, 60);
