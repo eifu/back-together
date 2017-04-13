@@ -20,7 +20,7 @@ Game.Main.prototype = {
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
-        map.setCollisionBetween(1, 1)
+        map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
