@@ -7,8 +7,8 @@
     <script type="text/javascript" src="js/phaser.min.js"></script>
     <script type="text/javascript" src="js/Boot.js"></script>
     <script type="text/javascript" src="js/Preloader.js"></script>
-    <script type="text/javascript" src="js/Main.js"></script>
-    <script type="text/javascript" src="js/Level.js"></script>
+    <script type="text/javascript" src="js/LevelSelecting.js"></script>
+    <script type="text/javascript" src="js/Level1.js"></script>
     <style type="text/css">
         * {
             margin: 0;
@@ -20,14 +20,14 @@
 <body>
     <script type="text/javascript">
         window.onload = function () {
-            var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
+            var backtogether = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
-            game.state.add('Boot', Game.Boot);
-            game.state.add('Preloader', Game.Preloader);
-            game.state.add('Main', Game.Main);
-            game.state.add('Level', Game.Level);
+            backtogether.state.add('Boot', BackTogether.Boot);
+            backtogether.state.add('Preloader', BackTogether.Preloader);
+            backtogether.state.add('Level1', BackTogether.Level1);
+            backtogether.state.add('LevelSelecting', BackTogether.LevelSelecting);
 
-            game.state.start('Boot');
+            backtogether.state.start('Boot');
         }
     </script>
 </body>

@@ -1,9 +1,9 @@
-var Game = {};
+var BackTogether = {};
 
-Game.Boot = function(game){};
+BackTogether.Boot = function(game){};
 
 
-Game.Boot.prototype = {
+BackTogether.Boot.prototype = {
     init:function(){
 
         this.MaxPointer = 1  // if it is mobile game, it could be more than 1.
@@ -17,7 +17,7 @@ Game.Boot.prototype = {
     },
 
     preload:function(){
-        this.load.image("preloadBar", "assets/preloadBar.png");
+        this.load.image("preloadBar", "assets/images/preloadBar.png");
     },
 
     create: function(){
