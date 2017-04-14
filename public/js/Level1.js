@@ -443,6 +443,14 @@ BackTogether.Level1.prototype = {
         inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
         inventoryTxt.anchor.setTo(0.5, 0.5);
     },
+    gameStatus: function(win){
+        if(win){
+            
+        }
+        else{
+            
+        }
+    },
     resetOnClick: function (game) {
         this.score = 0;
         this.state.restart();
