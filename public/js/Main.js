@@ -2,48 +2,54 @@ Game.Main = function (game) {
 
 };
 
-var map;
+
 var platformLayer;
 var pausedLayer;
+
 var keys;
+
 
 Game.Main.prototype = {
 
     create: function (game) {
-        game.physics.p2.setPostBroadphaseCallback(checkOverlap, this); 
+
+        game.physics.startSystem(Phaser.Physics.P2JS);
+
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
 
-        map = this.add.tilemap('map', 64, 64);
-        map.addTilesetImage('tileset');
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
-        map.setCollisionBetween(1, 1)
+        map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
-        // BlackTile is at 1st position, RedTile is at 2nd position, 
+        // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
 
         this.score = 0;
 
-        //  We're going to be using physics, so enable the Arcade Physics system
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        this.physics.p2.convertTilemap(map, platformLayer);
+
+        this.physics.p2.restitution = 0;
+        this.physics.p2.gravity.y = 300;
 
         this.initPlayer();
-        this.initStars();
         this.initItems();
         this.initText();
         this.initEnemies();
 
-        //  Our controls.
-        this.cursors = this.input.keyboard.createCursorKeys();
         var inputs = [
             Phaser.Keyboard.UP,
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.DOWN,
             Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.W,
+            Phaser.Keyboard.A,
+            Phaser.Keyboard.S,
+            Phaser.Keyboard.D
         ];
         var name = [
-            'UP', 'LEFT', 'RIGHT', 'SPACE'
+            'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D'
         ]
 
         keys = {};
@@ -76,14 +82,6 @@ Game.Main.prototype = {
     update: function (game) {
 
 
-        this.physics.arcade.collide(this.player, platformLayer);
-        this.physics.arcade.collide(this.stars, platformLayer);
-        this.physics.arcade.collide(this.items, platformLayer);
-
-        this.physics.arcade.collide(this.enemies, platformLayer);
-        this.physics.arcade.collide(this.player, this.enemies, this.playerDamaged, null, this);
-
-
         //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
         this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
 
@@ -91,34 +89,43 @@ Game.Main.prototype = {
             this.items.children[i].frame = 0;
         }
 
-        this.physics.arcade.overlap(this.player, this.items, this.propUser, null, this);
+        //  Reset the players velocity (movement)
+        this.player.body.velocity.x = 0;
 
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
 
-        if (keys['LEFT'].isDown) {
-            //  Move to the left
-            this.player.body.velocity.x = -150;
+        if (this.time.now < this.player.damagedTime) {
+            if (this.player.face == 'left') {
+                this.player.animations.play('left_damaged')
+                this.player.body.velocity.x = 100;
+            } else {
+                this.player.animations.play("right_damaged")
+                this.player.body.velocity.x = -100;
+            }
 
-            this.player.animations.play('left');
-        }
-        else if (keys['RIGHT'].isDown) {
-            //  Move to the right
-            this.player.body.velocity.x = 150;
+        } else {
+            if (keys['LEFT'].isDown || keys['A'].isDown) {
+                //  Move to the left
+                this.player.body.velocity.x = -150;
 
-            this.player.animations.play('right');
-        }
-        else {
-            //  Stand still
-            this.player.animations.stop();
+                this.player.animations.play('left');
+                this.player.face = 'left';
+            }
+            else if (keys['RIGHT'].isDown || keys['D'].isDown) {
+                //  Move to the right
+                this.player.body.velocity.x = 150;
 
-            this.player.frame = 4;
-        }
+                this.player.animations.play('right');
+                this.player.face = 'right';
+            } else {
+                if (this.player.face == 'left') {
+                    this.player.animations.play('left');
+                } else {
+                    this.player.animations.play('right');
+                }
+            }
 
-        //  Allow the player to jump if they are touching the ground.
-        if (keys['UP'].isDown && this.player.body.blocked.down) {
-            // when using tilemap, body.touching does not work. so instead, using body.blocked.down.
-            this.player.body.velocity.y = -350;
         }
 
         for (var i = 0; i < this.items.length; i++) {
@@ -136,6 +143,8 @@ Game.Main.prototype = {
             this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
 
         }
+
+
 
         if (keys['SPACE'].isDown) {
 
@@ -188,86 +197,81 @@ Game.Main.prototype = {
             function settingOnClick() {
                 console.log('setting button clicked');
             }
-            function resumeOnClick() {
-                pausedLayer.destroy();
-                cancelBtn.destroy();
-                pausedBtnCard.destroy();
-                pausedBtnCardText.destroy();
-                resetBtn.destroy();
-                resetIcon.destroy();
-                settingBtn.destroy();
-                settingIcon.destroy();
-                inventoryBtn.destroy();
-                inventoryTxt.destroy();
-                // Unpause the game
-                game.paused = false;
+        }
+        for (var i = 0; i < this.items.length; i++) {
+            if (this.items.children[i].held) {
+                this.items.children[i].body.y = this.player.body.y;
+                this.items.children[i].body.x = this.player.body.x - this.pipe1.offset * (7 / 10);
+                this.items.children[i].holdTime += .166;
             }
 
+            else {
+                this.items.children[i].releaseTime += .166;
+            }
+
+            this.items.children[i].holdbox1 = this.items.children[i].body.x;
+            this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
+
+        }
+        if (keys['SPACE'].isDown) {
+            this.initPausedScreen(game);
         }
 
         this.updateEnemies();
-    },
-    collectStar: function (player, star) {
-
-        // Removes the star from the screen
-        star.kill();
-
-        //  Add and update the score
-        this.score += 10;
-        this.scoreText.text = 'Score: ' + this.score;
 
     },
+
     checkOverlap: function (body, body2){
-        if(body.sprite.name == "player" && body2.sprite.type == "item"){
+        if(body.sprite && body.sprite.name == "player" && body2.sprite.type == "item"){
             console.log("hello");
         }
     },
     propUser: function () {
-        for (var i = 0; i < this.items.length; i++) {
-            if (!this.items.children[i].held) {
-                this.items.children[i].frame = 1;
+        for (var i = 0; i < this.item.length; i++) {
+            if (!this.item.children[i].held) {
+                this.item.children[i].frame = 1;
             }
-            if (this.cursors.down.isDown) {
+        }
+        if (keys['DOWN'].isDown || keys['S'].isDown) {
+            if (!this.item.children[i].held && this.item.children[i].releaseTime > 10) {
+                this.item.children[i].held = true;
+                this.item.children[i].frame = 0;
+                this.item.children[i].body.gravity.y = 0;
+                this.item.children[i].frame = 0;
+                this.item.children[i].releaseTime = 0;
+                this.item.children[i].holdTime = 0;
+                var dist1 = Math.abs(this.player.body.x - this.item.children[i].holdbox1);
+                var dist2 = Math.abs(this.player.body.x - this.item.children[i].holdbox2);
 
-                if (!this.items.children[i].held && this.items.children[i].releaseTime > 10) {
-                    this.items.children[i].held = true;
-                    this.items.children[i].frame = 0;
-                    this.items.children[i].body.gravity.y = 0;
-                    this.items.children[i].frame = 0;
-                    this.items.children[i].releaseTime = 0;
-                    this.items.children[i].holdTime = 0;
-                    var dist1 = Math.abs(this.player.body.x - this.items.children[i].holdbox1);
-                    var dist2 = Math.abs(this.player.body.x - this.items.children[i].holdbox2);
-
-
-                    if (dist2 < dist1) {
-                        this.items.children[i].offset = this.items.children[i].body.width;
-                    }
-                    else {
-                        this.items.children[i].offset = 0;
-                    }
+                if (dist2 < dist1) {
+                    this.item.children[i].offset = this.item.children[i].body.width;
                 }
                 else {
-                    if (this.items.children[i].holdTime > 10) {
-                        this.items.children[i].held = false;
-                        this.items.children[i].frame = 1;
-                        this.items.children[i].body.gravity.y = 300;
-                        this.items.children[i].releaseTime = 0;
-                        this.items.children[i].holdTime = 0;
-                    }
+                    this.item.children[i].offset = 0;
                 }
+            }
+            else {
+                if (this.item.children[i].holdTime > 10) {
+                    this.item.children[i].held = false;
+                    this.item.children[i].frame = 1;
+                    this.item.children[i].body.gravity.y = 300;
+                    this.item.children[i].releaseTime = 0;
+                    this.item.children[i].holdTime = 0;
+                }
+
 
             }
         }
     },
 
+
     initItems: function () {
         this.items = this.add.group();
 
-        //  enable physics for pipe
         this.items.enableBody = true;
 
         this.pipe1 = this.items.create(300, 100, 'pipe');
+
         this.pipe1.body.gravity.y = 300;
         this.pipe1.body.bounce.y = .1;
         this.pipe1.held = false;
@@ -279,53 +283,38 @@ Game.Main.prototype = {
     playerDamaged: function () {
         if (this.player.damagedTime < this.time.now) {
 
-            console.log('damaged');
-            this.player.damagedTime = this.time.now + 1000;
+            this.player.damagedTime = this.time.now + 200;
 
         }
 
     },
     initPlayer: function () {
         // The player and its settings
-        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'dude');
+        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'hand');
 
         //  We need to enable physics on the player
-        this.physics.arcade.enable(this.player);
+        this.physics.p2.enable(this.player, true);
 
-        //  Player physics properties. Give the little guy a slight bounce.
-        this.player.body.bounce.y = 0.2;
-        this.player.body.gravity.y = 300;
-        this.player.body.collideWorldBounds = true;
+        this.player.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 5), 10, true);
+        this.player.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
+        this.player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('left_damaged', 1, 2), 10, true);
+        this.player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('right_damaged', 1, 2), 10, true);
 
-        //  Our two animations, walking left and right.
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+
+        this.player.animations.play('left');
+        this.player.face = 'left';
+
+        this.player.body.clearShapes();
+        this.player.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
+
+
         this.camera.follow(this.player);
 
         this.player.damaged = false;
         this.player.damagedTime = 0;
     },
-    initStars: function () {
-        //  Finally some stars to collect
-        this.stars = this.add.group();
-
-        //  We will enable physics for any star that is created in this group
-        this.stars.enableBody = true;
-
-        //  Here we'll create 12 of them evenly spaced apart
-        for (var i = 0; i < 12; i++) {
-            //  Create a star inside of the 'stars' group
-            var star = this.stars.create(i * 70, 0, 'star');
-
-            //  Let gravity do its thing
-            star.body.gravity.y = 300;
-
-            //  This just gives each star a slightly random bounce value
-            star.body.bounce.y = 0.7 + Math.random() * 0.2;
-        }
-    },
     initText: function () {
-        // the level 
+        // the level
         this.levelText = this.add.text(100, 70, 'Level:' + Level, { font: '32px Aclonica', fill: '#000' });
 
         //  The score
@@ -336,25 +325,42 @@ Game.Main.prototype = {
     initEnemies: function () {
 
         this.enemies = this.add.group()
-        this.enemies.enableBody = true;
 
-        this.enemy1 = this.enemies.create(64 * 1 + 16, 64 * 8 + 16, 'enemy');
-        this.enemy1.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.enemy1.animations.add('right', [5, 6, 7, 8], 10, true);
-        this.enemy1.animations.play('right');
-        this.enemy1.body.velocity.x = 100;
 
-        this.enemy2 = this.enemies.create(64 * 7 + 16, 64 * 8 + 16, 'enemy');
-        this.enemy2.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.enemy2.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
+        this.physics.p2.enable(this.enemy1, true);
+        this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        this.enemy1.body.clearShapes();
+        this.enemy1.body.addRectangle(86, 256, 5, 11);
+        this.enemy1.body.addRectangle(86, 256, 5, 11);
+        this.enemy1.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy1.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy1.body.fixedRotation = true;
+
+
+
+        this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
+        this.physics.p2.enable(this.enemy2, true);
+        this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
         this.enemy2.animations.play('right');
-        this.enemy2.body.velocity.x = 100;
+        this.enemy2.body.clearShapes();
+        this.enemy2.body.addRectangle(86, 256, 5, 11);
+        this.enemy2.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy2.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy2.body.fixedRotation = true;
 
-        this.enemy3 = this.enemies.create(64 * 13 + 16, 64 * 6 + 16, 'enemy');
-        this.enemy3.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.enemy3.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
+        this.physics.p2.enable(this.enemy3, true);
+        this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
         this.enemy3.animations.play('right');
-        this.enemy3.body.velocity.x = 100;
+        this.enemy3.body.clearShapes();
+        this.enemy3.body.addRectangle(86, 256, 5, 11);
+        this.enemy3.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy3.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy3.body.fixedRotation = true;
 
     },
     updateEnemies: function () {
@@ -382,6 +388,69 @@ Game.Main.prototype = {
             this.enemy3.animations.play('left');
             this.enemy3.body.velocity.x = -100;
         }
-    }
+    },
+    initPausedScreen: function (game) {
+        pausedLayer = map.createLayer('pausedLayer');
+        pausedLayer.resizeWorld();
+        pausedLayer.alpha = 0.6;
+        game.paused = true;
 
+        pausedBtnCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'pausedBtnCard')
+        pausedBtnCard.anchor.setTo(0.5, 0.5);
+        pausedBtnCard.scale.setTo(2.5, 2.5);
+
+        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, this, 2, 1, 0);
+        cancelBtn.anchor.setTo(0.5, 0.5);
+        cancelBtn.scale.setTo(0.3, 0.3);
+
+        pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
+        pausedBtnCardText.anchor.setTo(0.5, 0.5);
+
+        settingBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.settingOnClick, this, 2, 1, 0);
+        settingBtn.anchor.setTo(0.5, 0.5);
+        settingBtn.scale.setTo(1.6, 1.6);
+
+        settingIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'settingIcon');
+        settingIcon.anchor.setTo(0.5, 0.5);
+        settingIcon.scale.setTo(0.8, 0.8);
+
+
+        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, this, 2, 1, 0);
+        resetBtn.anchor.setTo(0.5, 0.5);
+        resetBtn.scale.setTo(1.6, 1.6);
+
+        resetIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'resetIcon');
+        resetIcon.anchor.setTo(0.5, 0.5);
+        resetIcon.scale.setTo(0.8, 0.8);
+
+
+        inventoryBtn = this.add.image(this.camera.view.centerX + 79, this.camera.view.centerY, 'pausedBtn');
+        inventoryBtn.anchor.setTo(0.5, 0.5);
+        inventoryBtn.scale.setTo(3.8, 3.8);
+
+        inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
+        inventoryTxt.anchor.setTo(0.5, 0.5);
+    },
+    resetOnClick: function (game) {
+        this.score = 0;
+        this.state.restart();
+        game.paused = false;
+    },
+    settingOnClick: function () {
+        console.log('setting button clicked');
+    },
+    resumeOnClick: function (game) {
+        pausedLayer.destroy();
+        cancelBtn.destroy();
+        pausedBtnCard.destroy();
+        pausedBtnCardText.destroy();
+        resetBtn.destroy();
+        resetIcon.destroy();
+        settingBtn.destroy();
+        settingIcon.destroy();
+        inventoryBtn.destroy();
+        inventoryTxt.destroy();
+        // Unpause the game
+        game.paused = false;
+    }
 }
