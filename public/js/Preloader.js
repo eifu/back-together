@@ -26,6 +26,9 @@ Game.Preloader.prototype = {
         this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
         this.load.spritesheet('enemy', 'assets/enemy.png', 32, 48);
         this.load.tilemap('map', 'assets/test.json', null, Phaser.Tilemap.TILED_JSON);
+
+        this.load.atlasJSONArray('hand', 'assets/hand.png', 'assets/hand.json');
+
         this.load.spritesheet('pipe', 'assets/pipe.png', 64, 16);
         this.load.image('hold', 'assets/hold.png');
         this.load.image('tileset', 'assets/tileset.png');
