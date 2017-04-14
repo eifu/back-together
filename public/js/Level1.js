@@ -89,22 +89,21 @@ BackTogether.Level1.prototype = {
         //  Reset the players velocity (movement)
         this.player.body.velocity.x = 0;
 
-        //  Reset the players velocity (movement)
-        this.player.body.velocity.x = 0;
-
         if (this.time.now < this.player.damagedTime) {
             if (this.player.face == 'left') {
                 this.player.animations.play('left_damaged')
                 this.player.body.velocity.x = 100;
-                // this.playerDamaged();
-                this.screenShake();
             } else {
                 this.player.animations.play("right_damaged")
                 this.player.body.velocity.x = -100;
-                this.screenShake();
             }
 
         } else {
+            if (this.checkOverlap(this.player, this.enemies)) {
+                this.screenShake();
+                this.playerDamaged();
+            }
+
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
                 this.player.body.velocity.x = -150;
@@ -121,8 +120,12 @@ BackTogether.Level1.prototype = {
             } else {
                 if (this.player.face == 'left') {
                     this.player.animations.play('left');
+                    this.player.animations.stop();
+
                 } else {
                     this.player.animations.play('right');
+                    this.player.animations.stop();
+
                 }
             }
 
@@ -165,10 +168,7 @@ BackTogether.Level1.prototype = {
 
         this.updateEnemies();
 
-        if (this.checkOverlap(this.player, this.enemies)) {
 
-            this.playerDamaged();
-        }
 
     },
 
@@ -241,7 +241,7 @@ BackTogether.Level1.prototype = {
     playerDamaged: function () {
         if (this.player.damagedTime < this.time.now) {
 
-            this.player.damagedTime = this.time.now + 200;
+            this.player.damagedTime = this.time.now + 1000;
         }
 
     },
