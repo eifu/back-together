@@ -220,7 +220,7 @@ BackTogether.Level1.prototype = {
         this.updateEnemies();
 
         if (this.checkOverlap(this.player, this.enemies)){
-            this.playerDamaged();
+//            this.playerDamaged();
             this.screenShake();
         }
 
@@ -235,7 +235,7 @@ BackTogether.Level1.prototype = {
 
     },
     screenShake: function(){
-        this.camera.shake(0.03, 200);
+        this.camera.shake(0.03, 500);
     },
     
     propUser: function () {
