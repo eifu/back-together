@@ -1,4 +1,4 @@
-Game.Main = function (game) {
+BackTogether.Main = function (game) {
 
 };
 
@@ -9,7 +9,7 @@ var pausedLayer;
 var keys;
 
 
-Game.Main.prototype = {
+BackTogether.Main.prototype = {
 
     create: function (game) {
 

@@ -1,4 +1,4 @@
-Game.Level = function (game) {
+BackTogether.Level = function (game) {
 
 };
 var Level;
@@ -11,7 +11,7 @@ var wfconfig = {
 var map;
 var menuLayer;
 
-Game.Level.prototype = {
+BackTogether.Level.prototype = {
     create: function (game) {
         WebFont.load(wfconfig);
         game.stage.backgroundColor = "#570e28";

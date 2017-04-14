@@ -20,14 +20,14 @@
 <body>
     <script type="text/javascript">
         window.onload = function () {
-            var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
+            var backtogether = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
-            game.state.add('Boot', Game.Boot);
-            game.state.add('Preloader', Game.Preloader);
-            game.state.add('Main', Game.Main);
-            game.state.add('Level', Game.Level);
+            backtogether.state.add('Boot', BackTogether.Boot);
+            backtogether.state.add('Preloader', BackTogether.Preloader);
+            backtogether.state.add('Main', BackTogether.Main);
+            backtogether.state.add('Level', BackTogether.Level);
 
-            game.state.start('Boot');
+            backtogether.state.start('Boot');
         }
     </script>
 </body>
