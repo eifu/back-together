@@ -219,12 +219,19 @@ Game.Main.prototype = {
 
         this.updateEnemies();
 
-    },
-
-    checkOverlap: function (body, body2){
-        if(body.sprite && body.sprite.name == "player" && body2.sprite.type == "item"){
+        if (this.checkOverlap(this.player, this.enemies)){
             console.log("hello");
         }
+
+    },
+
+    checkOverlap: function (spriteA, spriteB) {
+
+        var boundsA = spriteA.getBounds();
+        var boundsB = spriteB.getBounds();
+
+        return Phaser.Rectangle.intersects(boundsA, boundsB);
+
     },
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
@@ -312,6 +319,7 @@ Game.Main.prototype = {
 
         this.player.damaged = false;
         this.player.damagedTime = 0;
+
     },
     initText: function () {
         // the level
