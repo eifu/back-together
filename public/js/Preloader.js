@@ -13,21 +13,20 @@ Game.Preloader.prototype = {
         this.time.advancedTiming = true;
 
         this.load.setPreloadSprite(this.preloadBar);
-        this.load.image('sky', 'assets/sky.png');
-        this.load.image('ground', 'assets/platform.png');
-        this.load.image('star', 'assets/star.png');
         this.load.image('logo', 'assets/logo.jpg');
+        this.load.image('menuBtnCard', 'assets/menuBtnCard.png');
         this.load.spritesheet('levelBtn', 'assets/levelBtn.png', 110, 60);
         this.load.image('pausedBtn', 'assets/pausedBtn.png');
         this.load.image('pausedBtnCard', 'assets/pausedBtnCard.png');
         this.load.image('resetIcon', 'assets/resetIcon.png');
         this.load.image('settingIcon', 'assets/settingIcon.png');
         this.load.image('cancelIcon', 'assets/cancelIcon.png');
-        this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-        this.load.spritesheet('enemy', 'assets/enemy.png', 32, 48);
+        // this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+        // this.load.spritesheet('enemy', 'assets/enemy.png', 32, 48);
         this.load.tilemap('map', 'assets/test.json', null, Phaser.Tilemap.TILED_JSON);
 
         this.load.atlasJSONArray('hand', 'assets/hand.png', 'assets/hand.json');
+        this.load.atlasJSONArray('enemy1', 'assets/enemy1.png', 'assets/enemy1.json');
 
         this.load.spritesheet('pipe', 'assets/pipe.png', 64, 16);
         this.load.image('hold', 'assets/hold.png');
