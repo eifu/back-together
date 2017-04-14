@@ -220,7 +220,8 @@ BackTogether.Level1.prototype = {
         this.updateEnemies();
 
         if (this.checkOverlap(this.player, this.enemies)){
-            console.log("hello");
+            this.playerDamaged();
+            this.screenShake();
         }
 
     },
@@ -233,6 +234,10 @@ BackTogether.Level1.prototype = {
         return Phaser.Rectangle.intersects(boundsA, boundsB);
 
     },
+    screenShake: function(){
+        this.camera.shake(0.03, 200);
+    },
+    
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
             if (!this.item.children[i].held) {
@@ -291,7 +296,6 @@ BackTogether.Level1.prototype = {
         if (this.player.damagedTime < this.time.now) {
 
             this.player.damagedTime = this.time.now + 200;
-
         }
 
     },
