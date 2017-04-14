@@ -1,4 +1,4 @@
-BackTogether.Level = function (game) {
+BackTogether.LevelSelecting = function (game) {
 
 };
 var Level;
@@ -11,7 +11,7 @@ var wfconfig = {
 var map;
 var menuLayer;
 
-BackTogether.Level.prototype = {
+BackTogether.LevelSelecting.prototype = {
     create: function (game) {
         WebFont.load(wfconfig);
         game.stage.backgroundColor = "#570e28";
@@ -74,7 +74,7 @@ BackTogether.Level.prototype = {
                 this.createButton(game, itoaArray[y * 4 + x],
                     game.world.centerX + (x + 1) * 120 - 60 - 240, game.world.centerY + 70 * y - 80,
                     110, 60, function () {
-                        game.state.start("Main");
+                        game.state.start("Level1");
                     })
             }
         }

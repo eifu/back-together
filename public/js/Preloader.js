@@ -46,7 +46,7 @@ BackTogether.Preloader.prototype = {
     },
 
     create: function () {
-        this.state.start("Level");
+        this.state.start("LevelSelecting");
         
     }
 
