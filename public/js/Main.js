@@ -10,6 +10,7 @@ var keys;
 Game.Main.prototype = {
 
     create: function (game) {
+        game.physics.p2.setPostBroadphaseCallback(checkOverlap, this); 
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
 
@@ -216,6 +217,11 @@ Game.Main.prototype = {
         this.scoreText.text = 'Score: ' + this.score;
 
     },
+    checkOverlap: function (body, body2){
+        if(body.sprite.name == "player" && body2.sprite.type == "item"){
+            console.log("hello");
+        }
+    },
     propUser: function () {
         for (var i = 0; i < this.items.length; i++) {
             if (!this.items.children[i].held) {
@@ -268,6 +274,7 @@ Game.Main.prototype = {
         this.pipe1.releaseTime = 0;
         this.pipe1.holdbox1 = this.pipe1.body.x;
         this.pipe1.holdbox2 = this.pipe1.body.x + this.pipe1.body.width;
+        this.pipe1.type = "item";
     },
     playerDamaged: function () {
         if (this.player.damagedTime < this.time.now) {
