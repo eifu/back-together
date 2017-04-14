@@ -82,9 +82,6 @@ BackTogether.Level1.prototype = {
     update: function (game) {
 
 
-        //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-        this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
-
         for (var i = 0; i < this.items.length; i++) {
             this.items.children[i].frame = 0;
         }
@@ -99,9 +96,12 @@ BackTogether.Level1.prototype = {
             if (this.player.face == 'left') {
                 this.player.animations.play('left_damaged')
                 this.player.body.velocity.x = 100;
+                // this.playerDamaged();
+                this.screenShake();
             } else {
                 this.player.animations.play("right_damaged")
                 this.player.body.velocity.x = -100;
+                this.screenShake();
             }
 
         } else {
@@ -144,60 +144,6 @@ BackTogether.Level1.prototype = {
 
         }
 
-
-
-        if (keys['SPACE'].isDown) {
-
-            pausedLayer = map.createLayer('pausedLayer');
-            pausedLayer.resizeWorld();
-            pausedLayer.alpha = 0.6;
-            game.paused = true;
-
-            pausedBtnCard = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'pausedBtnCard')
-            pausedBtnCard.anchor.setTo(0.5, 0.5);
-            pausedBtnCard.scale.setTo(2.5, 2.5);
-
-            cancelBtn = game.add.button(game.camera.view.centerX + 235 , game.camera.view.centerY-110, 'cancelIcon', resumeOnClick, this,2,1,0);
-            cancelBtn.anchor.setTo(0.5,0.5);
-            cancelBtn.scale.setTo(0.3,0.3);
-
-            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
-            pausedBtnCardText.anchor.setTo(0.5, 0.5);
-
-            settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
-            settingBtn.anchor.setTo(0.5, 0.5);
-            settingBtn.scale.setTo(1.6, 1.6);
-
-            settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
-            settingIcon.anchor.setTo(0.5, 0.5);
-            settingIcon.scale.setTo(0.8, 0.8);
-
-
-            resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
-            resetBtn.anchor.setTo(0.5, 0.5);
-            resetBtn.scale.setTo(1.6, 1.6);
-
-            resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
-            resetIcon.anchor.setTo(0.5, 0.5);
-            resetIcon.scale.setTo(0.8, 0.8);
-
-
-            inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
-            inventoryBtn.anchor.setTo(0.5, 0.5);
-            inventoryBtn.scale.setTo(3.8, 3.8);
-
-            inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
-            inventoryTxt.anchor.setTo(0.5, 0.5);
-
-            function resetOnClick(event) {
-                this.score = 0;
-                game.state.restart();
-                game.paused = false;
-            }
-            function settingOnClick() {
-                console.log('setting button clicked');
-            }
-        }
         for (var i = 0; i < this.items.length; i++) {
             if (this.items.children[i].held) {
                 this.items.children[i].body.y = this.player.body.y;
@@ -219,9 +165,9 @@ BackTogether.Level1.prototype = {
 
         this.updateEnemies();
 
-        if (this.checkOverlap(this.player, this.enemies)){
-//            this.playerDamaged();
-            this.screenShake();
+        if (this.checkOverlap(this.player, this.enemies)) {
+
+            this.playerDamaged();
         }
 
     },
@@ -234,10 +180,10 @@ BackTogether.Level1.prototype = {
         return Phaser.Rectangle.intersects(boundsA, boundsB);
 
     },
-    screenShake: function(){
-        this.camera.shake(0.03, 500);
+    screenShake: function () {
+        this.camera.shake(0.01, 100);
     },
-    
+
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
             if (!this.item.children[i].held) {

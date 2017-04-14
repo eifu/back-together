@@ -21,6 +21,17 @@
          "width":36,
          "x":0,
          "y":0
+        }, 
+        {
+         "height":20,
+         "image":"",
+         "name":"backgroundLayer",
+         "opacity":1,
+         "type":"imagelayer",
+         "visible":true,
+         "width":36,
+         "x":0,
+         "y":0
         }],
  "nextobjectid":1,
  "orientation":"orthogonal",
@@ -30,7 +41,7 @@
         {
          "columns":2,
          "firstgid":1,
-         "image":"tileset.png",
+         "image":"..\/tiles\/tileset.png",
          "imageheight":256,
          "imagewidth":128,
          "margin":0,
