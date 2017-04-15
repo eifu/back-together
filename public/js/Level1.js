@@ -124,12 +124,14 @@ BackTogether.Level1.prototype = {
                 if (this.player.damaged && this.player.face == 'left'){
                     this.player.animations.play('left');
                     this.player.animations.stop();
+                    this.player.damaged = false;
                 } else if (this.player.face == 'left') {
                     // this.player.animations.play('left');
                     this.player.animations.stop();
                 } else if (this.player.damaged && this.player.face == 'right') {
                     this.player.animations.play('right');
                     this.player.animations.stop();
+                    this.player.damaged = false;
                 } else if (this.player.face == 'right') {
                     // this.player.animations.play('right');
                     this.player.animations.stop();
