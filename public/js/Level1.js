@@ -98,6 +98,8 @@ BackTogether.Level1.prototype = {
                 this.player.body.velocity.x = -100;
             }
 
+            this.player.damaged = true;
+
         } else {
             if (this.checkOverlap(this.player, this.enemies)) {
                 this.screenShake();
@@ -118,15 +120,20 @@ BackTogether.Level1.prototype = {
                 this.player.animations.play('right');
                 this.player.face = 'right';
             } else {
-                if (this.player.face == 'left') {
+
+                if (this.player.damaged && this.player.face == 'left'){
                     this.player.animations.play('left');
                     this.player.animations.stop();
-
-                } else {
+                } else if (this.player.face == 'left') {
+                    // this.player.animations.play('left');
+                    this.player.animations.stop();
+                } else if (this.player.damaged && this.player.face == 'right') {
                     this.player.animations.play('right');
                     this.player.animations.stop();
-
-                }
+                } else if (this.player.face == 'right') {
+                    // this.player.animations.play('right');
+                    this.player.animations.stop();
+                } 
             }
 
         }
@@ -221,8 +228,18 @@ BackTogether.Level1.prototype = {
             }
         }
     },
+    playerDamaged: function () {
+        if (this.player.damagedTime < this.time.now) {
+            this.player.damagedTime = this.time.now + 1000;
+            if (this.player.face == 'left'){
+                this.player.face = 'left_damagd';
+            }else{
+                this.player.face = 'right_damaged';
+            }
 
+        }
 
+    },
     initItems: function () {
         this.items = this.add.group();
 
@@ -237,13 +254,6 @@ BackTogether.Level1.prototype = {
         this.pipe1.holdbox1 = this.pipe1.body.x;
         this.pipe1.holdbox2 = this.pipe1.body.x + this.pipe1.body.width;
         this.pipe1.type = "item";
-    },
-    playerDamaged: function () {
-        if (this.player.damagedTime < this.time.now) {
-
-            this.player.damagedTime = this.time.now + 1000;
-        }
-
     },
     initPlayer: function () {
         // The player and its settings
