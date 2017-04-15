@@ -78,7 +78,11 @@ BackTogether.Level1.prototype = {
                 for (var i = 0; i < player.itemBtns.length; i++) {
                     player.itemBtns[i].destroy();
                 }
+                for (var i = 0; i < player.itemNums.length; i++) {
+                    player.itemNums[i].destroy();
+                }
                 player.itemBtns = [];
+                player.itemNums = [];
 
                 console.log(player.itemBtns);
                 // Unpause the game
@@ -278,10 +282,10 @@ BackTogether.Level1.prototype = {
         player.damaged = false;
         player.damagedTime = 0;
 
-        player.items = ['invisible', 'stink', 'invisible'];
-        // player.items = {'invisible':2, 'stink':1};
+        // player.items = ['invisible', 'stink', 'invisible'];
+        player.items = { 'invisible': 2, 'stink': 1 };
         player.itemBtns = [];
-
+        player.itemNums = [];
 
     },
     initText: function () {
@@ -402,15 +406,29 @@ BackTogether.Level1.prototype = {
         inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY - 68, 'inventory', { font: '32px Aclonica', fill: '#000' });
         inventoryTxt.anchor.setTo(0.5, 0.5);
 
-        for (var i = 0; i < player.items.length; i++) {
+        var i = 0;
+        for (var key in player.items) {
+            if (!player.items.hasOwnProperty(key)) continue;
+
+            var obj = player.items[key];
+
+            console.log(key);
+            console.log(obj);
 
             var x = this.camera.view.centerX + i * 32;
             var y = this.camera.view.centerY - 58 + i + 32
 
-            var item1 = this.add.button(x, y, player.items[i], this.inventoryItemOnClick, game, 2, 1, 0);
+            var item1 = this.add.button(x, y, key, this.inventoryItemOnClick, game, 2, 1, 0);
             item1.anchor.setTo(0.5, 0.5);
             player.itemBtns.push(item1);
 
+            var num = this.add.sprite(x + 16, y + 16, 'numbers');
+            num.anchor.setTo(0.5, 0.5);
+            num.scale.setTo(0.5, 0.5);
+            player.itemNums.push(num);
+            num.frame = obj;
+
+            i += 1;
         }
 
     },
@@ -437,8 +455,12 @@ BackTogether.Level1.prototype = {
         for (var i = 0; i < player.itemBtns.length; i++) {
             player.itemBtns[i].destroy();
         }
+        for (var i = 0; i < player.itemNums.length; i++) {
+            player.itemNums[i].destroy();
+        }
 
         player.itemBtns = [];
+        player.itemNums = [];
 
         // Unpause the game
         this.paused = false;

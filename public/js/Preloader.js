@@ -17,6 +17,7 @@ BackTogether.Preloader.prototype = {
         this.load.image('menuBtnCard', 'assets/images/menuBtnCard.png');
         this.load.spritesheet('levelBtn', 'assets/images/levelBtn.png', 110, 60);
         this.load.spritesheet('item1', 'assets/images/item1.png',32,32);
+        this.load.spritesheet('numbers', 'assets/images/numbers.png',32,32);
         this.load.image('invisible', 'assets/images/invisible.png');
         this.load.image('stink', 'assets/images/stink.png');
         this.load.image('pausedBtn', 'assets/images/pausedBtn.png');
