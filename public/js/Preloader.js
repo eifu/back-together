@@ -16,13 +16,14 @@ BackTogether.Preloader.prototype = {
         this.load.image('logo', 'assets/images/logo.jpg');
         this.load.image('menuBtnCard', 'assets/images/menuBtnCard.png');
         this.load.spritesheet('levelBtn', 'assets/images/levelBtn.png', 110, 60);
+        this.load.spritesheet('item1', 'assets/images/item1.png',32,32);
+        this.load.image('invisible', 'assets/images/invisible.png');
+        this.load.image('stink', 'assets/images/stink.png');
         this.load.image('pausedBtn', 'assets/images/pausedBtn.png');
         this.load.image('pausedBtnCard', 'assets/images/pausedBtnCard.png');
         this.load.image('resetIcon', 'assets/images/resetIcon.png');
         this.load.image('settingIcon', 'assets/images/settingIcon.png');
         this.load.image('cancelIcon', 'assets/images/cancelIcon.png');
-        // this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-        // this.load.spritesheet('enemy', 'assets/enemy.png', 32, 48);
         this.load.tilemap('map', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
 
         this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
