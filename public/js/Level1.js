@@ -8,6 +8,8 @@ var pausedLayer;
 
 var keys;
 
+var outcomeLayer;
+
 
 BackTogether.Level1.prototype = {
 
@@ -46,10 +48,12 @@ BackTogether.Level1.prototype = {
             Phaser.Keyboard.W,
             Phaser.Keyboard.A,
             Phaser.Keyboard.S,
-            Phaser.Keyboard.D
+            Phaser.Keyboard.D,
+            Phaser.Keyboard.O,
+            Phaser.Keyboard.P
         ];
         var name = [
-            'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D'
+            'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
         ]
 
         keys = {};
@@ -144,60 +148,6 @@ BackTogether.Level1.prototype = {
 
         }
 
-
-
-//        if (keys['SPACE'].isDown) {
-//
-//            pausedLayer = map.createLayer('pausedLayer');
-//            pausedLayer.resizeWorld();
-//            pausedLayer.alpha = 0.6;
-//            game.paused = true;
-//
-//            pausedBtnCard = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'pausedBtnCard')
-//            pausedBtnCard.anchor.setTo(0.5, 0.5);
-//            pausedBtnCard.scale.setTo(2.5, 2.5);
-//
-//            cancelBtn = game.add.button(game.camera.view.centerX + 235 , game.camera.view.centerY-110, 'cancelIcon', resumeOnClick, this,2,1,0);
-//            cancelBtn.anchor.setTo(0.5,0.5);
-//            cancelBtn.scale.setTo(0.3,0.3);
-//
-//            pausedBtnCardText = game.add.text(game.camera.view.centerX, game.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
-//            pausedBtnCardText.anchor.setTo(0.5, 0.5);
-//
-//            settingBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'pausedBtn', settingOnClick, this, 2, 1, 0);
-//            settingBtn.anchor.setTo(0.5, 0.5);
-//            settingBtn.scale.setTo(1.6, 1.6);
-//
-//            settingIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY + 55, 'settingIcon');
-//            settingIcon.anchor.setTo(0.5, 0.5);
-//            settingIcon.scale.setTo(0.8, 0.8);
-//
-//
-//            resetBtn = game.add.button(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'pausedBtn', resetOnClick, this, 2, 1, 0);
-//            resetBtn.anchor.setTo(0.5, 0.5);
-//            resetBtn.scale.setTo(1.6, 1.6);
-//
-//            resetIcon = game.add.sprite(game.camera.view.centerX - 134, game.camera.view.centerY - 55, 'resetIcon');
-//            resetIcon.anchor.setTo(0.5, 0.5);
-//            resetIcon.scale.setTo(0.8, 0.8);
-//
-//
-//            inventoryBtn = game.add.image(game.camera.view.centerX + 79, game.camera.view.centerY, 'pausedBtn');
-//            inventoryBtn.anchor.setTo(0.5, 0.5);
-//            inventoryBtn.scale.setTo(3.8, 3.8);
-//
-//            inventoryTxt = game.add.text(game.camera.view.centerX + 79, game.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
-//            inventoryTxt.anchor.setTo(0.5, 0.5);
-//
-//            function resetOnClick(event) {
-//                this.score = 0;
-//                game.state.restart();
-//                game.paused = false;
-//            }
-//            function settingOnClick() {
-//                console.log('setting button clicked');
-//            }
-//        }
         for (var i = 0; i < this.items.length; i++) {
             if (this.items.children[i].held) {
                 this.items.children[i].body.y = this.player.body.y;
@@ -215,6 +165,10 @@ BackTogether.Level1.prototype = {
         }
         if (keys['SPACE'].isDown) {
             this.initPausedScreen(game);
+        }
+        
+        if(keys['O'].isDown){
+            this.gameStatus();
         }
 
         this.updateEnemies();
@@ -443,17 +397,46 @@ BackTogether.Level1.prototype = {
         inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
         inventoryTxt.anchor.setTo(0.5, 0.5);
     },
-    gameStatus: function(win){
-        pausedLayer = map.createLayer('winLoseLayer');
-        pausedLayer.resizeWorld();
-        pausedLayer.alpha = 0.5;
-        
-        if(win){
-            
-        }
-        else{
-            
-        }
+    gameStatus: function(){
+        outcomeLayer = map.createLayer('outcomeLayer');
+        outcomeLayer.resizeWorld();
+        outcomeLayer.alpha = 0.6;
+
+//        winBtnCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'restartBtnCard')
+//        winBtnCard.anchor.setTo(0.5, 0.5);
+//        winBtnCard.scale.setTo(2.5, 2.5);
+//
+//        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, this, 2, 1, 0);
+//        cancelBtn.anchor.setTo(0.5, 0.5);
+//        cancelBtn.scale.setTo(0.3, 0.3);
+//
+//        pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
+//        pausedBtnCardText.anchor.setTo(0.5, 0.5);
+//
+//        settingBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.settingOnClick, this, 2, 1, 0);
+//        settingBtn.anchor.setTo(0.5, 0.5);
+//        settingBtn.scale.setTo(1.6, 1.6);
+//
+//        settingIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'settingIcon');
+//        settingIcon.anchor.setTo(0.5, 0.5);
+//        settingIcon.scale.setTo(0.8, 0.8);
+//
+//
+//        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, this, 2, 1, 0);
+//        resetBtn.anchor.setTo(0.5, 0.5);
+//        resetBtn.scale.setTo(1.6, 1.6);
+//
+//        resetIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'resetIcon');
+//        resetIcon.anchor.setTo(0.5, 0.5);
+//        resetIcon.scale.setTo(0.8, 0.8);
+//
+//
+//        inventoryBtn = this.add.image(this.camera.view.centerX + 79, this.camera.view.centerY, 'pausedBtn');
+//        inventoryBtn.anchor.setTo(0.5, 0.5);
+//        inventoryBtn.scale.setTo(3.8, 3.8);
+//
+//        inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
+//        inventoryTxt.anchor.setTo(0.5, 0.5);
     },
     resetOnClick: function (game) {
         this.score = 0;
