@@ -99,9 +99,6 @@ BackTogether.LevelSelecting.prototype = {
         b.anchor.setTo(0.5, 0.5);
         b.width = w;
         b.height = h;
-        
-        b.inputEnabled = false;
-        b.input.enabled = false;
 
         var txt = game.add.text(b.x, b.y, string, {
             font: '16px Aclonica', fill: "#ff3823",
