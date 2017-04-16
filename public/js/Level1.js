@@ -8,8 +8,9 @@ var pausedLayer;
 
 var keys;
 
-var outcomeLayer;
-
+var playAgain;
+var mainMenu;
+var next;
 
 BackTogether.Level1.prototype = {
 
@@ -168,7 +169,11 @@ BackTogether.Level1.prototype = {
         }
         
         if(keys['O'].isDown){
-            this.gameStatus();
+            this.gameStatus(game, true);
+        }
+        
+        if(keys['P'].isDown){
+            this.gameStatus(game, false);
         }
 
         this.updateEnemies();
@@ -397,46 +402,21 @@ BackTogether.Level1.prototype = {
         inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
         inventoryTxt.anchor.setTo(0.5, 0.5);
     },
-    gameStatus: function(){
-        outcomeLayer = map.createLayer('outcomeLayer');
+    gameStatus: function(game, win){
+        outcomeLayer = map.createLayer('pausedLayer');
         outcomeLayer.resizeWorld();
-        outcomeLayer.alpha = 0.6;
+        outcomeLayer.alpha = 1;
 
-//        winBtnCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'restartBtnCard')
-//        winBtnCard.anchor.setTo(0.5, 0.5);
-//        winBtnCard.scale.setTo(2.5, 2.5);
-//
-//        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, this, 2, 1, 0);
-//        cancelBtn.anchor.setTo(0.5, 0.5);
-//        cancelBtn.scale.setTo(0.3, 0.3);
-//
-//        pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
-//        pausedBtnCardText.anchor.setTo(0.5, 0.5);
-//
-//        settingBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.settingOnClick, this, 2, 1, 0);
-//        settingBtn.anchor.setTo(0.5, 0.5);
-//        settingBtn.scale.setTo(1.6, 1.6);
-//
-//        settingIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'settingIcon');
-//        settingIcon.anchor.setTo(0.5, 0.5);
-//        settingIcon.scale.setTo(0.8, 0.8);
-//
-//
-//        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, this, 2, 1, 0);
-//        resetBtn.anchor.setTo(0.5, 0.5);
-//        resetBtn.scale.setTo(1.6, 1.6);
-//
-//        resetIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'resetIcon');
-//        resetIcon.anchor.setTo(0.5, 0.5);
-//        resetIcon.scale.setTo(0.8, 0.8);
-//
-//
-//        inventoryBtn = this.add.image(this.camera.view.centerX + 79, this.camera.view.centerY, 'pausedBtn');
-//        inventoryBtn.anchor.setTo(0.5, 0.5);
-//        inventoryBtn.scale.setTo(3.8, 3.8);
-//
-//        inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
-//        inventoryTxt.anchor.setTo(0.5, 0.5);
+        playAgain = game.add.button(this.camera.view.centerX - 110, this.camera.view.centerY, 'gameStatusBtn', this.restartLvl, this, 2, 1, 0);
+        playAgain.anchor.setTo(0.5, 0.5);
+        
+        mainMenu = game.add.button(this.camera.view.centerX, this.camera.view.centerY, 'gameStatusBtn', this.returnMM, this, 2, 1, 0);
+        mainMenu.anchor.setTo(0.5, 0.5);
+        
+        if(!win){
+            next = game.add.button(this.camera.view.centerX + 110, this.camera.view.centerY, 'gameStatusBtn', this.nextLvl, this, 2, 1, 0);
+            next.anchor.setTo(0.5, 0.5);
+        }
     },
     resetOnClick: function (game) {
         this.score = 0;
@@ -445,6 +425,15 @@ BackTogether.Level1.prototype = {
     },
     settingOnClick: function () {
         console.log('setting button clicked');
+    },
+    restartLvl: function () {
+        this.game.state.start('LevelSelecting');
+    },
+    returnMM: function () {
+        this.game.state.start('MainMenu');
+    },
+    nextLvl: function () {
+        console.log("to be implemented");
     },
     resumeOnClick: function (game) {
         pausedLayer.destroy();
