@@ -21,6 +21,8 @@ BackTogether.Preloader.prototype = {
         this.load.image('resetIcon', 'assets/images/resetIcon.png');
         this.load.image('settingIcon', 'assets/images/settingIcon.png');
         this.load.image('cancelIcon', 'assets/images/cancelIcon.png');
+        this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 110, 60);
+        this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
         // this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
         // this.load.spritesheet('enemy', 'assets/enemy.png', 32, 48);
         this.load.tilemap('map', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
@@ -46,7 +48,7 @@ BackTogether.Preloader.prototype = {
     },
 
     create: function () {
-        this.state.start("LevelSelecting");
+        this.state.start("MainMenu");
         
     }
 
