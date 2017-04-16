@@ -422,12 +422,11 @@ BackTogether.Level1.prototype = {
             item1.anchor.setTo(0.5, 0.5);
             player.itemBtns.push(item1);
 
-            var num = this.add.sprite(x + 16, y + 16, 'numbers');
+            var num = this.add.text(x + 16, y + 16, obj, { font: '32px Aclonica', fill: '#000' });
             num.anchor.setTo(0.5, 0.5);
             num.scale.setTo(0.5, 0.5);
             player.itemNums.push(num);
-            num.frame = obj;
-
+ 
             i += 1;
         }
 
