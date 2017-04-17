@@ -77,7 +77,7 @@ BackTogether.MainMenu.prototype = {
         }
 
         function showSettings() {
-            console.log('setting button pressed')
+            game.state.start("Settings");
         }
 
         function showHelp() {
