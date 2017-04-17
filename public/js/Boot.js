@@ -18,6 +18,17 @@ BackTogether.Boot.prototype = {
 
     preload:function(){
         this.load.image("preloadBar", "assets/images/preloadBar.png");
+
+        this.load.script("webfont", "//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js");
+        // The Google WebFont Loader will look for this object,
+        //    so create it before loading the script.
+        WebFontConfig = {
+            //  The Google Fonts we want to load (specify as many as you like in the array)
+            google: {
+                families: ["Aclonica"]
+            }
+
+        };  
     },
 
     create: function(){
