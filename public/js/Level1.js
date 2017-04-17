@@ -178,11 +178,11 @@ BackTogether.Level1.prototype = {
         }
         
         if(keys['O'].isDown){
-            this.gameStatus(game, true);
+            this.game.state.start('WinScreen');
         }
         
         if(keys['P'].isDown){
-            this.gameStatus(game, false);
+            this.game.state.start('LoseScreen');
         }
 
         this.updateEnemies();
@@ -443,26 +443,6 @@ BackTogether.Level1.prototype = {
             i += 1;
         }
 
-    },
-    gameStatus: function(game, win){
-
-        console.log(game);
-        game.paused = true;
-
-        outcomeLayer = map.createLayer('pausedLayer');
-        outcomeLayer.resizeWorld();
-        outcomeLayer.alpha = 1;
-
-        playAgain = game.add.button(this.camera.view.centerX - 110, this.camera.view.centerY, 'gameStatusBtn', this.restartLvl, this, 2, 1, 0);
-        playAgain.anchor.setTo(0.5, 0.5);
-        
-        mainMenu = game.add.button(this.camera.view.centerX, this.camera.view.centerY, 'gameStatusBtn', this.returnMM, this, 2, 1, 0);
-        mainMenu.anchor.setTo(0.5, 0.5);
-        
-        if(!win){
-            next = game.add.button(this.camera.view.centerX + 110, this.camera.view.centerY, 'gameStatusBtn', this.nextLvl, this, 2, 1, 0);
-            next.anchor.setTo(0.5, 0.5);
-        }
     },
     resetOnClick: function () {
         this.score = 0;

@@ -10,16 +10,18 @@ var wfconfig = {
 
 var menuLayer;
 
+var itoaArray;
+
 BackTogether.LevelSelecting.prototype = {
     create: function (game) {
         WebFont.load(wfconfig);
         game.stage.backgroundColor = "#570e28";
 
 
-        var l = game.add.sprite(game.world.centerX, game.world.centerY + 60, 'logo');
+        var l = game.add.sprite(this.camera.view.centerX, this.camera.view.centerY + 60, 'logo');
         l.anchor.setTo(0.5, 0.5);
 
-        var txt = game.add.text(game.world.centerX, 50, "SELECT YOUR LEVEL", {
+        var txt = game.add.text(this.camera.view.centerX, 50, "SELECT YOUR LEVEL", {
             font: '60px Aclonica', fill: "#000",
             align: "center"
         });
@@ -27,13 +29,13 @@ BackTogether.LevelSelecting.prototype = {
         txt.anchor.setTo(0.5, 0.5);
 
 
-        var itoaArray = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN',
+        itoaArray = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN',
             'ELEVEN', 'TWELVE']
 
         for (var y = 0; y < 3; y++) {
             for (var x = 0; x < 4; x++) {
                 this.createButton(game, itoaArray[y * 4 + x],
-                    game.world.centerX + (x + 1) * 120 - 60 - 240, game.world.centerY + 70 * y - 80,
+                    this.camera.view.centerX + (x + 1) * 120 - 60 - 240, this.camera.view.centerY + 70 * y - 80,
                     110, 60, function () {
                     game.state.start("Level1");
                     
