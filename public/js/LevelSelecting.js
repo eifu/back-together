@@ -109,7 +109,6 @@ BackTogether.LevelSelecting.prototype = {
         b.width = w;
         b.height = h;
         game.add.tween(b).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
-        console.log(y);
         
         var txt = game.add.text(b.x, b.y - 50, itoaArray[i], {
             font: '16px Aclonica', fill: "#ff3823",
