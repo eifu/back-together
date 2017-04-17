@@ -5,7 +5,11 @@ var play;
 var menuLayer;
 var settings;
 
+var menuBtns;
 var helpNodes;
+
+var helpSelected;
+var settingSelected;
 
 var map;
 
@@ -29,18 +33,23 @@ BackTogether.MainMenu.prototype = {
 
         playBtn = game.add.button(game.world.centerX, game.world.centerY - 170, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
         playBtn.anchor.setTo(0.5, 0.5);
-        playBtn.scale.setTo(3.0,3.0);
+        playBtn.scale.setTo(3.0, 3.0);
 
         settingBtn = game.add.button(game.world.centerX, game.world.centerY - 70, 'mainMenuBtn', showSettings, this, 2, 1, 0);
         settingBtn.anchor.setTo(0.5, 0.5);
-        settingBtn.scale.setTo(3.0,3.0);
+        settingBtn.scale.setTo(3.0, 3.0);
 
-        helpBtn = game.add.button(game.world.centerX, game.world.centerY+30, 'mainMenuBtn', showHelp, this, 2, 1, 0);
+        helpBtn = game.add.button(game.world.centerX, game.world.centerY + 30, 'mainMenuBtn', showHelp, this, 2, 1, 0);
         helpBtn.anchor.setTo(0.5, 0.5);
-        helpBtn.scale.setTo(3.0,3.0);
+        helpBtn.scale.setTo(3.0, 3.0);
 
-        titleFontStyle = {font: '60px Aclonica', fill: "#C0C0C0",align: "center"}
-        btnFontStyle = {font: '50px Aclonica', fill: "#C0C0C0",align: "center"}
+        menuBtns = [];
+        menuBtns.push(playBtn);
+        menuBtns.push(settingBtn);
+        menuBtns.push(helpBtn);
+
+        titleFontStyle = { font: '60px Aclonica', fill: "#C0C0C0", align: "center" }
+        btnFontStyle = { font: '50px Aclonica', fill: "#C0C0C0", align: "center" }
 
         var titleTxt = game.add.text(game.world.centerX, 50, "BACK TOGETHER", titleFontStyle);
         titleTxt.anchor.setTo(0.5, 0.5);
@@ -65,36 +74,73 @@ BackTogether.MainMenu.prototype = {
 
         function showHelp() {
 
+            menuBtns.forEach(function (e) {
+                e.inputEnabled = false;
+            });
+
             helpLayer = map.createLayer('pausedLayer');
+            helpLayer.alpha = 0;
 
-            helpLayerCardBtn = game.add.button(game.world.centerX, game.world.centerY, 'menuBtnCard', exitHelp, this, 2, 1, 0);
-            helpLayerCardBtn.anchor.setTo(0.5, 0.5);
+            helpLayerCard = game.add.image(game.world.centerX, game.world.centerY, 'menuBtnCard');
+            helpLayerCard.anchor.setTo(0.5, 0.5);
+            helpLayerCard.alpha = 0;
 
-            helpFontStyle = {font: '20px Aclonica', fill: "#F00", align: "center"}
+            helpFontStyle = { font: '20px Aclonica', fill: "#F00", align: "center" };
+            helpTitleFontStyle = { font: '40px Aclonica', fill: "#F00", align: "center" };
+
+            helpTitleTxt = game.add.text(game.world.centerX, game.world.centerY - 50, "How to play", helpTitleFontStyle);
+            helpTitleTxt.anchor.setTo(0.5, 0.5);
+            helpTitleTxt.alpha = 0;
 
             helpTxt = game.add.text(game.world.centerX, game.world.centerY, "Press to exit help screen", helpFontStyle);
             helpTxt.anchor.setTo(0.5, 0.5);
+            helpTxt.alpha = 0;
 
             helpTxt2 = game.add.text(game.world.centerX, game.world.centerY + 75, "←:left \n →:right \n ↑:jump \n ↓:hold item or drop item", helpFontStyle);
             helpTxt2.anchor.setTo(0.5, 0.5);
+            helpTxt2.alpha = 0;
+
+            helpTxt3 = game.add.text(game.world.centerX, game.world.centerY + 165, "Click any place to go back.", helpFontStyle);
+            helpTxt3.anchor.setTo(0.5, 0.5);
+            helpTxt3.alpha = 0;
 
 
             helpNodes.push(helpLayer);
-            helpNodes.push(helpLayerCardBtn);
+            helpNodes.push(helpLayerCard);
+            helpNodes.push(helpTitleTxt);
             helpNodes.push(helpTxt);
             helpNodes.push(helpTxt2);
+            helpNodes.push(helpTxt3);
 
-            function exitHelp() {
-                helpNodes.forEach(function(e){
-                    e.destroy();
-                })
-                helpNodes = [];
-            }
+            helpSelected = true;
+
         }
 
     },
 
-    update:function(){
+    update: function (game) {
+        if (helpSelected) {
+            if (helpNodes[0].alpha <= 1) {
+                helpNodes.forEach(function (e) {
+                    e.alpha += 0.05;
+                })
+            } else {
+                if (game.input.mousePointer.isDown) {
+                    helpNodes.forEach(function (e) {
+                        e.destroy();
+                    })
+                    helpNodes = [];
+                    helpSelected = false;
+                    menuBtns.forEach(function (e) {
+                        e.inputEnabled = true;
+                    });
+                }
+            }
+        }
+
+        if (settingSelected) {
+
+        }
 
     }
 
