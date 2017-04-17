@@ -3,13 +3,10 @@ BackTogether.MainMenu = function (game) {
 };
 var play;
 var menuLayer;
-var helpLayer;
 var settings;
-var help;
-var helpLayerCardBtn;
-var helpLayer;
-var helpTxt;
-var helpTxt2;
+
+var helpNodes;
+
 var map;
 
 var wfconfig = {
@@ -56,6 +53,7 @@ BackTogether.MainMenu.prototype = {
 
         var helpBtnTxt = game.add.text(game.world.centerX, game.world.centerY + 30, "Help", btnFontStyle);
         helpBtnTxt.anchor.setTo(0.5, 0.5);
+        helpNodes = [];
 
         function startOnClick() {
             game.state.start("LevelSelecting");
@@ -68,32 +66,38 @@ BackTogether.MainMenu.prototype = {
         function showHelp() {
 
             helpLayer = map.createLayer('pausedLayer');
-            helpLayer.alpha = 0.1;
 
             helpLayerCardBtn = game.add.button(game.world.centerX, game.world.centerY, 'menuBtnCard', exitHelp, this, 2, 1, 0);
             helpLayerCardBtn.anchor.setTo(0.5, 0.5);
 
-            helpTxt = game.add.text(game.world.centerX, game.world.centerY, "Press to exit help screen", {
-                font: '20px Aclonica', fill: "#F00",
-                align: "center"
-            });
+            helpFontStyle = {font: '20px Aclonica', fill: "#F00", align: "center"}
+
+            helpTxt = game.add.text(game.world.centerX, game.world.centerY, "Press to exit help screen", helpFontStyle);
             helpTxt.anchor.setTo(0.5, 0.5);
 
-            helpTxt2 = game.add.text(game.world.centerX, game.world.centerY + 75, "←:left \n →:right \n ↑:jump \n ↓:hold item or drop item", {
-                font: '20px Aclonica', fill: "#F00",
-                align: "center"
-            });
+            helpTxt2 = game.add.text(game.world.centerX, game.world.centerY + 75, "←:left \n →:right \n ↑:jump \n ↓:hold item or drop item", helpFontStyle);
             helpTxt2.anchor.setTo(0.5, 0.5);
 
-            function exitHelp() {
-                helpLayerCardBtn.destroy();
-                helpLayer.destroy();
-                helpTxt.destroy();
-                helpTxt2.destroy();
-            }
 
+            helpNodes.push(helpLayer);
+            helpNodes.push(helpLayerCardBtn);
+            helpNodes.push(helpTxt);
+            helpNodes.push(helpTxt2);
+
+            function exitHelp() {
+                helpNodes.forEach(function(e){
+                    e.destroy();
+                })
+                helpNodes = [];
+            }
         }
 
+    },
+
+    update:function(){
+
     }
+
+
 }
 
