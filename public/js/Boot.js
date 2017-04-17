@@ -28,7 +28,7 @@ BackTogether.Boot.prototype = {
                 families: ["Aclonica"]
             }
 
-        };  
+        };
     },
 
     create: function(){
