@@ -87,15 +87,16 @@ BackTogether.LevelSelecting.prototype = {
     createButton: function (game, i, x, y, w, h, callback) {
         var b;
         if (i < user.getLevel()) {
-            b = game.add.button(x, y, 'levelBtn',
+            b = game.add.button(x, y - 50, 'levelBtn',
                 function () {
                     Level = itoaArray[i];
                     callback();
                     
                 }
                 , 2, 1, 0);
+            
         } else {
-            b = game.add.button(x, y, 'disabledLevelBtn',
+            b = game.add.button(x, y-50, 'disabledLevelBtn',
                 function () {
                     console.log("currently rocked.");
                     game.camera.shake(0.01, 100);
@@ -104,21 +105,19 @@ BackTogether.LevelSelecting.prototype = {
             
         }
 
-        b.alpha = .1;
         b.anchor.setTo(0.5, 0.5);
         b.width = w;
         b.height = h;
-        game.add.tween(b).to( { alpha: 1 }, 2000, "Linear", true);
+        game.add.tween(b).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
+        console.log(y);
         
-
-        var txt = game.add.text(b.x, b.y, itoaArray[i], {
+        var txt = game.add.text(b.x, b.y - 50, itoaArray[i], {
             font: '16px Aclonica', fill: "#ff3823",
             align: "center"
         });
 
         txt.anchor.setTo(0.5, 0.5);
-        txt.alpha = .1;
-        game.add.tween(txt).to( { alpha: 1 }, 2000, "Linear", true);
+        game.add.tween(txt).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
     }
 
 
