@@ -370,7 +370,7 @@ BackTogether.Level1.prototype = {
         pausedBtnCard.anchor.setTo(0.5, 0.5);
         pausedBtnCard.scale.setTo(2.5, 2.5);
 
-        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, this, 2, 1, 0);
+        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, game, 2, 1, 0);
         cancelBtn.anchor.setTo(0.5, 0.5);
         cancelBtn.scale.setTo(0.3, 0.3);
 
@@ -386,7 +386,7 @@ BackTogether.Level1.prototype = {
         settingIcon.scale.setTo(0.8, 0.8);
 
 
-        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, this, 2, 1, 0);
+        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, game, 2, 1, 0);
         resetBtn.anchor.setTo(0.5, 0.5);
         resetBtn.scale.setTo(1.6, 1.6);
 
@@ -403,6 +403,10 @@ BackTogether.Level1.prototype = {
         inventoryTxt.anchor.setTo(0.5, 0.5);
     },
     gameStatus: function(game, win){
+
+        console.log(game);
+        game.paused = true;
+
         outcomeLayer = map.createLayer('pausedLayer');
         outcomeLayer.resizeWorld();
         outcomeLayer.alpha = 1;
@@ -418,10 +422,10 @@ BackTogether.Level1.prototype = {
             next.anchor.setTo(0.5, 0.5);
         }
     },
-    resetOnClick: function (game) {
+    resetOnClick: function () {
         this.score = 0;
         this.state.restart();
-        game.paused = false;
+        this.paused = false;
     },
     settingOnClick: function () {
         console.log('setting button clicked');
@@ -447,6 +451,6 @@ BackTogether.Level1.prototype = {
         inventoryBtn.destroy();
         inventoryTxt.destroy();
         // Unpause the game
-        game.paused = false;
+        this.paused = false;
     }
 }
