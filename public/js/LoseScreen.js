@@ -7,22 +7,21 @@ BackTogether.LoseScreen.prototype = {
     
     create: function (game) {
         var loseLayer = map.createLayer('pausedLayer');
-        loseLayer.resizeWorld();
 
-        var replayBtn = this.add.button(this.camera.view.centerX - 100, window.innerHeight - 100, 'gameStatusBtn', replay, this, 2, 1, 0);
+        var replayBtn = this.add.button(this.camera.view.centerX - 200, this.camera.view.centerY + 100, 'gameStatusBtn', replay, this, 2, 1, 0);
         replayBtn.anchor.setTo(0.5, 0.5);
         replayBtn.scale.setTo(1.6, 1.6);
 
-        var replayIcon = this.add.sprite(this.camera.view.centerX - 100, window.innerHeight - 100, 'resetIcon');
+        var replayIcon = this.add.sprite(this.camera.view.centerX - 200, this.camera.view.centerY + 100, 'resetIcon');
         replayIcon.anchor.setTo(0.5, 0.5);
         replayIcon.scale.setTo(0.8, 0.8);
 
 
-        var menuBtn = this.add.button(this.camera.view.centerX + 100, window.innerHeight - 100, 'gameStatusBtn', mainMenu, this, 2, 1, 0);
+        var menuBtn = this.add.button(this.camera.view.centerX , this.camera.view.centerY + 100, 'gameStatusBtn', mainMenu, this, 2, 1, 0);
         menuBtn.anchor.setTo(0.5, 0.5);
         menuBtn.scale.setTo(1.6, 1.6);
 
-        var menuIcon = this.add.sprite(this.camera.view.centerX + 100, window.innerHeight - 100, 'mainMenuIcon');
+        var menuIcon = this.add.sprite(this.camera.view.centerX , this.camera.view.centerY + 100, 'mainMenuIcon');
         menuIcon.anchor.setTo(0.5, 0.5);
         menuIcon.scale.setTo(0.8, 0.8);
         
