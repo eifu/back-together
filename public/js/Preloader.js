@@ -16,6 +16,7 @@ BackTogether.Preloader.prototype = {
         this.load.image('logo', 'assets/images/logo.jpg');
         this.load.image('menuBtnCard', 'assets/images/menuBtnCard.png');
         this.load.spritesheet('levelBtn', 'assets/images/levelBtn.png', 110, 60);
+        this.load.image('disabledLevelBtn', 'assets/images/disabledLevelBtn.png');
         this.load.spritesheet('item1', 'assets/images/item1.png',32,32);
         this.load.spritesheet('numbers', 'assets/images/numbers.png',32,32);
         this.load.image('invisible', 'assets/images/invisible.png');
@@ -26,6 +27,8 @@ BackTogether.Preloader.prototype = {
         this.load.image('settingIcon', 'assets/images/settingIcon.png');
         this.load.image('cancelIcon', 'assets/images/cancelIcon.png');
 
+        this.load.image('mainMenuIcon', 'assets/images/mainMenuIcon.png');
+        this.load.image('nextIcon', 'assets/images/nextIcon.png');
         this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
         this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
 

@@ -27,19 +27,26 @@ BackTogether.MainMenu.prototype = {
         map = this.add.tilemap('map', 64, 64);
         map.addTilesetImage('tileset');
 
-        menuLayer = map.createLayer('pausedLayer');
+        var menuLayer = map.createLayer('pausedLayer');
         // menuLayer.resizeWorld();
         menuLayer.alpha = 0.6;
+        
+        var txt = game.add.text(this.camera.view.centerX, 50, "BACK TOGETHER", {
+        font: '60px Aclonica', fill: "#000",
+        align: "center"
+        });
+        
+        txt.anchor.setTo(0.5, 0.5);
 
-        playBtn = game.add.button(game.world.centerX, game.world.centerY - 170, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
+        playBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 170, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
         playBtn.anchor.setTo(0.5, 0.5);
         playBtn.scale.setTo(3.0, 3.0);
 
-        settingBtn = game.add.button(game.world.centerX, game.world.centerY - 70, 'mainMenuBtn', showSettings, this, 2, 1, 0);
+        settingBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 70, 'mainMenuBtn', showSettings, this, 2, 1, 0);
         settingBtn.anchor.setTo(0.5, 0.5);
         settingBtn.scale.setTo(3.0, 3.0);
 
-        helpBtn = game.add.button(game.world.centerX, game.world.centerY + 30, 'mainMenuBtn', showHelp, this, 2, 1, 0);
+        helpBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY+30, 'mainMenuBtn', showHelp, this, 2, 1, 0);
         helpBtn.anchor.setTo(0.5, 0.5);
         helpBtn.scale.setTo(3.0, 3.0);
 
@@ -51,17 +58,18 @@ BackTogether.MainMenu.prototype = {
         titleFontStyle = { font: '60px Aclonica', fill: "#C0C0C0", align: "center" }
         btnFontStyle = { font: '50px Aclonica', fill: "#C0C0C0", align: "center" }
 
-        var titleTxt = game.add.text(game.world.centerX, 50, "BACK TOGETHER", titleFontStyle);
+        var titleTxt = game.add.text(this.camera.view.centerX, 50, "BACK TOGETHER", titleFontStyle);
         titleTxt.anchor.setTo(0.5, 0.5);
 
-        var playBtnTxt = game.add.text(game.world.centerX, game.world.centerY - 170, "Play", btnFontStyle);
+        var playBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 170, "Play", btnFontStyle);
         playBtnTxt.anchor.setTo(0.5, 0.5);
 
-        var settingBtnTxt = game.add.text(game.world.centerX, game.world.centerY - 70, "Settings", btnFontStyle);
+        var settingBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 70, "Settings", btnFontStyle);
         settingBtnTxt.anchor.setTo(0.5, 0.5);
 
-        var helpBtnTxt = game.add.text(game.world.centerX, game.world.centerY + 30, "Help", btnFontStyle);
+        var helpBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "Help", btnFontStyle);
         helpBtnTxt.anchor.setTo(0.5, 0.5);
+
         helpNodes = [];
 
         function startOnClick() {
@@ -81,26 +89,26 @@ BackTogether.MainMenu.prototype = {
             helpLayer = map.createLayer('pausedLayer');
             helpLayer.alpha = 0;
 
-            helpLayerCard = game.add.image(game.world.centerX, game.world.centerY, 'menuBtnCard');
+            helpLayerCard = game.add.image(this.camera.view.centerX, this.camera.view.centerY, 'menuBtnCard');
             helpLayerCard.anchor.setTo(0.5, 0.5);
             helpLayerCard.alpha = 0;
 
             helpFontStyle = { font: '20px Aclonica', fill: "#F00", align: "center" };
             helpTitleFontStyle = { font: '40px Aclonica', fill: "#F00", align: "center" };
 
-            helpTitleTxt = game.add.text(game.world.centerX, game.world.centerY - 50, "How to play", helpTitleFontStyle);
+            helpTitleTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 50, "How to play", helpTitleFontStyle);
             helpTitleTxt.anchor.setTo(0.5, 0.5);
             helpTitleTxt.alpha = 0;
 
-            helpTxt = game.add.text(game.world.centerX, game.world.centerY, "Press to exit help screen", helpFontStyle);
+            helpTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY, "Press to exit help screen", helpFontStyle);
             helpTxt.anchor.setTo(0.5, 0.5);
             helpTxt.alpha = 0;
 
-            helpTxt2 = game.add.text(game.world.centerX, game.world.centerY + 75, "←:left \n →:right \n ↑:jump \n ↓:hold item or drop item", helpFontStyle);
+            helpTxt2 = game.add.text(this.camera.view.centerX, this.camera.view.centerY+ 75, "←:left \n →:right \n ↑:jump \n ↓:hold item or drop item", helpFontStyle);
             helpTxt2.anchor.setTo(0.5, 0.5);
             helpTxt2.alpha = 0;
 
-            helpTxt3 = game.add.text(game.world.centerX, game.world.centerY + 165, "Click any place to go back.", helpFontStyle);
+            helpTxt3 = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 165, "Click any place to go back.", helpFontStyle);
             helpTxt3.anchor.setTo(0.5, 0.5);
             helpTxt3.alpha = 0;
 
