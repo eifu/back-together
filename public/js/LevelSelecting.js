@@ -75,10 +75,11 @@ BackTogether.LevelSelecting.prototype = {
             }
         }
 
-        hand = this.add.sprite(this.camera.view.centerX - 180, this.camera.view.centerY - 120, 'hand');
+        hand = this.add.sprite(this.camera.view.centerX - 300, this.camera.view.centerY - 120, 'hand');
         hand.anchor.setTo(0.5,0.5);
         hand.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
         hand.animations.play('right');
+        game.add.tween(hand).to( { x: this.camera.view.centerX - 180 }, 1500, "Linear", true);
         
         var backBtn = game.add.button(this.camera.view.centerX - game.width/2.5, this.camera.view.centerY + game.height/2, 'backBtn', function(){
             game.state.start("MainMenu")
@@ -88,7 +89,6 @@ BackTogether.LevelSelecting.prototype = {
         backBtn.scale.setTo(0.5, 1);
         backBtn.width = 55;
         backBtn.height = 60;
-//        game.add.tween(backBtn).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
         
         var backIcon = this.add.sprite(this.camera.view.centerX - game.width/2.5, this.camera.view.centerY + game.height/2, 'mainMenuIcon');
         backIcon.anchor.setTo(0.5, 0.5);
