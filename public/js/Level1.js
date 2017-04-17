@@ -13,6 +13,8 @@ var mainMenu;
 var next;
 var player;
 
+var map;
+
 BackTogether.Level1.prototype = {
 
     create: function (game) {
@@ -21,6 +23,8 @@ BackTogether.Level1.prototype = {
 
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
+        map = this.add.tilemap('map1', 64, 64);
+        map.addTilesetImage('tileset');
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();

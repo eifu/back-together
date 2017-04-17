@@ -2,8 +2,8 @@ BackTogether.MainMenu = function (game) {
 
 };
 var play;
-var menuLayer;
-var helpLayer;
+
+
 var settings;
 
 var menuBtns;
@@ -11,7 +11,7 @@ var helpNodes;
 
 var helpSelected;
 
-var map;
+
 
 var wfconfig = {
     google: {
@@ -23,13 +23,6 @@ BackTogether.MainMenu.prototype = {
     create: function (game) {
         WebFont.load(wfconfig);
         game.stage.backgroundColor = "#570e28";
-
-        map = this.add.tilemap('map', 64, 64);
-        map.addTilesetImage('tileset');
-
-        var menuLayer = map.createLayer('pausedLayer');
-        // menuLayer.resizeWorld();
-        menuLayer.alpha = 0.6;
         
         var txt = game.add.text(this.camera.view.centerX, 50, "BACK TOGETHER", {
         font: '60px Aclonica', fill: "#000",
@@ -94,8 +87,9 @@ BackTogether.MainMenu.prototype = {
                 e.inputEnabled = false;
             });
 
-            helpLayer = map.createLayer('pausedLayer');
-            helpLayer.alpha = 0.5;
+            // TODO: we should add some image that darken the entire screen. but do not use map.
+            // helpLayer = game.add.image('');
+            // helpLayer.alpha = 0.5;
 
             helpLayerCard = game.add.image(this.camera.view.centerX, this.camera.view.centerY, 'menuBtnCard');
             helpLayerCard.anchor.setTo(0.5, 0.5);
@@ -145,7 +139,7 @@ BackTogether.MainMenu.prototype = {
                     helpNodes.forEach(function (e) {
                         e.destroy();
                     })
-                    helpLayer.destroy();
+                    // helpLayer.destroy();
                     helpNodes = [];
                     helpSelected = false;
                     menuBtns.forEach(function (e) {

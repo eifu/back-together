@@ -6,7 +6,10 @@ BackTogether.Settings = function (game) {
 BackTogether.Settings.prototype = {
 
     create: function (game) {
-        var settingsLayer = map.createLayer('pausedLayer');
+
+        // TODO: we need to find a way to initialize the background.
+        // var settingsLayer = map.createLayer('pausedLayer');
+        game.stage.backgroundColor = "#570e28";
 
         var menuBtn = this.add.button(this.camera.view.centerX - 200, this.camera.view.centerY + game.height/2.5, 'settingsBtn', mainMenuOnClick, this, 2, 1, 0);
         menuBtn.anchor.setTo(0.5, 0.5);
