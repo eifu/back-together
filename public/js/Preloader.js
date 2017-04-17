@@ -26,7 +26,7 @@ BackTogether.Preloader.prototype = {
         this.load.image('resetIcon', 'assets/images/resetIcon.png');
         this.load.image('settingIcon', 'assets/images/settingIcon.png');
         this.load.image('cancelIcon', 'assets/images/cancelIcon.png');
-
+        this.load.spritesheet('backBtn', 'assets/images/backBtn.png', 110, 60);
         this.load.image('mainMenuIcon', 'assets/images/mainMenuIcon.png');
         this.load.image('nextIcon', 'assets/images/nextIcon.png');
         this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
