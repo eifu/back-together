@@ -8,8 +8,10 @@ var pausedLayer;
 
 var keys;
 
+var playAgain;
+var mainMenu;
+var next;
 var player;
-
 
 BackTogether.Level1.prototype = {
 
@@ -48,10 +50,12 @@ BackTogether.Level1.prototype = {
             Phaser.Keyboard.W,
             Phaser.Keyboard.A,
             Phaser.Keyboard.S,
-            Phaser.Keyboard.D
+            Phaser.Keyboard.D,
+            Phaser.Keyboard.O,
+            Phaser.Keyboard.P
         ];
         var name = [
-            'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D'
+            'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
         ]
 
         keys = {};
@@ -171,6 +175,14 @@ BackTogether.Level1.prototype = {
         }
         if (keys['SPACE'].isDown) {
             this.initPausedScreen(game);
+        }
+        
+        if(keys['O'].isDown){
+            this.gameStatus(game, true);
+        }
+        
+        if(keys['P'].isDown){
+            this.gameStatus(game, false);
         }
 
         this.updateEnemies();
@@ -431,6 +443,26 @@ BackTogether.Level1.prototype = {
         }
 
     },
+    gameStatus: function(game, win){
+
+        console.log(game);
+        game.paused = true;
+
+        outcomeLayer = map.createLayer('pausedLayer');
+        outcomeLayer.resizeWorld();
+        outcomeLayer.alpha = 1;
+
+        playAgain = game.add.button(this.camera.view.centerX - 110, this.camera.view.centerY, 'gameStatusBtn', this.restartLvl, this, 2, 1, 0);
+        playAgain.anchor.setTo(0.5, 0.5);
+        
+        mainMenu = game.add.button(this.camera.view.centerX, this.camera.view.centerY, 'gameStatusBtn', this.returnMM, this, 2, 1, 0);
+        mainMenu.anchor.setTo(0.5, 0.5);
+        
+        if(!win){
+            next = game.add.button(this.camera.view.centerX + 110, this.camera.view.centerY, 'gameStatusBtn', this.nextLvl, this, 2, 1, 0);
+            next.anchor.setTo(0.5, 0.5);
+        }
+    },
     resetOnClick: function () {
         this.score = 0;
         this.state.restart();
@@ -439,6 +471,16 @@ BackTogether.Level1.prototype = {
     settingOnClick: function () {
         console.log('setting button clicked');
     },
+    restartLvl: function () {
+        this.game.state.start('LevelSelecting');
+    },
+    returnMM: function () {
+        this.game.state.start('MainMenu');
+    },
+    nextLvl: function () {
+        console.log("to be implemented");
+    },
+
     resumeOnClick: function () {
         pausedLayer.destroy();
         cancelBtn.destroy();
@@ -471,7 +513,6 @@ BackTogether.Level1.prototype = {
     inventoryItemOnClick: function (e) {
         console.log('hi');
         console.log(e.key);
-
     }
 
 }

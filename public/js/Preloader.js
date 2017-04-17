@@ -25,6 +25,10 @@ BackTogether.Preloader.prototype = {
         this.load.image('resetIcon', 'assets/images/resetIcon.png');
         this.load.image('settingIcon', 'assets/images/settingIcon.png');
         this.load.image('cancelIcon', 'assets/images/cancelIcon.png');
+
+        this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
+        this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
+
         this.load.tilemap('map', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
 
         this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
@@ -48,7 +52,7 @@ BackTogether.Preloader.prototype = {
     },
 
     create: function () {
-        this.state.start("LevelSelecting");
+        this.state.start("MainMenu");
         
     }
 
