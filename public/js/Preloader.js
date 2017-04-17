@@ -24,9 +24,12 @@ BackTogether.Preloader.prototype = {
         this.load.image('pausedBtn', 'assets/images/pausedBtn.png');
         this.load.image('pausedBtnCard', 'assets/images/pausedBtnCard.png');
         this.load.image('resetIcon', 'assets/images/resetIcon.png');
+        this.load.spritesheet('settingsBtn', 'assets/images/settingsBtn.png', 110, 60);
         this.load.image('settingIcon', 'assets/images/settingIcon.png');
         this.load.image('cancelIcon', 'assets/images/cancelIcon.png');
-
+        this.load.image('saveIcon', 'assets/images/saveIcon.png');
+        this.load.image('okIcon', 'assets/images/okIcon.png');
+        this.load.spritesheet('backBtn', 'assets/images/backBtn.png', 110, 60);
         this.load.image('mainMenuIcon', 'assets/images/mainMenuIcon.png');
         this.load.image('nextIcon', 'assets/images/nextIcon.png');
         this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
