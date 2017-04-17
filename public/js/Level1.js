@@ -11,6 +11,7 @@ var keys;
 var playAgain;
 var mainMenu;
 var next;
+var player;
 
 BackTogether.Level1.prototype = {
 
@@ -77,6 +78,17 @@ BackTogether.Level1.prototype = {
                 settingIcon.destroy();
                 inventoryBtn.destroy();
                 inventoryTxt.destroy();
+
+                for (var i = 0; i < player.itemBtns.length; i++) {
+                    player.itemBtns[i].destroy();
+                }
+                for (var i = 0; i < player.itemNums.length; i++) {
+                    player.itemNums[i].destroy();
+                }
+                player.itemBtns = [];
+                player.itemNums = [];
+
+                console.log(player.itemBtns);
                 // Unpause the game
                 game.paused = false;
             }
@@ -92,67 +104,64 @@ BackTogether.Level1.prototype = {
         }
 
         //  Reset the players velocity (movement)
-        this.player.body.velocity.x = 0;
+        player.body.velocity.x = 0;
 
-        //  Reset the players velocity (movement)
-        this.player.body.velocity.x = 0;
-
-        if (this.time.now < this.player.damagedTime) {
-            if (this.player.face == 'left') {
-                this.player.animations.play('left_damaged')
-                this.player.body.velocity.x = 100;
-                // this.playerDamaged();
-                this.screenShake();
+        if (this.time.now < player.damagedTime) {
+            if (player.face == 'left') {
+                player.animations.play('left_damaged')
+                player.body.velocity.x = 100;
             } else {
-                this.player.animations.play("right_damaged")
-                this.player.body.velocity.x = -100;
-                this.screenShake();
+                player.animations.play("right_damaged")
+                player.body.velocity.x = -100;
             }
 
+            player.damaged = true;
+
         } else {
+            if (this.checkOverlap(player, this.enemies)) {
+                this.screenShake();
+                this.playerDamaged();
+            }
+
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
-                this.player.body.velocity.x = -150;
+                player.body.velocity.x = -150;
 
-                this.player.animations.play('left');
-                this.player.face = 'left';
+                player.animations.play('left');
+                player.face = 'left';
             }
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
-                this.player.body.velocity.x = 150;
+                player.body.velocity.x = 150;
 
-                this.player.animations.play('right');
-                this.player.face = 'right';
+                player.animations.play('right');
+                player.face = 'right';
             } else {
-                if (this.player.face == 'left') {
-                    this.player.animations.play('left');
-                } else {
-                    this.player.animations.play('right');
+
+                if (player.damaged && player.face == 'left') {
+                    player.animations.play('left');
+                    player.animations.stop();
+                    player.damaged = false;
+                } else if (player.face == 'left') {
+                    // player.animations.play('left');
+                    player.animations.stop();
+                } else if (player.damaged && player.face == 'right') {
+                    player.animations.play('right');
+                    player.animations.stop();
+                    player.damaged = false;
+                } else if (player.face == 'right') {
+                    // player.animations.play('right');
+                    player.animations.stop();
                 }
             }
 
         }
 
-        for (var i = 0; i < this.items.length; i++) {
-            if (this.items.children[i].held) {
-                this.items.children[i].body.y = this.player.body.y;
-                this.items.children[i].body.x = this.player.body.x - this.pipe1.offset * (7 / 10);
-                this.items.children[i].holdTime += .166;
-            }
-
-            else {
-                this.items.children[i].releaseTime += .166;
-            }
-
-            this.items.children[i].holdbox1 = this.items.children[i].body.x;
-            this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
-
-        }
 
         for (var i = 0; i < this.items.length; i++) {
             if (this.items.children[i].held) {
-                this.items.children[i].body.y = this.player.body.y;
-                this.items.children[i].body.x = this.player.body.x - this.pipe1.offset * (7 / 10);
+                this.items.children[i].body.y = player.body.y;
+                this.items.children[i].body.x = player.body.x - this.pipe1.offset * (7 / 10);
                 this.items.children[i].holdTime += .166;
             }
 
@@ -178,10 +187,7 @@ BackTogether.Level1.prototype = {
 
         this.updateEnemies();
 
-        if (this.checkOverlap(this.player, this.enemies)) {
 
-            this.playerDamaged();
-        }
 
     },
 
@@ -211,8 +217,8 @@ BackTogether.Level1.prototype = {
                 this.item.children[i].frame = 0;
                 this.item.children[i].releaseTime = 0;
                 this.item.children[i].holdTime = 0;
-                var dist1 = Math.abs(this.player.body.x - this.item.children[i].holdbox1);
-                var dist2 = Math.abs(this.player.body.x - this.item.children[i].holdbox2);
+                var dist1 = Math.abs(player.body.x - this.item.children[i].holdbox1);
+                var dist2 = Math.abs(player.body.x - this.item.children[i].holdbox2);
 
                 if (dist2 < dist1) {
                     this.item.children[i].offset = this.item.children[i].body.width;
@@ -234,8 +240,18 @@ BackTogether.Level1.prototype = {
             }
         }
     },
+    playerDamaged: function () {
+        if (player.damagedTime < this.time.now) {
+            player.damagedTime = this.time.now + 1000;
+            if (player.face == 'left') {
+                player.face = 'left_damagd';
+            } else {
+                player.face = 'right_damaged';
+            }
 
+        }
 
+    },
     initItems: function () {
         this.items = this.add.group();
 
@@ -250,38 +266,38 @@ BackTogether.Level1.prototype = {
         this.pipe1.holdbox1 = this.pipe1.body.x;
         this.pipe1.holdbox2 = this.pipe1.body.x + this.pipe1.body.width;
         this.pipe1.type = "item";
-    },
-    playerDamaged: function () {
-        if (this.player.damagedTime < this.time.now) {
 
-            this.player.damagedTime = this.time.now + 200;
-        }
 
     },
     initPlayer: function () {
         // The player and its settings
-        this.player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'hand');
+        player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'hand');
 
         //  We need to enable physics on the player
-        this.physics.p2.enable(this.player, true);
+        this.physics.p2.enable(player, true);
 
-        this.player.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 5), 10, true);
-        this.player.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
-        this.player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('left_damaged', 1, 2), 10, true);
-        this.player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('right_damaged', 1, 2), 10, true);
-
-
-        this.player.animations.play('left');
-        this.player.face = 'left';
-
-        this.player.body.clearShapes();
-        this.player.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
+        player.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 5), 10, true);
+        player.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
+        player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('left_damaged', 1, 2), 10, true);
+        player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('right_damaged', 1, 2), 10, true);
 
 
-        this.camera.follow(this.player);
+        player.animations.play('left');
+        player.face = 'left';
 
-        this.player.damaged = false;
-        this.player.damagedTime = 0;
+        player.body.clearShapes();
+        player.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
+
+
+        this.camera.follow(player);
+
+        player.damaged = false;
+        player.damagedTime = 0;
+
+        // player.items = ['invisible', 'stink', 'invisible'];
+        player.items = { 'invisible': 2, 'stink': 1 };
+        player.itemBtns = [];
+        player.itemNums = [];
 
     },
     initText: function () {
@@ -399,8 +415,34 @@ BackTogether.Level1.prototype = {
         inventoryBtn.anchor.setTo(0.5, 0.5);
         inventoryBtn.scale.setTo(3.8, 3.8);
 
-        inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY, 'inventory', { font: '32px Aclonica', fill: '#000' });
+        inventoryTxt = this.add.text(this.camera.view.centerX + 79, this.camera.view.centerY - 68, 'inventory', { font: '32px Aclonica', fill: '#000' });
         inventoryTxt.anchor.setTo(0.5, 0.5);
+
+        var i = 0;
+        for (var key in player.items) {
+            if (!player.items.hasOwnProperty(key)) continue;
+
+            var obj = player.items[key];
+
+            console.log(key);
+            console.log(obj);
+
+            var x = this.camera.view.centerX + i * 32;
+            var y = this.camera.view.centerY - 58 + i + 32
+
+            var item1 = this.add.button(x, y, key, this.inventoryItemOnClick, game, 2, 1, 0);
+            item1.anchor.setTo(0.5, 0.5);
+            player.itemBtns.push(item1);
+
+            var num = this.add.sprite(x + 16, y + 16, 'numbers');
+            num.anchor.setTo(0.5, 0.5);
+            num.scale.setTo(0.5, 0.5);
+            player.itemNums.push(num);
+            num.frame = obj;
+
+            i += 1;
+        }
+
     },
     gameStatus: function(game, win){
 
@@ -439,7 +481,8 @@ BackTogether.Level1.prototype = {
     nextLvl: function () {
         console.log("to be implemented");
     },
-    resumeOnClick: function (game) {
+
+    resumeOnClick: function () {
         pausedLayer.destroy();
         cancelBtn.destroy();
         pausedBtnCard.destroy();
@@ -450,7 +493,27 @@ BackTogether.Level1.prototype = {
         settingIcon.destroy();
         inventoryBtn.destroy();
         inventoryTxt.destroy();
+
+        for (var i = 0; i < player.itemBtns.length; i++) {
+            player.itemBtns[i].destroy();
+        }
+        for (var i = 0; i < player.itemNums.length; i++) {
+            player.itemNums[i].destroy();
+        }
+
+        player.itemBtns = [];
+        player.itemNums = [];
+
         // Unpause the game
         this.paused = false;
+    },
+    inventortOnClick: function () {
+        inventoryTxt.visible = !inventoryTxt.visible;
+        item1.visible = !item1.visible;
+    },
+    inventoryItemOnClick: function (e) {
+        console.log('hi');
+        console.log(e.key);
     }
+
 }
