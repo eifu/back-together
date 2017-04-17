@@ -87,9 +87,6 @@ BackTogether.Level1.prototype = {
     update: function (game) {
 
 
-        //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-        this.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
-
         for (var i = 0; i < this.items.length; i++) {
             this.items.children[i].frame = 0;
         }
@@ -104,9 +101,12 @@ BackTogether.Level1.prototype = {
             if (this.player.face == 'left') {
                 this.player.animations.play('left_damaged')
                 this.player.body.velocity.x = 100;
+                // this.playerDamaged();
+                this.screenShake();
             } else {
                 this.player.animations.play("right_damaged")
                 this.player.body.velocity.x = -100;
+                this.screenShake();
             }
 
         } else {
@@ -178,9 +178,9 @@ BackTogether.Level1.prototype = {
 
         this.updateEnemies();
 
-        if (this.checkOverlap(this.player, this.enemies)){
-//            this.playerDamaged();
-            this.screenShake();
+        if (this.checkOverlap(this.player, this.enemies)) {
+
+            this.playerDamaged();
         }
 
     },
@@ -193,10 +193,10 @@ BackTogether.Level1.prototype = {
         return Phaser.Rectangle.intersects(boundsA, boundsB);
 
     },
-    screenShake: function(){
-        this.camera.shake(0.03, 500);
+    screenShake: function () {
+        this.camera.shake(0.01, 100);
     },
-    
+
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
             if (!this.item.children[i].held) {
@@ -370,7 +370,7 @@ BackTogether.Level1.prototype = {
         pausedBtnCard.anchor.setTo(0.5, 0.5);
         pausedBtnCard.scale.setTo(2.5, 2.5);
 
-        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, this, 2, 1, 0);
+        cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, game, 2, 1, 0);
         cancelBtn.anchor.setTo(0.5, 0.5);
         cancelBtn.scale.setTo(0.3, 0.3);
 
@@ -386,7 +386,7 @@ BackTogether.Level1.prototype = {
         settingIcon.scale.setTo(0.8, 0.8);
 
 
-        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, this, 2, 1, 0);
+        resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, game, 2, 1, 0);
         resetBtn.anchor.setTo(0.5, 0.5);
         resetBtn.scale.setTo(1.6, 1.6);
 
@@ -403,6 +403,10 @@ BackTogether.Level1.prototype = {
         inventoryTxt.anchor.setTo(0.5, 0.5);
     },
     gameStatus: function(game, win){
+
+        console.log(game);
+        game.paused = true;
+
         outcomeLayer = map.createLayer('pausedLayer');
         outcomeLayer.resizeWorld();
         outcomeLayer.alpha = 1;
@@ -418,10 +422,10 @@ BackTogether.Level1.prototype = {
             next.anchor.setTo(0.5, 0.5);
         }
     },
-    resetOnClick: function (game) {
+    resetOnClick: function () {
         this.score = 0;
         this.state.restart();
-        game.paused = false;
+        this.paused = false;
     },
     settingOnClick: function () {
         console.log('setting button clicked');
@@ -447,6 +451,6 @@ BackTogether.Level1.prototype = {
         inventoryBtn.destroy();
         inventoryTxt.destroy();
         // Unpause the game
-        game.paused = false;
+        this.paused = false;
     }
 }
