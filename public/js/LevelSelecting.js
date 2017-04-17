@@ -43,7 +43,7 @@ BackTogether.LevelSelecting.prototype = {
         //  |--load game
         //
         user = new User();
-        user.setLevel(1);
+        user.setLevel(2);
 
 
 
@@ -68,71 +68,69 @@ BackTogether.LevelSelecting.prototype = {
         for (var y = 0; y < 3; y++) {
             for (var x = 0; x < 4; x++) {
                 this.createButton(game, y * 4 + x,
-                    this.camera.view.centerX + (x + 1) * 120 - 60 - 240, this.camera.view.centerY + 70 * y - 80,
-                    110, 60, function () {
-                        game.state.start("Level1");
-                    })
+                    this.camera.view.centerX + x * 120 - 180, this.camera.view.centerY + 70 * y - 80,
+                    110, 60)
             }
         }
 
-        hand = this.add.sprite(this.camera.view.centerX - 180, this.camera.view.centerY - 120, 'hand');
-        hand.anchor.setTo(0.5,0.5);
+        hand = this.add.sprite(this.camera.view.centerX + (user.getLevel() - 1) * 120 - 300, this.camera.view.centerY - 120, 'hand');
+        hand.anchor.setTo(0.5, 0.5);
         hand.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
         hand.animations.play('right');
-        
-        var backBtn = game.add.button(this.camera.view.centerX - game.width/2.5, this.camera.view.centerY + game.height/2, 'backBtn', function(){
+        game.add.tween(hand).to({ x: this.camera.view.centerX + user.getLevel() * 120 - 300 }, 1500, "Linear", true);
+
+        var backBtn = game.add.button(this.camera.view.centerX - game.width / 2.5, this.camera.view.centerY + game.height / 2, 'backBtn', function () {
             game.state.start("MainMenu")
         }, 2, 1, 0);
-        
+
         backBtn.anchor.setTo(0.5, 0.5);
         backBtn.scale.setTo(0.5, 1);
         backBtn.width = 55;
         backBtn.height = 60;
-//        game.add.tween(backBtn).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
-        
-        var backIcon = this.add.sprite(this.camera.view.centerX - game.width/2.5, this.camera.view.centerY + game.height/2, 'mainMenuIcon');
+
+        var backIcon = this.add.sprite(this.camera.view.centerX - game.width / 2.5, this.camera.view.centerY + game.height / 2, 'mainMenuIcon');
         backIcon.anchor.setTo(0.5, 0.5);
         backIcon.scale.set(0.5, 0.5);
-        
-        game.add.tween(backBtn).to( { y: this.camera.view.centerY + game.height/2.5 }, 500, Phaser.Easing.Bounce.Out, true);
-        game.add.tween(backIcon).to( { y: this.camera.view.centerY + game.height/2.5 }, 500, Phaser.Easing.Bounce.Out, true);
+
+        game.add.tween(backBtn).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
+        game.add.tween(backIcon).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
     },
     update: function () {
 
     },
-    createButton: function (game, i, x, y, w, h, callback) {
+    createButton: function (game, i, x, y, w, h) {
         var b;
         if (i < user.getLevel()) {
             b = game.add.button(x, y - 50, 'levelBtn',
                 function () {
                     Level = itoaArray[i];
-                    callback();
-                    
+                    game.state.start("Level"+(i+1));
+
                 }
                 , 2, 1, 0);
-            
+
         } else {
-            b = game.add.button(x, y-50, 'disabledLevelBtn',
+            b = game.add.button(x, y - 50, 'disabledLevelBtn',
                 function () {
                     console.log("currently rocked.");
                     game.camera.shake(0.01, 100);
                 }
                 , 2, 1, 0);
-            
+
         }
 
         b.anchor.setTo(0.5, 0.5);
         b.width = w;
         b.height = h;
-        game.add.tween(b).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
-        
+        game.add.tween(b).to({ y: y }, 500, Phaser.Easing.Bounce.Out, true);
+
         var txt = game.add.text(b.x, b.y - 50, itoaArray[i], {
             font: '16px Aclonica', fill: "#ff3823",
             align: "center"
         });
 
         txt.anchor.setTo(0.5, 0.5);
-        game.add.tween(txt).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
+        game.add.tween(txt).to({ y: y }, 500, Phaser.Easing.Bounce.Out, true);
     }
 
 

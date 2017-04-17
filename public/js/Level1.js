@@ -13,6 +13,8 @@ var mainMenu;
 var next;
 var player;
 
+var map;
+
 BackTogether.Level1.prototype = {
 
     create: function (game) {
@@ -21,6 +23,8 @@ BackTogether.Level1.prototype = {
 
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
+        map = this.add.tilemap('map1', 64, 64);
+        map.addTilesetImage('tileset');
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
@@ -88,7 +92,6 @@ BackTogether.Level1.prototype = {
                 player.itemBtns = [];
                 player.itemNums = [];
 
-                console.log(player.itemBtns);
                 // Unpause the game
                 game.paused = false;
             }
@@ -424,9 +427,6 @@ BackTogether.Level1.prototype = {
 
             var obj = player.items[key];
 
-            console.log(key);
-            console.log(obj);
-
             var x = this.camera.view.centerX + i * 32;
             var y = this.camera.view.centerY - 58 + i + 32
 
@@ -491,7 +491,7 @@ BackTogether.Level1.prototype = {
         item1.visible = !item1.visible;
     },
     inventoryItemOnClick: function (e) {
-        console.log('hi');
+        console.log('inventory item pressed');
         console.log(e.key);
     }
 
