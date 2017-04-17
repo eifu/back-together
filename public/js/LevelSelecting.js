@@ -79,7 +79,23 @@ BackTogether.LevelSelecting.prototype = {
         hand.anchor.setTo(0.5,0.5);
         hand.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
         hand.animations.play('right');
-
+        
+        var backBtn = game.add.button(this.camera.view.centerX - game.width/2.5, this.camera.view.centerY + game.height/2, 'backBtn', function(){
+            game.state.start("MainMenu")
+        }, 2, 1, 0);
+        
+        backBtn.anchor.setTo(0.5, 0.5);
+        backBtn.scale.setTo(0.5, 1);
+        backBtn.width = 55;
+        backBtn.height = 60;
+//        game.add.tween(backBtn).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
+        
+        var backIcon = this.add.sprite(this.camera.view.centerX - game.width/2.5, this.camera.view.centerY + game.height/2, 'mainMenuIcon');
+        backIcon.anchor.setTo(0.5, 0.5);
+        backIcon.scale.set(0.5, 0.5);
+        
+        game.add.tween(backBtn).to( { y: this.camera.view.centerY + game.height/2.5 }, 500, Phaser.Easing.Bounce.Out, true);
+        game.add.tween(backIcon).to( { y: this.camera.view.centerY + game.height/2.5 }, 500, Phaser.Easing.Bounce.Out, true);
     },
     update: function () {
 
@@ -109,7 +125,6 @@ BackTogether.LevelSelecting.prototype = {
         b.width = w;
         b.height = h;
         game.add.tween(b).to( { y: y }, 500, Phaser.Easing.Bounce.Out, true);
-        console.log(y);
         
         var txt = game.add.text(b.x, b.y - 50, itoaArray[i], {
             font: '16px Aclonica', fill: "#ff3823",
