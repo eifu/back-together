@@ -73,7 +73,7 @@ BackTogether.LevelSelecting.prototype = {
                 this.createButton(game, itoaArray[y * 4 + x],
                     game.world.centerX + (x + 1) * 120 - 60 - 240, game.world.centerY + 70 * y - 80,
                     110, 60, function () {
-                    game.state.start("MainMenu");
+                    game.state.start("Level1");
                     
                     })
             }

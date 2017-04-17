@@ -4,7 +4,6 @@ BackTogether.MainMenu = function (game) {
 var play;
 var menuLayer;
 var helpLayer;
-var levelSelect;
 var settings;
 var help;
 var helpLayerCard;
@@ -38,16 +37,13 @@ BackTogether.MainMenu.prototype = {
         
         txt.anchor.setTo(0.5, 0.5);
 
-        play = game.add.button(game.world.centerX, game.world.centerY-70, 'mainMenuBtn', initGameplay, this, 2, 1, 0);
+        play = game.add.button(game.world.centerX, game.world.centerY-70, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
         play.anchor.setTo(0.5, 0.5);
         
-        levelSelect = game.add.button(game.world.centerX, game.world.centerY, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
-        levelSelect.anchor.setTo(0.5, 0.5);
-        
-        settings = game.add.button(game.world.centerX, game.world.centerY+70, 'mainMenuBtn', showSettings, this, 2, 1, 0);
+        settings = game.add.button(game.world.centerX, game.world.centerY, 'mainMenuBtn', showSettings, this, 2, 1, 0);
         settings.anchor.setTo(0.5, 0.5);        
         
-        help = game.add.button(game.world.centerX, game.world.centerY+140, 'mainMenuBtn', showHelp, this, 2, 1, 0);
+        help = game.add.button(game.world.centerX, game.world.centerY+70, 'mainMenuBtn', showHelp, this, 2, 1, 0);
         help.anchor.setTo(0.5, 0.5);
         
 
@@ -57,28 +53,17 @@ BackTogether.MainMenu.prototype = {
         });
         menuTxt.anchor.setTo(0.5, 0.5);
 
-        menuTxt2 = game.add.text(game.world.centerX, game.world.centerY, "Levels", {
+        menuTxt2 = game.add.text(game.world.centerX, game.world.centerY, "Settings", {
             font: '20px Aclonica', fill: "#F00",
             align: "center"
         });
         menuTxt2.anchor.setTo(0.5, 0.5);
-
-        menuTxt3 = game.add.text(game.world.centerX, game.world.centerY + 70, "Settings", {
-            font: '20px Aclonica', fill: "#F00",
-            align: "center"
-        });
-        menuTxt3.anchor.setTo(0.5, 0.5);
         
-        menuTxt4 = game.add.text(game.world.centerX, game.world.centerY + 140, "Help", {
+        menuTxt3 = game.add.text(game.world.centerX, game.world.centerY + 70, "Help", {
         font: '20px Aclonica', fill: "#F00",
         align: "center"
         });
-        menuTxt4.anchor.setTo(0.5, 0.5);
-        
-        function initGameplay(){
-            if(Level != null)
-            game.state.start("Level1");
-        }
+        menuTxt3.anchor.setTo(0.5, 0.5);
 
         function startOnClick() {
             game.state.start("LevelSelecting");
