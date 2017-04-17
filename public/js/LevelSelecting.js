@@ -91,7 +91,7 @@ BackTogether.LevelSelecting.prototype = {
                 function () {
                     Level = itoaArray[i];
                     callback();
-
+                    
                 }
                 , 2, 1, 0);
         } else {
@@ -101,12 +101,15 @@ BackTogether.LevelSelecting.prototype = {
                     game.camera.shake(0.01, 100);
                 }
                 , 2, 1, 0);
+            
         }
 
-
+        b.alpha = .1;
         b.anchor.setTo(0.5, 0.5);
         b.width = w;
         b.height = h;
+        game.add.tween(b).to( { alpha: 1 }, 2000, "Linear", true);
+        
 
         var txt = game.add.text(b.x, b.y, itoaArray[i], {
             font: '16px Aclonica', fill: "#ff3823",
@@ -114,7 +117,8 @@ BackTogether.LevelSelecting.prototype = {
         });
 
         txt.anchor.setTo(0.5, 0.5);
-
+        txt.alpha = .1;
+        game.add.tween(txt).to( { alpha: 1 }, 2000, "Linear", true);
     }
 
 
