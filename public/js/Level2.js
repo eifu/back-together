@@ -290,7 +290,9 @@ BackTogether.Level2.prototype = {
         player.face = 'left';
 
         player.body.clearShapes();
-        player.body.addPolygon({}, [[121, 48], [121, 11], [96, 0], [30, 0], [0, 21], [0, 48]]);
+        // player.body.addPolygon({}, [[0,54],[128,54],[112,-10],[16,-10]]);
+        player.body.addRectangle(128, 30,0,10);
+        player.body.addRectangle(80,70,0,-10);
 
 
         this.camera.follow(player);
