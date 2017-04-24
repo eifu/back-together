@@ -42,6 +42,30 @@ BackTogether.Settings.prototype = {
         });
         txt.anchor.setTo(0.5, 0.5);
         
+        var inputs = [
+            Phaser.Keyboard.ONE,
+            Phaser.Keyboard.TWO,
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.W,
+            Phaser.Keyboard.A,
+            Phaser.Keyboard.S,
+            Phaser.Keyboard.D,
+            Phaser.Keyboard.O,
+            Phaser.Keyboard.P
+        ];
+        var name = [
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
+        ]      
+        
+        keys = {};
+        inputs.forEach(function (input, i) {
+            keys[name[i]] = game.input.keyboard.addKey(input);
+        });
+        
         function saveOnClick(){ // saves game
             
             // TO-DO: save current game settings to user data, once done saving, continue on with rest of code
@@ -62,7 +86,17 @@ BackTogether.Settings.prototype = {
         function okOnClick(){
             game.state.start('MainMenu');   // goes to main menu for now, but later implementation, asks user to save changes first
         }
-}
+},
+    update: function(){
+        if(keys['ONE'].isDown){
+            Level = 'ONE';
+            this.game.state.start('Level1');
+        }
+        if(keys['TWO'].isDown){
+            Level = 'TWO';
+            this.game.state.start('Level2');
+        }
+    }
 }
 
 

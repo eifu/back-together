@@ -67,13 +67,13 @@ BackTogether.Level1.prototype = {
         ];
         var name = [
             'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
-        ]
-
+        ]      
+        
         keys = {};
         inputs.forEach(function (input, i) {
             keys[name[i]] = game.input.keyboard.addKey(input);
         });
-
+        
         keys['SPACE'].onDown.add(unpause, self);
 
         function unpause(event) {
@@ -203,6 +203,7 @@ BackTogether.Level1.prototype = {
         }
         
         if(keys['TWO'].isDown){
+            Level = 'TWO';
             this.game.state.start('Level2');
         }
 

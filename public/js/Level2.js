@@ -210,10 +210,13 @@ BackTogether.Level2.prototype = {
             this.game.state.start('LoseScreen');
         }
         
-        if(keys['Level1'].isDown){
+        if(keys['ONE'].isDown){
+            Level = 'ONE';
             this.game.state.start('Level1');
         }
-
+        if(keys['TWO'].isDown){
+            this.game.state.start('Level2');
+        }
 
         // this.updateEnemies();
         this.updateRobots();

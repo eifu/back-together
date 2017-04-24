@@ -2,7 +2,7 @@ BackTogether.MainMenu = function (game) {
 
 };
 var play;
-
+var keys;
 
 var settings;
 
@@ -19,6 +19,29 @@ var wfconfig = {
 
 BackTogether.MainMenu.prototype = {
     create: function (game) {
+       var inputs = [
+            Phaser.Keyboard.ONE,
+            Phaser.Keyboard.TWO,
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.W,
+            Phaser.Keyboard.A,
+            Phaser.Keyboard.S,
+            Phaser.Keyboard.D,
+            Phaser.Keyboard.O,
+            Phaser.Keyboard.P
+        ];
+        var name = [
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
+        ]      
+        
+        keys = {};
+        inputs.forEach(function (input, i) {
+            keys[name[i]] = game.input.keyboard.addKey(input);
+        });
         WebFont.load(wfconfig);
         game.stage.backgroundColor = "#570e28";
         
@@ -146,7 +169,14 @@ BackTogether.MainMenu.prototype = {
                 }
             }
         }
-
+        if(keys['ONE'].isDown){
+            Level = 'ONE';
+            this.game.state.start('Level1');
+        }
+        if(keys['TWO'].isDown){
+            Level = 'TWO';
+            this.game.state.start('Level2');
+        }
     }
 
 

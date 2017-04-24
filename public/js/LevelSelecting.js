@@ -35,6 +35,30 @@ var itoaArray;
 
 BackTogether.LevelSelecting.prototype = {
     create: function (game) {
+        
+        var inputs = [
+            Phaser.Keyboard.ONE,
+            Phaser.Keyboard.TWO,
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.W,
+            Phaser.Keyboard.A,
+            Phaser.Keyboard.S,
+            Phaser.Keyboard.D,
+            Phaser.Keyboard.O,
+            Phaser.Keyboard.P
+        ];
+        var name = [
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
+        ]      
+        
+        keys = {};
+        inputs.forEach(function (input, i) {
+            keys[name[i]] = game.input.keyboard.addKey(input);
+        });
 
         // this is temporaly.
         // user should be initialized at mainmenu. 
@@ -96,7 +120,14 @@ BackTogether.LevelSelecting.prototype = {
         game.add.tween(backIcon).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
     },
     update: function () {
-
+        if(keys['ONE'].isDown){
+            Level = 'ONE';
+            this.game.state.start('Level1');
+        }
+        if(keys['TWO'].isDown){
+            Level = 'TWO';
+            this.game.state.start('Level2');
+        }   
     },
     createButton: function (game, i, x, y, w, h) {
         var b;

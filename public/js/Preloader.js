@@ -1,8 +1,6 @@
 BackTogether.Preloader = function (game) {
 
 };
-
-
 BackTogether.Preloader.prototype = {
 
     preload: function () {
