@@ -29,8 +29,7 @@ BackTogether.Level1.prototype = {
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
-        pausedLayer = map.createLayer('pausedLayer');
-        pausedLayer.resizeWorld();
+
         map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
