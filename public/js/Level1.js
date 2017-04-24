@@ -128,15 +128,21 @@ BackTogether.Level1.prototype = {
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
-                player.body.velocity.x = -150;
-
+                if (player.animations.frame == 1) {
+                    player.body.velocity.x = -200;
+                } else {
+                    player.body.velocity.x = 0;
+                }
                 player.animations.play('left');
                 player.face = 'left';
             }
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
-                player.body.velocity.x = 150;
-
+                if (player.animations.frame == 5) {
+                    player.body.velocity.x = 200;
+                } else {
+                    player.body.velocity.x = 0;
+                }
                 player.animations.play('right');
                 player.face = 'right';
             } else {
@@ -179,12 +185,12 @@ BackTogether.Level1.prototype = {
         if (keys['SPACE'].isDown) {
             this.initPausedScreen(game);
         }
-        
-        if(keys['O'].isDown){
+
+        if (keys['O'].isDown) {
             this.game.state.start('WinScreen');
         }
-        
-        if(keys['P'].isDown){
+
+        if (keys['P'].isDown) {
             this.game.state.start('LoseScreen');
         }
 
@@ -438,7 +444,7 @@ BackTogether.Level1.prototype = {
             num.anchor.setTo(0.5, 0.5);
             num.scale.setTo(0.5, 0.5);
             player.itemNums.push(num);
- 
+
             i += 1;
         }
 
