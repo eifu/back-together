@@ -29,6 +29,8 @@ BackTogether.Level1.prototype = {
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
+        pausedLayer = map.createLayer('pausedLayer');
+        pausedLayer.resizeWorld();
         map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
@@ -42,7 +44,7 @@ BackTogether.Level1.prototype = {
         this.physics.p2.gravity.y = 300;
 
         this.initPlayer();
-        this.initItems();
+//        this.initItems();
         this.initText();
 //        this.initEnemies();
 
@@ -105,9 +107,9 @@ BackTogether.Level1.prototype = {
     update: function (game) {
 
 
-        for (var i = 0; i < this.items.length; i++) {
-            this.items.children[i].frame = 0;
-        }
+//        for (var i = 0; i < this.items.length; i++) {
+//            this.items.children[i].frame = 0;
+//        }
 
         //  Reset the players velocity (movement)
         player.body.velocity.x = 0;
@@ -171,21 +173,21 @@ BackTogether.Level1.prototype = {
         }
 
 
-        for (var i = 0; i < this.items.length; i++) {
-            if (this.items.children[i].held) {
-                this.items.children[i].body.y = player.body.y;
-                this.items.children[i].body.x = player.body.x - this.pipe1.offset * (7 / 10);
-                this.items.children[i].holdTime += .166;
-            }
+//        for (var i = 0; i < this.items.length; i++) {
+//            if (this.items.children[i].held) {
+//                this.items.children[i].body.y = player.body.y;
+//                this.items.children[i].body.x = player.body.x - this.pipe1.offset * (7 / 10);
+//                this.items.children[i].holdTime += .166;
+//            }
+//
+//            else {
+//                this.items.children[i].releaseTime += .166;
+//            }
+//
+//            this.items.children[i].holdbox1 = this.items.children[i].body.x;
+//            this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
 
-            else {
-                this.items.children[i].releaseTime += .166;
-            }
-
-            this.items.children[i].holdbox1 = this.items.children[i].body.x;
-            this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
-
-        }
+//        }
         if (keys['SPACE'].isDown) {
             this.initPausedScreen(game);
         }

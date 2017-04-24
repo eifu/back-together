@@ -14,6 +14,9 @@ var mainMenu;
 var next;
 var player;
 
+var playerStartPos;
+var playerEndPos;
+
 BackTogether.Level2.prototype = {
 
     create: function (game) {
@@ -26,12 +29,20 @@ BackTogether.Level2.prototype = {
         map.addTilesetImage('tileset2');
 
         WebFont.load(wfconfig);
-        this.stage.backgroundColor = "#3A5963";
 
         platformLayer = map.createLayer('platformLayer');
-//        backgroundLayer = map.createLayer('backgroundLayer');
-//        objectsLayer = map.createLayer('objectsLayer');
         platformLayer.resizeWorld();
+
+//        backgroundLayer = map.createLayer('backgroundLayer');
+//        backgroundLayer.resizeWorld();
+        
+//        console.log(backgroundLayer);
+        
+        objectsLayer = map.createLayer('objectsLayer');
+        console.log(objectsLayer);
+        
+//        legsLayer.resizeWorld();
+//        objectsLayer.resizeWorld();
         map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
@@ -40,15 +51,15 @@ BackTogether.Level2.prototype = {
         this.score = 0;
 
         this.physics.p2.convertTilemap(map, platformLayer);
-//        this.physics.p2.convertTilemap(map, backgroundLayer);
-//        this.physics.p2.convertTilemap(map, objectsLayer);
+        this.physics.p2.convertTilemap(map, backgroundLayer);
+        this.physics.p2.convertTilemap(map, objectsLayer);
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
         this.initPlayer();
         this.initItems();
         this.initText();
-        this.initEnemies();
+//        this.initEnemies();
 
         var inputs = [
             Phaser.Keyboard.UP,
@@ -126,10 +137,10 @@ BackTogether.Level2.prototype = {
             player.damaged = true;
 
         } else {
-            if (this.checkOverlap(player, this.enemies)) {
-                this.screenShake();
-                this.playerDamaged();
-            }
+//            if (this.checkOverlap(player, this.enemies)) {
+//                this.screenShake();
+//                this.playerDamaged();
+//            }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
@@ -193,7 +204,7 @@ BackTogether.Level2.prototype = {
             this.game.state.start('LoseScreen');
         }
 
-        this.updateEnemies();
+//        this.updateEnemies();
 
 
 
@@ -279,7 +290,9 @@ BackTogether.Level2.prototype = {
     },
     initPlayer: function () {
         // The player and its settings
-        player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'arm');
+        playerStartPos = this.findObjectsByType('playerStart', map, 'objectsLayer')
+        playerEndPos = this.findObjectsByType('playerEnd', map, 'objectsLayer');
+        player = this.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'arm');
 
         //  We need to enable physics on the player
         this.physics.p2.enable(player, true);
@@ -319,6 +332,18 @@ BackTogether.Level2.prototype = {
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
     },
+    
+    findObjectsByType: function(type, map, layer) {
+        var result = new Array();
+        map.objects[layer].forEach(function(element){
+          if(element.properties.type === type) {
+            element.y -= map.tileHeight;
+            result.push(element);
+          }      
+        });
+        return result; 
+  },
+    
     initEnemies: function () {
 
         this.enemies = this.add.group()
