@@ -65,6 +65,8 @@ BackTogether.Level2.prototype = {
         this.initRobots();
 
         var inputs = [
+            Phaser.Keyboard.ONE,
+            Phaser.Keyboard.TWO,
             Phaser.Keyboard.UP,
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
@@ -78,7 +80,7 @@ BackTogether.Level2.prototype = {
             Phaser.Keyboard.P
         ];
         var name = [
-            'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
         ]
 
         keys = {};
@@ -206,6 +208,10 @@ BackTogether.Level2.prototype = {
 
         if (keys['P'].isDown) {
             this.game.state.start('LoseScreen');
+        }
+        
+        if(keys['Level1'].isDown){
+            this.game.state.start('Level1');
         }
 
 

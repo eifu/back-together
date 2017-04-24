@@ -36,7 +36,6 @@ BackTogether.Preloader.prototype = {
         this.load.image('nextIcon', 'assets/images/nextIcon.png');
         this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
         this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
-
         this.load.tilemap('map1', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
         
@@ -51,6 +50,7 @@ BackTogether.Preloader.prototype = {
         this.load.image('hold', 'assets/images/hold.png');
         this.load.image('tileset', 'assets/images/tileset.png');
         this.load.image('tileset2', 'assets/images/tileset2.png');
+        
     },
 
     create: function () {

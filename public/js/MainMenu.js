@@ -11,8 +11,6 @@ var helpNodes;
 
 var helpSelected;
 
-
-
 var wfconfig = {
     google: {
         families: ['Aclonica']
