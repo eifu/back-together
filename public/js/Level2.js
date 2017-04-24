@@ -5,7 +5,6 @@ BackTogether.Level2 = function (game) {
 
 var platformLayer;
 var pausedLayer;
-var backgroundLayer;
 var objectsLayer;
 var keys;
 
@@ -26,29 +25,36 @@ BackTogether.Level2.prototype = {
         map.addTilesetImage('tileset2');
 
         WebFont.load(wfconfig);
-        this.stage.backgroundColor = "#3A5963";
 
         platformLayer = map.createLayer('platformLayer');
-//        backgroundLayer = map.createLayer('backgroundLayer');
-//        objectsLayer = map.createLayer('objectsLayer');
+        // objectsLayer = map.createLayer('objectsLayer');
         platformLayer.resizeWorld();
         map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
 
+        this.tableTops = this.game.add.group();
+        this.tableTops.enableBody = true;
+
+        result = this.findObjectsByType('tableTop', map, 'objectsLayer');
+
+        result.forEach(function (element) {
+            this.createFromTiledObject(element, this.tableTops);
+        }, this);
+
         this.score = 0;
 
         this.physics.p2.convertTilemap(map, platformLayer);
-//        this.physics.p2.convertTilemap(map, backgroundLayer);
-//        this.physics.p2.convertTilemap(map, objectsLayer);
+        this.physics.p2.convertTilemap(map, objectsLayer);
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
         this.initPlayer();
         this.initItems();
         this.initText();
-        this.initEnemies();
+        // this.initEnemies();
+        this.initRobots();
 
         var inputs = [
             Phaser.Keyboard.UP,
@@ -126,21 +132,21 @@ BackTogether.Level2.prototype = {
             player.damaged = true;
 
         } else {
-            if (this.checkOverlap(player, this.enemies)) {
+            if (this.checkOverlap(player, this.robots)) {
                 this.screenShake();
                 this.playerDamaged();
             }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
-                player.body.velocity.x = -150;
+                player.body.velocity.x = -800;
 
                 player.animations.play('left');
                 player.face = 'left';
             }
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
-                player.body.velocity.x = 150;
+                player.body.velocity.x = 800;
 
                 player.animations.play('right');
                 player.face = 'right';
@@ -193,8 +199,8 @@ BackTogether.Level2.prototype = {
             this.game.state.start('LoseScreen');
         }
 
-        this.updateEnemies();
-
+        // this.updateEnemies();
+        this.updateRobots();
 
 
     },
@@ -279,7 +285,9 @@ BackTogether.Level2.prototype = {
     },
     initPlayer: function () {
         // The player and its settings
-        player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'arm');
+        playerStartPos = this.findObjectsByType('playerStart', map, 'objectsLayer')
+        playerEndPos = this.findObjectsByType('playerEnd', map, 'objectsLayer');
+        player = this.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'arm');
 
         //  We need to enable physics on the player
         this.physics.p2.enable(player, true);
@@ -295,8 +303,8 @@ BackTogether.Level2.prototype = {
 
         player.body.clearShapes();
         // player.body.addPolygon({}, [[0,54],[128,54],[112,-10],[16,-10]]);
-        player.body.addRectangle(128, 30,0,10);
-        player.body.addRectangle(80,70,0,-10);
+        player.body.addRectangle(128, 30, 0, 10);
+        player.body.addRectangle(80, 70, 0, -10);
 
 
         this.camera.follow(player);
@@ -310,6 +318,35 @@ BackTogether.Level2.prototype = {
         player.itemNums = [];
 
     },
+    findObjectsByType: function (type, map, layer) {
+        var result = new Array();
+        console.log("******looking for ");
+            console.log(type);
+        map.objects[layer].forEach(function (element) {
+
+            console.log(element.properties.type);
+            if (element.properties.type === type) {
+                console.log("!!!!!!!!!!!!!!!!!!!found")
+                element.y -= map.tileHeight;
+                result.push(element);
+            }
+        });
+        console.log("### find")
+        console.log(result);
+        return result;
+
+    },
+    //create a sprite from an object
+    createFromTiledObject: function (element, group) {
+        var sprite = group.create(element.x, element.y, element.properties.sprite);
+
+        //copy all properties to the sprite
+        Object.keys(element.properties).forEach(function (key) {
+            sprite[key] = element.properties[key];
+        });
+    },
+
+
     initText: function () {
         // the level
         this.levelText = this.add.text(100, 70, 'Level:' + Level, { font: '32px Aclonica', fill: '#000' });
@@ -385,6 +422,49 @@ BackTogether.Level2.prototype = {
             this.enemy3.animations.play('left');
             this.enemy3.body.velocity.x = -100;
         }
+    },
+    initRobots: function () {
+        this.robots = this.add.group();
+
+        _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
+        _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
+
+        // console.log("daddadda");
+        // console.log(_robot1Left);
+        //         console.log("daddadda");
+        // console.log(_robot1Right);
+
+
+        this.robot1 = this.factoryRobot(_robot1Left[0].x, _robot1Left[0].y);
+        this.robot1.robot1Left = _robot1Left;
+        this.robot1.robot1Right = _robot1Right;
+
+    },
+    updateRobots:function(){
+        if (this.robot1.body.x < this.robot1.robot1Left[0].x){
+            this.robot1.animations.play('right');
+            this.robot1.body.velocity.x = 100;
+        }else if (this.robot1.robot1Right[0].x < this.robot1.body.x) {
+            this.robot1.animations.play("left");
+            this.robot1.body.velocity.x = -100;
+        }
+    },
+
+    factoryRobot: function (x, y) {
+        var r = this.robots.create(x, y, 'robot');
+        this.physics.p2.enable(r, true);
+        r.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        r.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+
+        r.body.clearShapes();
+
+        r.body.addCircle(24, 0, -76);
+        r.body.addRectangle(59, 90, 0, -8);
+        r.body.addRectangle(155, 55, 0, 67);
+
+        r.body.velocity.x = 0;
+        r.body.velocity.y = 0;
+        return r;
     },
     initPausedScreen: function (game) {
         pausedLayer = map.createLayer('pausedLayer');
