@@ -12,7 +12,8 @@ var playAgain;
 var mainMenu;
 var next;
 var player;
-
+var playerStartPos;
+var playerEndPos;
 var map;
 
 BackTogether.Level1.prototype = {
@@ -23,8 +24,8 @@ BackTogether.Level1.prototype = {
 
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
-        map = this.add.tilemap('map1', 64, 64);
-        map.addTilesetImage('tileset');
+        map = this.add.tilemap('lvl1', 64, 64);
+        map.addTilesetImage('tileset2');
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
@@ -32,7 +33,7 @@ BackTogether.Level1.prototype = {
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
-
+        
         this.score = 0;
 
         this.physics.p2.convertTilemap(map, platformLayer);
@@ -43,7 +44,7 @@ BackTogether.Level1.prototype = {
         this.initPlayer();
         this.initItems();
         this.initText();
-        this.initEnemies();
+//        this.initEnemies();
 
         var inputs = [
             Phaser.Keyboard.UP,
@@ -121,10 +122,10 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-            if (this.checkOverlap(player, this.enemies)) {
-                this.screenShake();
-                this.playerDamaged();
-            }
+//            if (this.checkOverlap(player, this.enemies)) {
+//                this.screenShake();
+//                this.playerDamaged();
+//            }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
@@ -188,8 +189,8 @@ BackTogether.Level1.prototype = {
             this.game.state.start('LoseScreen');
         }
 
-        this.updateEnemies();
-
+//        this.updateEnemies();
+          this.playerVictory();
 
 
     },
@@ -274,7 +275,9 @@ BackTogether.Level1.prototype = {
     },
     initPlayer: function () {
         // The player and its settings
-        player = this.add.sprite(this.world.centerX, this.world.centerY - 150, 'hand');
+        playerStartPos = this.findObjectsByType('playerStart', map, 'objectsLayer')
+        playerEndPos = this.findObjectsByType('playerEnd', map, 'objectsLayer');
+        player = this.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'hand');
 
         //  We need to enable physics on the player
         this.physics.p2.enable(player, true);
@@ -312,73 +315,85 @@ BackTogether.Level1.prototype = {
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
     },
-    initEnemies: function () {
-
-        this.enemies = this.add.group()
-
-
-        this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
-        this.physics.p2.enable(this.enemy1, true);
-        this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        this.enemy1.body.clearShapes();
-        this.enemy1.body.addRectangle(86, 256, 5, 11);
-        this.enemy1.body.addRectangle(86, 256, 5, 11);
-        this.enemy1.body.addRectangle(55, 241, 60, 213, 0);
-        this.enemy1.body.addRectangle(55, 241, -30, 203, 0);
-        this.enemy1.body.fixedRotation = true;
-
-
-
-        this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
-        this.physics.p2.enable(this.enemy2, true);
-        this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        this.enemy2.animations.play('right');
-        this.enemy2.body.clearShapes();
-        this.enemy2.body.addRectangle(86, 256, 5, 11);
-        this.enemy2.body.addRectangle(55, 241, 60, 213, 0);
-        this.enemy2.body.addRectangle(55, 241, -30, 203, 0);
-        this.enemy2.body.fixedRotation = true;
-
-        this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
-        this.physics.p2.enable(this.enemy3, true);
-        this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        this.enemy3.animations.play('right');
-        this.enemy3.body.clearShapes();
-        this.enemy3.body.addRectangle(86, 256, 5, 11);
-        this.enemy3.body.addRectangle(55, 241, 60, 213, 0);
-        this.enemy3.body.addRectangle(55, 241, -30, 203, 0);
-        this.enemy3.body.fixedRotation = true;
-
-    },
-    updateEnemies: function () {
-
-        if (this.enemy1.body.x < 64 * 1 + 2) {
-            this.enemy1.animations.play('right')
-            this.enemy1.body.velocity.x = 100;
-        } else if (this.enemy1.body.x > 64 * 3 + 32 - 2) {
-            this.enemy1.animations.play('left');
-            this.enemy1.body.velocity.x = -100;
-        }
-
-        if (this.enemy2.body.x < 64 * 7 + 2) {
-            this.enemy2.animations.play('right');
-            this.enemy2.body.velocity.x = 100;
-        } else if (this.enemy2.body.x > 64 * 8 + 32 - 2) {
-            this.enemy2.animations.play('left');
-            this.enemy2.body.velocity.x = -100;
-        }
-
-        if (this.enemy3.body.x < 64 * 13 + 2) {
-            this.enemy3.animations.play('right');
-            this.enemy3.body.velocity.x = 100;
-        } else if (this.enemy3.body.x > 64 * 16 + 32 - 2) {
-            this.enemy3.animations.play('left');
-            this.enemy3.body.velocity.x = -100;
-        }
-    },
+    
+    findObjectsByType: function(type, map, layer) {
+        var result = new Array();
+        map.objects[layer].forEach(function(element){
+          if(element.properties.type === type) {
+            element.y -= map.tileHeight;
+            result.push(element);
+          }      
+        });
+        return result;
+        
+  },
+//    initEnemies: function () {
+//
+//        this.enemies = this.add.group()
+//
+//
+//        this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
+//        this.physics.p2.enable(this.enemy1, true);
+//        this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+//        this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+//        this.enemy1.body.clearShapes();
+//        this.enemy1.body.addRectangle(86, 256, 5, 11);
+//        this.enemy1.body.addRectangle(86, 256, 5, 11);
+//        this.enemy1.body.addRectangle(55, 241, 60, 213, 0);
+//        this.enemy1.body.addRectangle(55, 241, -30, 203, 0);
+//        this.enemy1.body.fixedRotation = true;
+//
+//
+//
+//        this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
+//        this.physics.p2.enable(this.enemy2, true);
+//        this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+//        this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+//        this.enemy2.animations.play('right');
+//        this.enemy2.body.clearShapes();
+//        this.enemy2.body.addRectangle(86, 256, 5, 11);
+//        this.enemy2.body.addRectangle(55, 241, 60, 213, 0);
+//        this.enemy2.body.addRectangle(55, 241, -30, 203, 0);
+//        this.enemy2.body.fixedRotation = true;
+//
+//        this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
+//        this.physics.p2.enable(this.enemy3, true);
+//        this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+//        this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+//        this.enemy3.animations.play('right');
+//        this.enemy3.body.clearShapes();
+//        this.enemy3.body.addRectangle(86, 256, 5, 11);
+//        this.enemy3.body.addRectangle(55, 241, 60, 213, 0);
+//        this.enemy3.body.addRectangle(55, 241, -30, 203, 0);
+//        this.enemy3.body.fixedRotation = true;
+//
+//    },
+//    updateEnemies: function () {
+//
+//        if (this.enemy1.body.x < 64 * 1 + 2) {
+//            this.enemy1.animations.play('right')
+//            this.enemy1.body.velocity.x = 100;
+//        } else if (this.enemy1.body.x > 64 * 3 + 32 - 2) {
+//            this.enemy1.animations.play('left');
+//            this.enemy1.body.velocity.x = -100;
+//        }
+//
+//        if (this.enemy2.body.x < 64 * 7 + 2) {
+//            this.enemy2.animations.play('right');
+//            this.enemy2.body.velocity.x = 100;
+//        } else if (this.enemy2.body.x > 64 * 8 + 32 - 2) {
+//            this.enemy2.animations.play('left');
+//            this.enemy2.body.velocity.x = -100;
+//        }
+//
+//        if (this.enemy3.body.x < 64 * 13 + 2) {
+//            this.enemy3.animations.play('right');
+//            this.enemy3.body.velocity.x = 100;
+//        } else if (this.enemy3.body.x > 64 * 16 + 32 - 2) {
+//            this.enemy3.animations.play('left');
+//            this.enemy3.body.velocity.x = -100;
+//        }
+//    },
     initPausedScreen: function (game) {
         pausedLayer = map.createLayer('pausedLayer');
         pausedLayer.resizeWorld();
@@ -493,6 +508,11 @@ BackTogether.Level1.prototype = {
     inventoryItemOnClick: function (e) {
         console.log('inventory item pressed');
         console.log(e.key);
+    },
+    playerVictory: function(){
+        if(playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x){
+            console.log("victory!");
+        }
     }
 
 }
