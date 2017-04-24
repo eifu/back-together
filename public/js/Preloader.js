@@ -39,7 +39,7 @@ BackTogether.Preloader.prototype = {
         this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
         
         this.load.tilemap('lvl1', 'assets/js/level1.json', null, Phaser.Tilemap.TILED_JSON);
-
+        this.load.tilemap('lvl2', 'assets/js/level2.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
         this.load.atlasJSONArray('arm', 'assets/images/arm.png', 'assets/js/arm.json');
         this.load.atlasJSONArray('enemy1', 'assets/images/enemy1.png', 'assets/js/enemy1.json');
