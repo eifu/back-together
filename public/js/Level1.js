@@ -35,7 +35,7 @@ BackTogether.Level1.prototype = {
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
-        
+
         this.score = 0;
 
         this.physics.p2.convertTilemap(map, platformLayer);
@@ -46,7 +46,8 @@ BackTogether.Level1.prototype = {
         this.initPlayer();
 //        this.initItems();
         this.initText();
-//        this.initEnemies();
+        this.initHealthBar();
+        //        this.initEnemies();
 
         this.initRobots();
 
@@ -135,7 +136,7 @@ BackTogether.Level1.prototype = {
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
                 if (player.animations.frame == 1) {
-                    player.body.velocity.x = -200;
+                    player.body.velocity.x = -800;
                 } else {
                     player.body.velocity.x = 0;
                 }
@@ -145,7 +146,7 @@ BackTogether.Level1.prototype = {
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
                 if (player.animations.frame == 5) {
-                    player.body.velocity.x = 200;
+                    player.body.velocity.x = 800;
                 } else {
                     player.body.velocity.x = 0;
                 }
@@ -200,8 +201,8 @@ BackTogether.Level1.prototype = {
             this.game.state.start('LoseScreen');
         }
 
-//        this.updateEnemies();
-          this.playerVictory();
+        //        this.updateEnemies();
+        this.playerVictory();
 
 
 
@@ -264,7 +265,18 @@ BackTogether.Level1.prototype = {
             } else {
                 player.face = 'right_damaged';
             }
+            this.healthPoint -= 1;
+            if (this.healthPoint == 0){
+                this.game.state.start('LoseScreen');
+            } else if (this.healthPoint < 2){
+                this.heart.animations.play("quick");
+            } else if (this.healthPoint < 4){
+                this.heart.animations.play("normal");
+            } else {
+                this.heart.animations.play("slow");
+            }
 
+            this.healthbar.scale.setTo(1, this.healthPoint);
         }
 
     },
@@ -327,19 +339,19 @@ BackTogether.Level1.prototype = {
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
     },
-    
-    findObjectsByType: function(type, map, layer) {
+
+    findObjectsByType: function (type, map, layer) {
         var result = new Array();
-        map.objects[layer].forEach(function(element){
-          if(element.properties.type === type) {
-            element.y -= map.tileHeight;
-            result.push(element);
-          }      
+        map.objects[layer].forEach(function (element) {
+            if (element.properties.type === type) {
+                element.y -= map.tileHeight;
+                result.push(element);
+            }
         });
         return result;
-        
-  },
-    
+
+    },
+
     initEnemies: function () {
 
         this.enemies = this.add.group();
@@ -409,16 +421,16 @@ BackTogether.Level1.prototype = {
     },
     initRobots: function () {
         this.robots = this.add.group();
-        this.robot1 = this.factoryRobot(this.world.centerX-200, this.world.centerY - 10);
+        this.robot1 = this.factoryRobot(this.world.centerX - 200, this.world.centerY - 10);
 
     },
 
-    factoryRobot:function(x, y){
+    factoryRobot: function (x, y) {
         var r = this.robots.create(x, y, 'robot');
         this.physics.p2.enable(r, true);
         r.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
         r.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        
+
         r.body.clearShapes();
 
         r.body.addCircle(24, 0, -76);
@@ -545,10 +557,36 @@ BackTogether.Level1.prototype = {
         console.log('inventory item pressed');
         console.log(e.key);
     },
-    playerVictory: function(){
-        if(playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x){
+    playerVictory: function () {
+        if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
             console.log("victory!");
         }
+    },
+    initHealthBar: function () {
+
+        this.healthPoint = 6;
+
+        this.healthbar = this.add.image(this.camera.view.width-120, 120, 'healthbar');
+        this.healthbar.anchor.setTo(0, 0);
+        this.healthbar.scale.setTo(1, this.healthPoint);
+        this.healthbar.fixedToCamera = true;
+
+
+        // console.log(this.camera.view);
+        this.heart = this.add.sprite(this.camera.view.width - 80, 120, 'heartbeat');
+        this.heart.anchor.setTo(0.5, 0.5);
+
+        this.heart.animations.add('normal', [0, 1, 2, 3, 4, 5], 10, true);
+
+        this.heart.animations.add('slow', [0, 0, 1, 2, 3, 3, 4, 5], 10, true);
+        this.heart.animations.add('quick', [0, 2, 4, 5], 10, true);
+
+        this.heart.animations.play('slow');
+
+        this.heart.fixedToCamera = true;
+
+
+
     }
 
 }
