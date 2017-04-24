@@ -43,7 +43,8 @@ BackTogether.Level1.prototype = {
         this.initPlayer();
         this.initItems();
         this.initText();
-        this.initEnemies();
+        // this.initEnemies();
+        this.initRobots();
 
         var inputs = [
             Phaser.Keyboard.UP,
@@ -121,7 +122,7 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-            if (this.checkOverlap(player, this.enemies)) {
+            if (this.checkOverlap(player, this.robots)) {
                 this.screenShake();
                 this.playerDamaged();
             }
@@ -194,7 +195,7 @@ BackTogether.Level1.prototype = {
             this.game.state.start('LoseScreen');
         }
 
-        this.updateEnemies();
+        // this.updateEnemies();
 
 
 
@@ -320,7 +321,7 @@ BackTogether.Level1.prototype = {
     },
     initEnemies: function () {
 
-        this.enemies = this.add.group()
+        this.enemies = this.add.group();
 
 
         this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
@@ -385,6 +386,26 @@ BackTogether.Level1.prototype = {
             this.enemy3.body.velocity.x = -100;
         }
     },
+    initRobots: function () {
+        this.robots = this.add.group();
+        this.robot1 = this.robots.create(this.world.centerX-200, this.world.centerY - 10, 'robot');
+        this.physics.p2.enable(this.robot1, true);
+        this.robot1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.robot1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        
+        this.robot1.body.clearShapes();
+
+        this.robot1.body.addCircle(24, 0, -76);
+        this.robot1.body.addRectangle(59, 90, 0, -8);
+        this.robot1.body.addRectangle(155, 55, 0, 67);
+
+        this.robot1.body.velocity.x = 0;
+        this.robot1.body.velocity.y = 0;
+
+        
+
+    },
+
     initPausedScreen: function (game) {
         pausedLayer = map.createLayer('pausedLayer');
         pausedLayer.resizeWorld();
