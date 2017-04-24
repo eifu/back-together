@@ -33,13 +33,13 @@ BackTogether.Level2.prototype = {
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
 
-//        backgroundLayer = map.createLayer('backgroundLayer');
-//        backgroundLayer.resizeWorld();
+        backgroundLayer = map.createLayer('backgroundLayer');
+        backgroundLayer.resizeWorld();
         
-//        console.log(backgroundLayer);
+        console.log(backgroundLayer);
         
-        objectsLayer = map.createLayer('objectsLayer');
-        console.log(objectsLayer);
+//        objectsLayer = map.createLayer('objectsLayer');
+//        console.log(objectsLayer);
         
 //        legsLayer.resizeWorld();
 //        objectsLayer.resizeWorld();
