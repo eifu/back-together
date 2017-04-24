@@ -46,6 +46,8 @@ BackTogether.Level1.prototype = {
         this.initText();
 //        this.initEnemies();
 
+        this.initRobots();
+
         var inputs = [
             Phaser.Keyboard.UP,
             Phaser.Keyboard.LEFT,
@@ -122,22 +124,29 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-//            if (this.checkOverlap(player, this.enemies)) {
-//                this.screenShake();
-//                this.playerDamaged();
-//            }
+            if (this.checkOverlap(player, this.robots)) {
+                this.screenShake();
+                this.playerDamaged();
+            }
+
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
-                player.body.velocity.x = -150;
-
+                if (player.animations.frame == 1) {
+                    player.body.velocity.x = -200;
+                } else {
+                    player.body.velocity.x = 0;
+                }
                 player.animations.play('left');
                 player.face = 'left';
             }
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
-                player.body.velocity.x = 150;
-
+                if (player.animations.frame == 5) {
+                    player.body.velocity.x = 200;
+                } else {
+                    player.body.velocity.x = 0;
+                }
                 player.animations.play('right');
                 player.face = 'right';
             } else {
@@ -180,17 +189,18 @@ BackTogether.Level1.prototype = {
         if (keys['SPACE'].isDown) {
             this.initPausedScreen(game);
         }
-        
-        if(keys['O'].isDown){
+
+        if (keys['O'].isDown) {
             this.game.state.start('WinScreen');
         }
-        
-        if(keys['P'].isDown){
+
+        if (keys['P'].isDown) {
             this.game.state.start('LoseScreen');
         }
 
 //        this.updateEnemies();
           this.playerVictory();
+
 
 
     },
@@ -327,73 +337,97 @@ BackTogether.Level1.prototype = {
         return result;
         
   },
-//    initEnemies: function () {
-//
-//        this.enemies = this.add.group()
-//
-//
-//        this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
-//        this.physics.p2.enable(this.enemy1, true);
-//        this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-//        this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-//        this.enemy1.body.clearShapes();
-//        this.enemy1.body.addRectangle(86, 256, 5, 11);
-//        this.enemy1.body.addRectangle(86, 256, 5, 11);
-//        this.enemy1.body.addRectangle(55, 241, 60, 213, 0);
-//        this.enemy1.body.addRectangle(55, 241, -30, 203, 0);
-//        this.enemy1.body.fixedRotation = true;
-//
-//
-//
-//        this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
-//        this.physics.p2.enable(this.enemy2, true);
-//        this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-//        this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-//        this.enemy2.animations.play('right');
-//        this.enemy2.body.clearShapes();
-//        this.enemy2.body.addRectangle(86, 256, 5, 11);
-//        this.enemy2.body.addRectangle(55, 241, 60, 213, 0);
-//        this.enemy2.body.addRectangle(55, 241, -30, 203, 0);
-//        this.enemy2.body.fixedRotation = true;
-//
-//        this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
-//        this.physics.p2.enable(this.enemy3, true);
-//        this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-//        this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-//        this.enemy3.animations.play('right');
-//        this.enemy3.body.clearShapes();
-//        this.enemy3.body.addRectangle(86, 256, 5, 11);
-//        this.enemy3.body.addRectangle(55, 241, 60, 213, 0);
-//        this.enemy3.body.addRectangle(55, 241, -30, 203, 0);
-//        this.enemy3.body.fixedRotation = true;
-//
-//    },
-//    updateEnemies: function () {
-//
-//        if (this.enemy1.body.x < 64 * 1 + 2) {
-//            this.enemy1.animations.play('right')
-//            this.enemy1.body.velocity.x = 100;
-//        } else if (this.enemy1.body.x > 64 * 3 + 32 - 2) {
-//            this.enemy1.animations.play('left');
-//            this.enemy1.body.velocity.x = -100;
-//        }
-//
-//        if (this.enemy2.body.x < 64 * 7 + 2) {
-//            this.enemy2.animations.play('right');
-//            this.enemy2.body.velocity.x = 100;
-//        } else if (this.enemy2.body.x > 64 * 8 + 32 - 2) {
-//            this.enemy2.animations.play('left');
-//            this.enemy2.body.velocity.x = -100;
-//        }
-//
-//        if (this.enemy3.body.x < 64 * 13 + 2) {
-//            this.enemy3.animations.play('right');
-//            this.enemy3.body.velocity.x = 100;
-//        } else if (this.enemy3.body.x > 64 * 16 + 32 - 2) {
-//            this.enemy3.animations.play('left');
-//            this.enemy3.body.velocity.x = -100;
-//        }
-//    },
+    
+    initEnemies: function () {
+
+        this.enemies = this.add.group();
+
+
+        this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
+        this.physics.p2.enable(this.enemy1, true);
+        this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        this.enemy1.body.clearShapes();
+        this.enemy1.body.addRectangle(86, 256, 5, 11);
+        this.enemy1.body.addRectangle(86, 256, 5, 11);
+        this.enemy1.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy1.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy1.body.fixedRotation = true;
+
+
+
+        this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
+        this.physics.p2.enable(this.enemy2, true);
+        this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        this.enemy2.animations.play('right');
+        this.enemy2.body.clearShapes();
+        this.enemy2.body.addRectangle(86, 256, 5, 11);
+        this.enemy2.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy2.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy2.body.fixedRotation = true;
+
+        this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
+        this.physics.p2.enable(this.enemy3, true);
+        this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        this.enemy3.animations.play('right');
+        this.enemy3.body.clearShapes();
+        this.enemy3.body.addRectangle(86, 256, 5, 11);
+        this.enemy3.body.addRectangle(55, 241, 60, 213, 0);
+        this.enemy3.body.addRectangle(55, 241, -30, 203, 0);
+        this.enemy3.body.fixedRotation = true;
+
+    },
+    updateEnemies: function () {
+
+        if (this.enemy1.body.x < 64 * 1 + 2) {
+            this.enemy1.animations.play('right')
+            this.enemy1.body.velocity.x = 100;
+        } else if (this.enemy1.body.x > 64 * 3 + 32 - 2) {
+            this.enemy1.animations.play('left');
+            this.enemy1.body.velocity.x = -100;
+        }
+
+        if (this.enemy2.body.x < 64 * 7 + 2) {
+            this.enemy2.animations.play('right');
+            this.enemy2.body.velocity.x = 100;
+        } else if (this.enemy2.body.x > 64 * 8 + 32 - 2) {
+            this.enemy2.animations.play('left');
+            this.enemy2.body.velocity.x = -100;
+        }
+
+        if (this.enemy3.body.x < 64 * 13 + 2) {
+            this.enemy3.animations.play('right');
+            this.enemy3.body.velocity.x = 100;
+        } else if (this.enemy3.body.x > 64 * 16 + 32 - 2) {
+            this.enemy3.animations.play('left');
+            this.enemy3.body.velocity.x = -100;
+        }
+    },
+    initRobots: function () {
+        this.robots = this.add.group();
+        this.robot1 = this.factoryRobot(this.world.centerX-200, this.world.centerY - 10);
+
+    },
+
+    factoryRobot:function(x, y){
+        var r = this.robots.create(x, y, 'robot');
+        this.physics.p2.enable(r, true);
+        r.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
+        r.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        
+        r.body.clearShapes();
+
+        r.body.addCircle(24, 0, -76);
+        r.body.addRectangle(59, 90, 0, -8);
+        r.body.addRectangle(155, 55, 0, 67);
+
+        r.body.velocity.x = 0;
+        r.body.velocity.y = 0;
+        return r;
+    },
+
     initPausedScreen: function (game) {
         pausedLayer = map.createLayer('pausedLayer');
         pausedLayer.resizeWorld();
@@ -453,7 +487,7 @@ BackTogether.Level1.prototype = {
             num.anchor.setTo(0.5, 0.5);
             num.scale.setTo(0.5, 0.5);
             player.itemNums.push(num);
- 
+
             i += 1;
         }
 

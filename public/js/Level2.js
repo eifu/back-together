@@ -5,7 +5,8 @@ BackTogether.Level2 = function (game) {
 
 var platformLayer;
 var pausedLayer;
-
+var backgroundLayer;
+var objectsLayer;
 var keys;
 
 var playAgain;
@@ -21,13 +22,15 @@ BackTogether.Level2.prototype = {
 
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
-        map = this.add.tilemap('map2', 64, 64);
-        map.addTilesetImage('tileset');
+        map = this.add.tilemap('lvl2', 64, 64);
+        map.addTilesetImage('tileset2');
 
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
 
         platformLayer = map.createLayer('platformLayer');
+//        backgroundLayer = map.createLayer('backgroundLayer');
+//        objectsLayer = map.createLayer('objectsLayer');
         platformLayer.resizeWorld();
         map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
@@ -37,7 +40,8 @@ BackTogether.Level2.prototype = {
         this.score = 0;
 
         this.physics.p2.convertTilemap(map, platformLayer);
-
+//        this.physics.p2.convertTilemap(map, backgroundLayer);
+//        this.physics.p2.convertTilemap(map, objectsLayer);
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
