@@ -451,11 +451,6 @@ BackTogether.Level2.prototype = {
         _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
         _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
 
-        // console.log("daddadda");
-        // console.log(_robot1Left);
-        //         console.log("daddadda");
-        // console.log(_robot1Right);
-
 
         this.robot1 = this.factoryRobot(_robot1Left[0].x, _robot1Left[0].y);
         this.robot1.robot1Left = _robot1Left;
