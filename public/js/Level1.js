@@ -564,14 +564,13 @@ BackTogether.Level1.prototype = {
                     r.animations.stop();
 
                     if (r.face == 'left') {
-                        r.animations.frame = 0;
-                    } else {
                         r.animations.frame = 2;
+                    } else {
+                        r.animations.frame = 6;
                     }
 
                 }
             }
-            console.log(r.state);
         })
     },
 

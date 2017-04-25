@@ -501,16 +501,26 @@ BackTogether.Level2.prototype = {
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
         this.drone1.leftPos = _drone1Left;
         this.drone1.rightPos = _drone1Right;
-        console.log(_drone1Left);
+        console.log(this.drone1);
     },
 
     factoryDrone: function(x,y){
         var d = this.drones.create(x,y,'drone');
+
         this.physics.p2.enable(d, true);
         d.animations.add('left', [0, 1], 10, true);
         d.animations.add('left_damaged', [2, 3], 10, true)
         d.animations.add('right', [4, 5], 10, true);
         d.animations.add("right_damaged", [6, 7], 10, true);
+
+        d.light = this.add.sprite(x, y+30, 'droneLight');
+        this.physics.p2.enable(d.light, true);
+        d.light.body.data.gravityScale = 0;
+        d.light.anchor.setTo(0.5,0);
+        d.light.scale.setTo(10,10);
+        d.light.frame = 1;
+        d.light.body.clearShapes();
+        d.light.sendToBack();
 
         d.anchor.setTo(0.5,0.5);
 
@@ -521,7 +531,6 @@ BackTogether.Level2.prototype = {
 
         // d.body.mass = 0;
         d.body.data.gravityScale = 0;
-        console.log(d.body);
         d.state = 'patrol';
         return d;
     },
@@ -534,17 +543,23 @@ BackTogether.Level2.prototype = {
                 if (d.body.x < d.leftPos[0].x){
                     d.face = 'right';
                     d.body.moveRight(100);
+                    d.light.body.moveRight(100);
+                    d.light.frame = 0;
 
                 } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x){
 
                     if (d.face == "left"){
 
                         d.body.moveLeft(100);
+
+                        d.light.body.moveLeft(100);
                         d.animations.play('left');
+                        
 
                     }else{
 
                         d.body.moveRight(100);
+                        d.light.body.moveRight(100);
                         d.animations.play('right');
 
                     }
@@ -553,6 +568,7 @@ BackTogether.Level2.prototype = {
                 else {
                     d.face = 'left';
                     d.body.moveLeft(100);
+                    d.light.frame = 1;
                 }
 
             }else{
