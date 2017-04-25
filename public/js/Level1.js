@@ -222,8 +222,6 @@ BackTogether.Level1.prototype = {
 
         this.updateRobots();
 
-        this.updateDrones();
-
     },
 
     checkOverlap: function (spriteA, spriteB) {
