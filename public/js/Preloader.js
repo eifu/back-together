@@ -34,11 +34,8 @@ BackTogether.Preloader.prototype = {
         this.load.image('nextIcon', 'assets/images/nextIcon.png');
         this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
         this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
-<<<<<<< HEAD
-=======
         this.load.spritesheet('robot', 'assets/images/robot.png',166,200);
 
->>>>>>> eifu
         this.load.tilemap('map1', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
         
