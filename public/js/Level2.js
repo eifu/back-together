@@ -124,15 +124,21 @@ BackTogether.Level2.prototype = {
         volIcon.anchor.setTo(0.5, 0.5);
 
         var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
-            if (!volumeOff) {
-                icon = 'volUpIcon';
-                volIcon.loadTexture(icon);
-                volumeOff = !volumeOff;
-            }
-            else {
+            if(!volumeOn){
                 icon = 'volDownIcon';
                 volIcon.loadTexture(icon);
-                volumeOff = !volumeOff;
+                volumeOn = !volumeOn;
+                music.mute = true;
+                pop.mute = true;
+                crash.mute = true;
+            }
+            else{
+                icon = 'volUpIcon';
+                volIcon.loadTexture(icon);
+                volumeOn = !volumeOn;
+                music.mute = false;
+                pop.mute = false;
+                crash.mute = false;
             }
         }, 2, 1, 0);
 

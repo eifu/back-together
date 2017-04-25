@@ -4,8 +4,8 @@ BackTogether.Preloader = function (game) {
 
 var music;
 var pop;
-var volumeOff = false;
-var icon = 'volDownIcon';
+var volumeOn = false;
+var icon = 'volUpIcon';
 
 BackTogether.Preloader.prototype = {
 
