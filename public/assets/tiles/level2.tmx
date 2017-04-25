@@ -51,17 +51,17 @@
     <property name="type" value="robot1Right"/>
    </properties>
   </object>
-  <object id="50" name="drone1Left" gid="9" x="320" y="256" width="64" height="64">
+  <object id="50" name="drone1Left" gid="9" x="323.031" y="570" width="64" height="64">
    <properties>
     <property name="type" value="drone1Left"/>
    </properties>
   </object>
-  <object id="51" name="drone1Right" gid="9" x="1280" y="256" width="64" height="64">
+  <object id="51" name="drone1Right" gid="9" x="1264" y="570" width="64" height="64">
    <properties>
     <property name="type" value="drone1Right"/>
    </properties>
   </object>
-  <object id="52" name="drone1Start" gid="9" x="766" y="256" width="64" height="64">
+  <object id="52" name="drone1Start" gid="9" x="769.03" y="570" width="64" height="64">
    <properties>
     <property name="type" value="drone1Start"/>
    </properties>

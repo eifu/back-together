@@ -63,6 +63,7 @@ BackTogether.Level2.prototype = {
         this.initItems();
         this.initText();
         this.initRobots();
+        this.initDrones();
 
         var inputs = [
             Phaser.Keyboard.UP,
@@ -211,7 +212,7 @@ BackTogether.Level2.prototype = {
 
         // this.updateEnemies();
         this.updateRobots();
-
+        this.updateDrones();
 
     },
 
@@ -447,9 +448,71 @@ BackTogether.Level2.prototype = {
     },
     initDrones:function(){
         this.drones = this.add.group();
+        _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
+        _drone1Left = this.findObjectsByType('drone1Left', map, 'objectsLayer')
+        _drone1Right = this.findObjectsByType('drone1Right', map, 'objectsLayer');
 
-        
+        this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        this.drone1.leftPos = _drone1Left;
+        this.drone1.rightPos = _drone1Right;
+        console.log(_drone1Left);
     },
+
+    factoryDrone: function(x,y){
+        var d = this.drones.create(x,y,'drone');
+        this.physics.p2.enable(d, true);
+        d.animations.add('left', [0, 1], 10, true);
+        d.animations.add('left_damaged', [2, 3], 10, true)
+        d.animations.add('right', [4, 5], 10, true);
+        d.animations.add("right_damaged", [6, 7], 10, true);
+
+        d.anchor.setTo(0.5,0.5);
+
+        d.body.clearShapes();
+
+        d.animations.play("left");
+        d.face = 'left';
+
+        // d.body.mass = 0;
+        d.body.data.gravityScale = 0;
+        console.log(d.body);
+        d.state = 'patrol';
+        return d;
+    },
+
+    updateDrones:function(){
+        this.drones.children.forEach(function(d){
+            if (d.state == 'patrol'){
+                // goomba
+                // console.log(d.rightPos[0].x);
+                if (d.body.x < d.leftPos[0].x){
+                    d.face = 'right';
+                    d.body.moveRight(100);
+
+                } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x){
+
+                    if (d.face == "left"){
+
+                        d.body.moveLeft(100);
+
+                    }else{
+
+                        d.body.moveRight(100);
+
+                    }
+                }
+                
+                else {
+                    d.face = 'left';
+                    d.body.moveLeft(100);
+                }
+
+            }else{
+                // trace player
+            }
+        })
+    },
+
 
   initRobots: function () {
         this.robots = this.add.group();
@@ -534,7 +597,6 @@ BackTogether.Level2.prototype = {
 
                 }
             }
-            console.log(r.state);
         })
     },
     initPausedScreen: function (game) {
