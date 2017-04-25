@@ -43,11 +43,9 @@ BackTogether.Level1.prototype = {
         this.physics.p2.gravity.y = 300;
 
         this.initPlayer();
-//        this.initItems();
+        // this.initItems();
         this.initText();
         this.initHealthBar();
-        //        this.initEnemies();
-
         this.initRobots();
 
         var inputs = [
@@ -131,11 +129,6 @@ BackTogether.Level1.prototype = {
     },
 
     update: function (game) {
-
-//        for (var i = 0; i < this.items.length; i++) {
-//            this.items.children[i].frame = 0;
-//        }
-
         //  Reset the players velocity (movement)
         player.body.velocity.x = 0;
 
@@ -183,36 +176,17 @@ BackTogether.Level1.prototype = {
                     player.animations.stop();
                     player.damaged = false;
                 } else if (player.face == 'left') {
-                    // player.animations.play('left');
                     player.animations.stop();
                 } else if (player.damaged && player.face == 'right') {
                     player.animations.play('right');
                     player.animations.stop();
                     player.damaged = false;
                 } else if (player.face == 'right') {
-                    // player.animations.play('right');
                     player.animations.stop();
                 }
             }
-
         }
 
-
-//        for (var i = 0; i < this.items.length; i++) {
-//            if (this.items.children[i].held) {
-//                this.items.children[i].body.y = player.body.y;
-//                this.items.children[i].body.x = player.body.x - this.pipe1.offset * (7 / 10);
-//                this.items.children[i].holdTime += .166;
-//            }
-//
-//            else {
-//                this.items.children[i].releaseTime += .166;
-//            }
-//
-//            this.items.children[i].holdbox1 = this.items.children[i].body.x;
-//            this.items.children[i].holdbox2 = this.items.children[i].body.x + this.items.children[i].body.width;
-
-//        }
         if (keys['SPACE'].isDown) {
             this.initPausedScreen(game);
         }
@@ -243,8 +217,9 @@ BackTogether.Level1.prototype = {
             iKeyDown = false;
         }
 
-        //        this.updateEnemies();
         this.playerVictory();
+
+        this.updateRobots();
 
     },
 
@@ -306,11 +281,11 @@ BackTogether.Level1.prototype = {
                 player.face = 'right_damaged';
             }
             this.healthPoint -= 1;
-            if (this.healthPoint == 0){
+            if (this.healthPoint == 0) {
                 this.game.state.start('LoseScreen');
-            } else if (this.healthPoint < 2){
+            } else if (this.healthPoint < 2) {
                 this.heart.animations.play("quick");
-            } else if (this.healthPoint < 4){
+            } else if (this.healthPoint < 4) {
                 this.heart.animations.play("normal");
             } else {
                 this.heart.animations.play("slow");
@@ -459,17 +434,82 @@ BackTogether.Level1.prototype = {
             this.enemy3.body.velocity.x = -100;
         }
     },
+    initDrones:function(){
+        this.drones = this.add.group();
+        _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
+        _drone1Left = this.findObjectsByType('drone1Left', map, 'objectsLayer')
+        _drone1Right = this.findObjectsByType('drone1Right', map, 'objectsLayer');
+
+        this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        this.drone1.leftPos = _drone1Left;
+        this.drone1.rightPos = _drone1Right;
+
+        this.camera.follow(this.drone1);
+
+    },
+
+    factoryDrone: function(x,y){
+        var d = this.drones.create(x,y,'drone');
+        this.physics.p2.enable(d, true);
+        d.animations.add('left', [0, 1], 10, true);
+        d.animations.add('left_damaged', [2, 3], 10, true)
+        d.animations.add('right', [4, 5], 10, true);
+        d.animations.add("right_damaged", [6, 7], 10, true);
+
+        d.animations.play("left");
+        d.face = 'left';
+    },
+
+    updateDrones:function(){
+        this.drones.children.forEach(function(d){
+            if (d.state == 'patrol'){
+                // goomba
+                if (d.body.x < d.leftPos){
+                    d.face = 'right';
+                    d.body.moveRight(100);
+
+                } else if (d.leftPos < d.body.x < d.rightPos){
+                    if (d.face == "left"){
+                        d.body.moveLeft(100);
+                    }else{
+                        d.body.moveRight(100);
+                    }
+                }
+                
+                else {
+                    d.face = 'left';
+                    d.body.moveLeft(100);
+                }
+
+            }else{
+                // trace player
+            }
+        })
+    },
+
     initRobots: function () {
         this.robots = this.add.group();
-        this.robot1 = this.factoryRobot(this.world.centerX - 200, this.world.centerY - 10);
+
+        _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
+        _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
+        _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
+
+        this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
+        this.robot1.robot1Left = _robot1Left;
+        this.robot1.robot1Right = _robot1Right;
 
     },
 
     factoryRobot: function (x, y) {
         var r = this.robots.create(x, y, 'robot');
         this.physics.p2.enable(r, true);
-        r.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        r.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        r.animations.add('right_attack', [0, 1], 10, true);
+        r.animations.add('right', [2, 3], 10, true)
+        r.animations.add('left_attack', [4, 5], 10, true);
+        r.animations.add("left", [6, 7], 10, true);
+
+        r.animations.play("left");
+        r.face = 'left';
 
         r.body.clearShapes();
 
@@ -477,9 +517,60 @@ BackTogether.Level1.prototype = {
         r.body.addRectangle(59, 90, 0, -8);
         r.body.addRectangle(155, 55, 0, 67);
 
-        r.body.velocity.x = 0;
+        r.body.moveLeft(100);
         r.body.velocity.y = 0;
+
+        r.states = [['left', 'idle'], ['left', 'left'],
+        ['right', 'idle'], ['right', 'right'],
+        ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
+        r.state = 'idle';
+
         return r;
+    },
+    updateRobots: function () {
+
+        var timeNow = this.time.now;
+
+        this.robots.children.forEach(function (r) {
+            if (r.state == "left") {
+                if (timeNow < r.stateTime) {
+                    r.body.moveLeft(100);
+                    r.animations.play('left');
+                } else {
+                    r.face = 'left';
+                    r.state = 'idle';
+                }
+            } else if (r.state == "right") {
+                if (timeNow < r.stateTime) {
+                    r.body.moveRight(100);
+                    r.animations.play("right");
+                } else {
+                    r.face = 'right';
+                    r.state = 'idle';
+                }
+            } else if (r.state == 'idle') {
+                if (Math.random() < 0.1) {
+                    if (Math.random() < 0.5) {
+                        r.state = 'left';
+                        r.face = 'left';
+                        r.stateTime = timeNow + 1000;
+                    } else {
+                        r.state = 'right';
+                        r.state = 'right';
+                        r.stateTime = timeNow + 1000;
+                    }
+                } else {
+                    r.animations.stop();
+
+                    if (r.face == 'left') {
+                        r.animations.frame = 2;
+                    } else {
+                        r.animations.frame = 6;
+                    }
+
+                }
+            }
+        })
     },
 
     initPausedScreen: function (game) {
@@ -629,7 +720,7 @@ BackTogether.Level1.prototype = {
 
         this.healthPoint = 6;
 
-        this.healthbar = this.add.image(this.camera.view.width-120, 120, 'healthbar');
+        this.healthbar = this.add.image(this.camera.view.width - 120, 120, 'healthbar');
         this.healthbar.anchor.setTo(0, 0);
         this.healthbar.scale.setTo(1, this.healthPoint);
         this.healthbar.fixedToCamera = true;
