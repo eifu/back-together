@@ -198,6 +198,9 @@ BackTogether.Level1.prototype = {
         this.playerVictory();
 
         this.updateRobots();
+
+        this.updateDrones();
+
     },
 
     checkOverlap: function (spriteA, spriteB) {
@@ -411,6 +414,59 @@ BackTogether.Level1.prototype = {
             this.enemy3.body.velocity.x = -100;
         }
     },
+    initDrones:function(){
+        this.drones = this.add.group();
+        _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
+        _drone1Left = this.findObjectsByType('drone1Left', map, 'objectsLayer')
+        _drone1Right = this.findObjectsByType('drone1Right', map, 'objectsLayer');
+
+        this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        this.drone1.leftPos = _drone1Left;
+        this.drone1.rightPos = _drone1Right;
+
+        this.camera.follow(this.drone1);
+
+    },
+
+    factoryDrone: function(x,y){
+        var d = this.drones.create(x,y,'drone');
+        this.physics.p2.enable(d, true);
+        d.animations.add('left', [0, 1], 10, true);
+        d.animations.add('left_damaged', [2, 3], 10, true)
+        d.animations.add('right', [4, 5], 10, true);
+        d.animations.add("right_damaged", [6, 7], 10, true);
+
+        d.animations.play("left");
+        d.face = 'left';
+    },
+
+    updateDrones:function(){
+        this.drones.children.forEach(function(d){
+            if (d.state == 'patrol'){
+                // goomba
+                if (d.body.x < d.leftPos){
+                    d.face = 'right';
+                    d.body.moveRight(100);
+
+                } else if (d.leftPos < d.body.x < d.rightPos){
+                    if (d.face == "left"){
+                        d.body.moveLeft(100);
+                    }else{
+                        d.body.moveRight(100);
+                    }
+                }
+                
+                else {
+                    d.face = 'left';
+                    d.body.moveLeft(100);
+                }
+
+            }else{
+                // trace player
+            }
+        })
+    },
+
     initRobots: function () {
         this.robots = this.add.group();
 
@@ -437,8 +493,8 @@ BackTogether.Level1.prototype = {
 
         r.body.clearShapes();
 
-        // r.body.addCircle(24, 0, -76);
-        // r.body.addRectangle(59, 90, 0, -8);
+        r.body.addCircle(24, 0, -76);
+        r.body.addRectangle(59, 90, 0, -8);
         r.body.addRectangle(155, 55, 0, 67);
 
         r.body.moveLeft(100);
@@ -496,8 +552,6 @@ BackTogether.Level1.prototype = {
             }
             console.log(r.state);
         })
-
-
     },
 
     initPausedScreen: function (game) {
