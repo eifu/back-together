@@ -32,12 +32,12 @@ BackTogether.Level2.prototype = {
         platformLayer = map.createLayer('platformLayer');
 
         platformLayer.resizeWorld();
-                
-//        objectsLayer = map.createLayer('objectsLayer');
-//        console.log(objectsLayer);
-        
-//        legsLayer.resizeWorld();
-//        objectsLayer.resizeWorld();
+
+        //        objectsLayer = map.createLayer('objectsLayer');
+        //        console.log(objectsLayer);
+
+        //        legsLayer.resizeWorld();
+        //        objectsLayer.resizeWorld();
         map.setCollisionBetween(1, 8);
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
@@ -62,7 +62,7 @@ BackTogether.Level2.prototype = {
         this.initPlayer();
         this.initItems();
         this.initText();
-        this.initRobots();
+        // this.initRobots();
         this.initDrones();
 
         var inputs = [
@@ -119,17 +119,17 @@ BackTogether.Level2.prototype = {
                 game.paused = false;
             }
         }
-        
+
         var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
         volIcon.anchor.setTo(0.5, 0.5);
-        
+
         var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
-            if(!volumeOff){
+            if (!volumeOff) {
                 icon = 'volUpIcon';
                 volIcon.loadTexture(icon);
                 volumeOff = !volumeOff;
             }
-            else{
+            else {
                 icon = 'volDownIcon';
                 volIcon.loadTexture(icon);
                 volumeOff = !volumeOff;
@@ -168,10 +168,10 @@ BackTogether.Level2.prototype = {
 
         } else {
 
-            if (this.checkOverlap(player, this.robots) && !invincibilityOff) {
-                this.screenShake();
-                this.playerDamaged();
-            }
+            // if (this.checkOverlap(player, this.robots) && !invincibilityOff) {
+            //     this.screenShake();
+            //     this.playerDamaged();
+            // }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
@@ -234,30 +234,30 @@ BackTogether.Level2.prototype = {
         if (keys['P'].isDown) {
             this.game.state.start('LoseScreen');
         }
-        
-        if(keys['ONE'].isDown){
+
+        if (keys['ONE'].isDown) {
             Level = 'ONE';
             this.game.state.start('Level1');
         }
-        if(keys['TWO'].isDown){
+        if (keys['TWO'].isDown) {
             this.game.state.start('Level2');
         }
-        
-        if(keys['I'].isDown && !iKeyDown){
+
+        if (keys['I'].isDown && !iKeyDown) {
             iKeyDown = true;
-            if(!invincibilityOff){
+            if (!invincibilityOff) {
                 invincibilityOff = true;
             }
-            else{
+            else {
                 invincibilityOff = false;
             }
         }
-        if(keys['I'].isUp){
+        if (keys['I'].isUp) {
             iKeyDown = false;
         }
 
         // this.updateEnemies();
-        this.updateRobots();
+        // this.updateRobots();
         this.updateDrones();
 
     },
@@ -378,7 +378,7 @@ BackTogether.Level2.prototype = {
     findObjectsByType: function (type, map, layer) {
         var result = new Array();
         console.log("******looking for ");
-            console.log(type);
+        console.log(type);
         map.objects[layer].forEach(function (element) {
 
             console.log(element.properties.type);
@@ -412,19 +412,26 @@ BackTogether.Level2.prototype = {
         this.scoreText = this.add.text(100, 100, 'Score: 0', { font: '32px Aclonica', fill: '#000' });
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
+
+        this.hidePopUp = this.add.image(this.camera.view.centerX, this.camera.view.centerY, 'hidePopUp');
+        this.hidePopUp.scale.setTo(7, 7);
+        this.hidePopUp.anchor.setTo(0.5, 0.5);
+        this.hidePopUp.fixedToCamera = true;
+        // console.log(this.hidePopUp); .
+        this.hidePopUp.visible = false;
     },
-    
-    findObjectsByType: function(type, map, layer) {
+
+    findObjectsByType: function (type, map, layer) {
         var result = new Array();
-        map.objects[layer].forEach(function(element){
-          if(element.properties.type === type) {
-            element.y -= map.tileHeight;
-            result.push(element);
-          }      
+        map.objects[layer].forEach(function (element) {
+            if (element.properties.type === type) {
+                element.y -= map.tileHeight;
+                result.push(element);
+            }
         });
-        return result; 
-  },
-    
+        return result;
+    },
+
     initEnemies: function () {
 
         this.enemies = this.add.group()
@@ -492,7 +499,7 @@ BackTogether.Level2.prototype = {
             this.enemy3.body.velocity.x = -100;
         }
     },
-    initDrones:function(){
+    initDrones: function () {
         this.drones = this.add.group();
         _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
         _drone1Left = this.findObjectsByType('drone1Left', map, 'objectsLayer')
@@ -504,8 +511,8 @@ BackTogether.Level2.prototype = {
         console.log(this.drone1);
     },
 
-    factoryDrone: function(x,y){
-        var d = this.drones.create(x,y,'drone');
+    factoryDrone: function (x, y) {
+        var d = this.drones.create(x, y, 'drone');
 
         this.physics.p2.enable(d, true);
         d.animations.add('left', [0, 1], 10, true);
@@ -513,16 +520,20 @@ BackTogether.Level2.prototype = {
         d.animations.add('right', [4, 5], 10, true);
         d.animations.add("right_damaged", [6, 7], 10, true);
 
-        d.light = this.add.sprite(x, y+30, 'droneLight');
+        d.light = this.add.sprite(x, y + 30, 'droneLight');
         this.physics.p2.enable(d.light, true);
         d.light.body.data.gravityScale = 0;
-        d.light.anchor.setTo(0.5,0);
+        d.light.anchor.setTo(0.5, 0);
         d.light.scale.setTo(10,10);
-        d.light.frame = 1;
         d.light.body.clearShapes();
+        // d.light.body.addRectangle(128, 256, 0, 160, 0);
+        // d.lightRangeLeft.body.addPolygon({}, [[0,0],[0,38],[6,55],[22,63]]);
         d.light.sendToBack();
+        d.light.body.angle = 45;
 
-        d.anchor.setTo(0.5,0.5);
+
+
+        d.anchor.setTo(0.5, 0.5);
 
         d.body.clearShapes();
 
@@ -535,28 +546,27 @@ BackTogether.Level2.prototype = {
         return d;
     },
 
-    updateDrones:function(){
-        this.drones.children.forEach(function(d){
-            if (d.state == 'patrol'){
+    updateDrones: function () {
+        this.drones.children.forEach(function (d) {
+            if (d.state == 'patrol') {
                 // goomba
                 // console.log(d.rightPos[0].x);
-                if (d.body.x < d.leftPos[0].x){
+                if (d.body.x < d.leftPos[0].x) {
                     d.face = 'right';
                     d.body.moveRight(100);
                     d.light.body.moveRight(100);
-                    d.light.frame = 0;
+                    d.light.body.angle = -45;
+                } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x) {
 
-                } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x){
-
-                    if (d.face == "left"){
+                    if (d.face == "left") {
 
                         d.body.moveLeft(100);
 
                         d.light.body.moveLeft(100);
                         d.animations.play('left');
-                        
 
-                    }else{
+
+                    } else {
 
                         d.body.moveRight(100);
                         d.light.body.moveRight(100);
@@ -564,21 +574,22 @@ BackTogether.Level2.prototype = {
 
                     }
                 }
-                
+
                 else {
                     d.face = 'left';
                     d.body.moveLeft(100);
-                    d.light.frame = 1;
+                    d.light.body.moveLeft(100);
+                    d.light.body.angle = 45;
                 }
 
-            }else{
+            } else {
                 // trace player
             }
         })
     },
 
 
-  initRobots: function () {
+    initRobots: function () {
         this.robots = this.add.group();
 
         _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
