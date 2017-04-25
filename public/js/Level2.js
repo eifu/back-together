@@ -494,10 +494,12 @@ BackTogether.Level2.prototype = {
                     if (d.face == "left"){
 
                         d.body.moveLeft(100);
+                        d.animations.play('left');
 
                     }else{
 
                         d.body.moveRight(100);
+                        d.animations.play('right');
 
                     }
                 }
