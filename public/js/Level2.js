@@ -7,7 +7,7 @@ var platformLayer;
 var pausedLayer;
 var objectsLayer;
 var keys;
-
+var iKeyDown = false;
 var playAgain;
 var mainMenu;
 var next;
@@ -77,10 +77,11 @@ BackTogether.Level2.prototype = {
             Phaser.Keyboard.S,
             Phaser.Keyboard.D,
             Phaser.Keyboard.O,
-            Phaser.Keyboard.P
+            Phaser.Keyboard.P,
+            Phaser.Keyboard.I
         ];
         var name = [
-            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P', 'I'
         ]
 
         keys = {};
@@ -143,7 +144,7 @@ BackTogether.Level2.prototype = {
 
         } else {
 
-            if (this.checkOverlap(player, this.robots)) {
+            if (this.checkOverlap(player, this.robots) && !invincibilityOff) {
                 this.screenShake();
                 this.playerDamaged();
             }
@@ -216,6 +217,19 @@ BackTogether.Level2.prototype = {
         }
         if(keys['TWO'].isDown){
             this.game.state.start('Level2');
+        }
+        
+        if(keys['I'].isDown && !iKeyDown){
+            iKeyDown = true;
+            if(!invincibilityOff){
+                invincibilityOff = true;
+            }
+            else{
+                invincibilityOff = false;
+            }
+        }
+        if(keys['I'].isUp){
+            iKeyDown = false;
         }
 
         // this.updateEnemies();

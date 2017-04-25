@@ -5,9 +5,9 @@ BackTogether.Level1 = function (game) {
 
 var platformLayer;
 var pausedLayer;
-
+var invincibilityOff = false;
 var keys;
-
+var iKeyDown = false;
 var playAgain;
 var mainMenu;
 var next;
@@ -63,10 +63,11 @@ BackTogether.Level1.prototype = {
             Phaser.Keyboard.S,
             Phaser.Keyboard.D,
             Phaser.Keyboard.O,
-            Phaser.Keyboard.P
+            Phaser.Keyboard.P,
+            Phaser.Keyboard.I
         ];
         var name = [
-            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P', 'I'
         ]      
         
         keys = {};
@@ -128,7 +129,7 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-            if (this.checkOverlap(player, this.robots)) {
+            if (this.checkOverlap(player, this.robots) && !invincibilityOff) {
                 this.screenShake();
                 this.playerDamaged();
             }
@@ -206,11 +207,22 @@ BackTogether.Level1.prototype = {
             Level = 'TWO';
             this.game.state.start('Level2');
         }
+        
+        if(keys['I'].isDown && !iKeyDown){
+            iKeyDown = true;
+            if(!invincibilityOff){
+                invincibilityOff = true;
+            }
+            else{
+                invincibilityOff = false;
+            }
+        }
+        if(keys['I'].isUp){
+            iKeyDown = false;
+        }
 
         //        this.updateEnemies();
         this.playerVictory();
-
-
 
     },
 
