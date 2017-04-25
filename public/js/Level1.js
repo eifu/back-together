@@ -86,8 +86,8 @@ BackTogether.Level1.prototype = {
                 pausedBtnCardText.destroy();
                 resetBtn.destroy();
                 resetIcon.destroy();
-                settingBtn.destroy();
-                settingIcon.destroy();
+                mmBtn.destroy();
+                mmIcon.destroy();
                 inventoryBtn.destroy();
                 inventoryTxt.destroy();
 
@@ -500,13 +500,13 @@ BackTogether.Level1.prototype = {
         pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
         pausedBtnCardText.anchor.setTo(0.5, 0.5);
 
-        settingBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.settingOnClick, this, 2, 1, 0);
-        settingBtn.anchor.setTo(0.5, 0.5);
-        settingBtn.scale.setTo(1.6, 1.6);
+        mmBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.mmOnClick, this, 2, 1, 0);
+        mmBtn.anchor.setTo(0.5, 0.5);
+        mmBtn.scale.setTo(1.6, 1.6);
 
-        settingIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'settingIcon');
-        settingIcon.anchor.setTo(0.5, 0.5);
-        settingIcon.scale.setTo(0.8, 0.8);
+        mmIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'mainMenuIcon');
+        mmIcon.anchor.setTo(0.5, 0.5);
+        mmIcon.scale.setTo(0.8, 0.8);
 
 
         resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, game, 2, 1, 0);
@@ -552,8 +552,8 @@ BackTogether.Level1.prototype = {
         this.state.restart();
         this.paused = false;
     },
-    settingOnClick: function () {
-        console.log('setting button clicked');
+    mmOnClick: function () {
+     
     },
     restartLvl: function () {
         this.game.state.start('LevelSelecting');
@@ -572,8 +572,8 @@ BackTogether.Level1.prototype = {
         pausedBtnCardText.destroy();
         resetBtn.destroy();
         resetIcon.destroy();
-        settingBtn.destroy();
-        settingIcon.destroy();
+        mmBtn.destroy();
+        mmIcon.destroy();
         inventoryBtn.destroy();
         inventoryTxt.destroy();
 
