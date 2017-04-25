@@ -147,6 +147,7 @@ BackTogether.Level1.prototype = {
             if (this.checkOverlap(player, this.robots) && !invincibilityOff) {
                 this.screenShake();
                 this.playerDamaged();
+                
             }
 
 
@@ -274,6 +275,7 @@ BackTogether.Level1.prototype = {
     },
     playerDamaged: function () {
         if (player.damagedTime < this.time.now) {
+            crash.play();
             player.damagedTime = this.time.now + 1000;
             if (player.face == 'left') {
                 player.face = 'left_damagd';
