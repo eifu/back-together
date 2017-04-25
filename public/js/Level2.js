@@ -168,10 +168,15 @@ BackTogether.Level2.prototype = {
 
         } else {
 
-            // if (this.checkOverlap(player, this.robots) && !invincibilityOff) {
-            //     this.screenShake();
-            //     this.playerDamaged();
-            // }
+            // this.drones.forEach(function(d){
+                
+            // })
+            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOff && !(576 < player.body.x && player.body.x < 832) ) {
+                this.screenShake();
+                this.hidePopUp.visible = true;
+            } else{
+                 this.hidePopUp.visible = false;
+            }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
@@ -193,14 +198,12 @@ BackTogether.Level2.prototype = {
                     player.animations.stop();
                     player.damaged = false;
                 } else if (player.face == 'left') {
-                    // player.animations.play('left');
                     player.animations.stop();
                 } else if (player.damaged && player.face == 'right') {
                     player.animations.play('right');
                     player.animations.stop();
                     player.damaged = false;
                 } else if (player.face == 'right') {
-                    // player.animations.play('right');
                     player.animations.stop();
                 }
             }
@@ -263,7 +266,7 @@ BackTogether.Level2.prototype = {
     },
 
     checkOverlap: function (spriteA, spriteB) {
-
+        // console.log(spriteB);
         var boundsA = spriteA.getBounds();
         var boundsB = spriteB.getBounds();
 
@@ -502,13 +505,20 @@ BackTogether.Level2.prototype = {
     initDrones: function () {
         this.drones = this.add.group();
         _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
-        _drone1Left = this.findObjectsByType('drone1Left', map, 'objectsLayer')
-        _drone1Right = this.findObjectsByType('drone1Right', map, 'objectsLayer');
-
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone1.leftPos = _drone1Left;
-        this.drone1.rightPos = _drone1Right;
-        console.log(this.drone1);
+        this.drone1.leftPos = this.findObjectsByType('drone1Left', map, 'objectsLayer')
+        this.drone1.rightPos =this.findObjectsByType('drone1Right', map, 'objectsLayer');
+
+        _drone2Start = this.findObjectsByType('drone2Start', map, 'objectsLayer')
+        this.drone2 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        this.drone2.leftPos = this.findObjectsByType('drone2Left', map, 'objectsLayer')
+        this.drone2.rightPos =this.findObjectsByType('drone2Right', map, 'objectsLayer');
+
+        _drone1Start = this.findObjectsByType('drone3Start', map, 'objectsLayer')
+        this.drone3 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        this.drone3.leftPos = this.findObjectsByType('drone3Left', map, 'objectsLayer')
+        this.drone3.rightPos =this.findObjectsByType('drone3Right', map, 'objectsLayer');
+
     },
 
     factoryDrone: function (x, y) {
@@ -529,7 +539,6 @@ BackTogether.Level2.prototype = {
         // d.light.body.addRectangle(128, 256, 0, 160, 0);
         // d.lightRangeLeft.body.addPolygon({}, [[0,0],[0,38],[6,55],[22,63]]);
         d.light.sendToBack();
-        d.light.body.angle = 45;
 
 
 
@@ -555,7 +564,6 @@ BackTogether.Level2.prototype = {
                     d.face = 'right';
                     d.body.moveRight(100);
                     d.light.body.moveRight(100);
-                    d.light.body.angle = -45;
                 } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x) {
 
                     if (d.face == "left") {
@@ -579,7 +587,6 @@ BackTogether.Level2.prototype = {
                     d.face = 'left';
                     d.body.moveLeft(100);
                     d.light.body.moveLeft(100);
-                    d.light.body.angle = 45;
                 }
 
             } else {
