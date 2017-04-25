@@ -416,8 +416,8 @@ BackTogether.Level1.prototype = {
 
         r.body.clearShapes();
 
-        // r.body.addCircle(24, 0, -76);
-        // r.body.addRectangle(59, 90, 0, -8);
+        r.body.addCircle(24, 0, -76);
+        r.body.addRectangle(59, 90, 0, -8);
         r.body.addRectangle(155, 55, 0, 67);
 
         r.body.moveLeft(100);
@@ -475,8 +475,6 @@ BackTogether.Level1.prototype = {
             }
             console.log(r.state);
         })
-
-
     },
 
     initPausedScreen: function (game) {

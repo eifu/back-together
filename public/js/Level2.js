@@ -445,33 +445,35 @@ BackTogether.Level2.prototype = {
             this.enemy3.body.velocity.x = -100;
         }
     },
-    initRobots: function () {
+    initDrones:function(){
+        this.drones = this.add.group();
+
+        
+    },
+
+  initRobots: function () {
         this.robots = this.add.group();
 
+        _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
         _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
         _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
 
-
-        this.robot1 = this.factoryRobot(_robot1Left[0].x, _robot1Left[0].y);
+        this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
         this.robot1.robot1Left = _robot1Left;
         this.robot1.robot1Right = _robot1Right;
 
-    },
-    updateRobots:function(){
-        if (this.robot1.body.x < this.robot1.robot1Left[0].x){
-            this.robot1.animations.play('right');
-            this.robot1.body.velocity.x = 100;
-        }else if (this.robot1.robot1Right[0].x < this.robot1.body.x) {
-            this.robot1.animations.play("left");
-            this.robot1.body.velocity.x = -100;
-        }
     },
 
     factoryRobot: function (x, y) {
         var r = this.robots.create(x, y, 'robot');
         this.physics.p2.enable(r, true);
-        r.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        r.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
+        r.animations.add('right_attack', [0, 1], 10, true);
+        r.animations.add('right', [2, 3], 10, true)
+        r.animations.add('left_attack', [4, 5], 10, true);
+        r.animations.add("left", [6, 7], 10, true);
+
+        r.animations.play("left");
+        r.face = 'left';
 
         r.body.clearShapes();
 
@@ -479,9 +481,61 @@ BackTogether.Level2.prototype = {
         r.body.addRectangle(59, 90, 0, -8);
         r.body.addRectangle(155, 55, 0, 67);
 
-        r.body.velocity.x = 0;
+        r.body.moveLeft(100);
         r.body.velocity.y = 0;
+
+        r.states = [['left', 'idle'], ['left', 'left'],
+        ['right', 'idle'], ['right', 'right'],
+        ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
+        r.state = 'idle';
+
         return r;
+    },
+    updateRobots: function () {
+
+        var timeNow = this.time.now;
+
+        this.robots.children.forEach(function (r) {
+            if (r.state == "left") {
+                if (timeNow < r.stateTime) {
+                    r.body.moveLeft(100);
+                    r.animations.play('left');
+                } else {
+                    r.face = 'left';
+                    r.state = 'idle';
+                }
+            } else if (r.state == "right") {
+                if (timeNow < r.stateTime) {
+                    r.body.moveRight(100);
+                    r.animations.play("right");
+                } else {
+                    r.face = 'right';
+                    r.state = 'idle';
+                }
+            } else if (r.state == 'idle') {
+                if (Math.random() < 0.1) {
+                    if (Math.random() < 0.5) {
+                        r.state = 'left';
+                        r.face = 'left';
+                        r.stateTime = timeNow + 1000;
+                    } else {
+                        r.state = 'right';
+                        r.state = 'right';
+                        r.stateTime = timeNow + 1000;
+                    }
+                } else {
+                    r.animations.stop();
+
+                    if (r.face == 'left') {
+                        r.animations.frame = 0;
+                    } else {
+                        r.animations.frame = 6;
+                    }
+
+                }
+            }
+            console.log(r.state);
+        })
     },
     initPausedScreen: function (game) {
         pausedLayer = map.createLayer('pausedLayer');
