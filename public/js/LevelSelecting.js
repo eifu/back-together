@@ -21,7 +21,7 @@ User.prototype = {
 
 //
 var user;
-
+var volDownIcon;
 var Level;
 var wfconfig = {
     google: {
@@ -118,6 +118,31 @@ BackTogether.LevelSelecting.prototype = {
 
         game.add.tween(backBtn).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
         game.add.tween(backIcon).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
+        
+        var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2, icon);
+        volIcon.anchor.setTo(0.5, 0.5);
+        
+        var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2, 'volBtn', function () {
+            if(!volumeOff){
+                icon = 'volUpIcon';
+                volIcon.loadTexture(icon);
+                volumeOff = !volumeOff;
+            }
+            else{
+                icon = 'volDownIcon';
+                volIcon.loadTexture(icon);
+                volumeOff = !volumeOff;
+            }
+        }, 2, 1, 0);
+
+        volBtn.anchor.setTo(0.5, 0.5);
+        volBtn.width = 55;
+        volBtn.height = 60;
+
+        game.add.tween(volBtn).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
+        game.add.tween(volIcon).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
+        
+        game.world.bringToTop(volIcon);
     },
     update: function () {
         if(keys['ONE'].isDown){

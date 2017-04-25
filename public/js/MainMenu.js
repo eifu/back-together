@@ -60,18 +60,18 @@ BackTogether.MainMenu.prototype = {
         loadGameBtn.anchor.setTo(0.5, 0.5);
         loadGameBtn.scale.setTo(3.0, 3.0);
 
-        settingBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', showSettings, this, 2, 1, 0);
-        settingBtn.anchor.setTo(0.5, 0.5);
-        settingBtn.scale.setTo(3.0, 3.0);
+//        settingBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', showSettings, this, 2, 1, 0);
+//        settingBtn.anchor.setTo(0.5, 0.5);
+//        settingBtn.scale.setTo(3.0, 3.0);
 
-        helpBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 130, 'mainMenuBtn', showHelp, this, 2, 1, 0);
+        helpBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', showHelp, this, 2, 1, 0);
         helpBtn.anchor.setTo(0.5, 0.5);
         helpBtn.scale.setTo(3.0, 3.0);
 
         menuBtns = [];
         menuBtns.push(newGameBtn);
         menuBtns.push(loadGameBtn);
-        menuBtns.push(settingBtn);
+//        menuBtns.push(settingBtn);
         menuBtns.push(helpBtn);
 
         titleFontStyle = { font: '60px Aclonica', fill: "#C0C0C0", align: "center" }
@@ -86,11 +86,33 @@ BackTogether.MainMenu.prototype = {
         var loadGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 70, "Load Game", btnFontStyle);
         loadGameBtnTxt.anchor.setTo(0.5, 0.5);
 
-        var settingBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "Settings", btnFontStyle);
-        settingBtnTxt.anchor.setTo(0.5, 0.5);
+//        var settingBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "Settings", btnFontStyle);
+//        settingBtnTxt.anchor.setTo(0.5, 0.5);
 
-        var helpBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 130, "Help", btnFontStyle);
+        var helpBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "Help", btnFontStyle);
         helpBtnTxt.anchor.setTo(0.5, 0.5);
+        
+        var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
+        volIcon.anchor.setTo(0.5, 0.5);
+        
+        var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
+            if(!volumeOff){
+                icon = 'volUpIcon';
+                volIcon.loadTexture(icon);
+                volumeOff = !volumeOff;
+            }
+            else{
+                icon = 'volDownIcon';
+                volIcon.loadTexture(icon);
+                volumeOff = !volumeOff;
+            }
+        }, 2, 1, 0);
+
+        volBtn.anchor.setTo(0.5, 0.5);
+        volBtn.width = 55;
+        volBtn.height = 60;
+        
+        game.world.bringToTop(volIcon);
 
         helpNodes = [];
 
