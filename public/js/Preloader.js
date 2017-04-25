@@ -1,6 +1,10 @@
 BackTogether.Preloader = function (game) {
 
 };
+
+var volumeOff = false;
+var icon = 'volDownIcon';
+
 BackTogether.Preloader.prototype = {
 
     preload: function () {
@@ -36,7 +40,9 @@ BackTogether.Preloader.prototype = {
         this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
         this.load.tilemap('map1', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
-        
+        this.load.spritesheet('volBtn', 'assets/images/VolBtn.png', 24, 24);
+        this.load.image('volDownIcon', 'assets/images/VolDownIcon.png');
+        this.load.image('volUpIcon', 'assets/images/VolUpIcon.png');
         this.load.tilemap('lvl1', 'assets/js/level1.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('lvl2', 'assets/js/level2.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');

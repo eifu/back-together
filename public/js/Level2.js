@@ -118,6 +118,29 @@ BackTogether.Level2.prototype = {
                 game.paused = false;
             }
         }
+        
+        var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
+        volIcon.anchor.setTo(0.5, 0.5);
+        
+        var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
+            if(!volumeOff){
+                icon = 'volUpIcon';
+                volIcon.loadTexture(icon);
+                volumeOff = !volumeOff;
+            }
+            else{
+                icon = 'volDownIcon';
+                volIcon.loadTexture(icon);
+                volumeOff = !volumeOff;
+            }
+        }, 2, 1, 0);
+
+        volBtn.anchor.setTo(0.5, 0.5);
+        volBtn.width = 55;
+        volBtn.height = 60;
+        volBtn.fixedToCamera = true;
+        volIcon.fixedToCamera = true;
+        game.world.bringToTop(volIcon);
 
     },
 
