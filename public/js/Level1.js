@@ -500,7 +500,7 @@ BackTogether.Level1.prototype = {
         pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
         pausedBtnCardText.anchor.setTo(0.5, 0.5);
 
-        mmBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.mmOnClick, this, 2, 1, 0);
+        mmBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', this.returnMM, game, 2, 1, 0);
         mmBtn.anchor.setTo(0.5, 0.5);
         mmBtn.scale.setTo(1.6, 1.6);
 
@@ -551,9 +551,6 @@ BackTogether.Level1.prototype = {
         this.score = 0;
         this.state.restart();
         this.paused = false;
-    },
-    mmOnClick: function () {
-     
     },
     restartLvl: function () {
         this.game.state.start('LevelSelecting');
