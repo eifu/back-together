@@ -159,6 +159,7 @@ BackTogether.LevelSelecting.prototype = {
         if (i < user.getLevel()) {
             b = game.add.button(x, y - 50, 'levelBtn',
                 function () {
+                    pop.play();
                     Level = itoaArray[i];
                     game.state.start("Level"+(i+1));
 

@@ -2,6 +2,8 @@ BackTogether.Preloader = function (game) {
 
 };
 
+var music;
+var pop;
 var volumeOff = false;
 var icon = 'volDownIcon';
 
@@ -41,7 +43,7 @@ BackTogether.Preloader.prototype = {
         this.load.spritesheet('robot', 'assets/images/robot.png',166,200);
         this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
         this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 128, 64);
-
+        this.load.audio('bg', ['assets/audio/bgMusic.mp3', 'assets/audio/bgMusic.ogg']);
         this.load.tilemap('map1', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.spritesheet('volBtn', 'assets/images/VolBtn.png', 24, 24);
@@ -52,15 +54,22 @@ BackTogether.Preloader.prototype = {
         this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
         this.load.atlasJSONArray('arm', 'assets/images/arm.png', 'assets/js/arm.json');
         this.load.atlasJSONArray('enemy1', 'assets/images/enemy1.png', 'assets/js/enemy1.json');
-
+        this.load.audio('pop', ['assets/audio/pop.mp3', 'assets/audio/pop.ogg']);
         this.load.spritesheet('pipe', 'assets/images/pipe.png', 64, 16);
         this.load.image('hold', 'assets/images/hold.png');
         this.load.image('tileset', 'assets/images/tileset.png');
         this.load.image('tileset2', 'assets/images/tileset2.png');
         
+        this.load.audio('crash', ['assets/audio/crash.mp3', 'assets/audio/crash.ogg']);
+        
     },
 
     create: function () {
+        music = this.add.audio('bg');
+        music.loop = true;
+        music.play();
+        pop = this.add.audio('pop');
+        crash = this.add.audio('crash');
         this.state.start("MainMenu");
         
     }

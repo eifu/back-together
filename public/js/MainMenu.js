@@ -117,15 +117,17 @@ BackTogether.MainMenu.prototype = {
         helpNodes = [];
 
         function startOnClick() {
+            pop.play();
             game.state.start("LevelSelecting");
         }
 
         function showSettings() {
+            pop.play();
             game.state.start("Settings");
         }
 
         function showHelp() {
-
+            pop.play();
             menuBtns.forEach(function (e) {
                 e.inputEnabled = false;
             });
