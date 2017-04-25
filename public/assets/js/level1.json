@@ -6,7 +6,7 @@
          "name":"platformLayer",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":100,
          "x":0,
          "y":0
@@ -17,7 +17,7 @@
          "name":"pausedLayer",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":100,
          "x":0,
          "y":0
@@ -66,15 +66,75 @@
                  "width":64,
                  "x":6208,
                  "y":1152
+                }, 
+                {
+                 "gid":9,
+                 "height":64,
+                 "id":6,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"robot1Start"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":500,
+                 "y":1000
+                }, 
+                {
+                 "gid":9,
+                 "height":64,
+                 "id":7,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"robot1Left"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":300,
+                 "y":1000
+                }, 
+                {
+                 "gid":9,
+                 "height":64,
+                 "id":8,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"robot1Right"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":700,
+                 "y":1000
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "width":0,
          "x":0,
          "y":0
         }],
- "nextobjectid":6,
+ "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":64,
@@ -82,13 +142,13 @@
         {
          "columns":3,
          "firstgid":1,
-         "image":"..\/..\/..\/..\/..\/art\/tileset2.png",
-         "imageheight":192,
+         "image":"..\/images\/tileset2.png",
+         "imageheight":256,
          "imagewidth":192,
          "margin":0,
          "name":"tileset2",
          "spacing":0,
-         "tilecount":9,
+         "tilecount":12,
          "tileheight":64,
          "tilewidth":64
         }],
