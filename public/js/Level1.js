@@ -5,7 +5,7 @@ BackTogether.Level1 = function (game) {
 
 var platformLayer;
 var pausedLayer;
-var invincibilityOff = false;
+var invincibilityOn = false;
 var keys;
 var iKeyDown = false;
 var playAgain;
@@ -150,10 +150,11 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-            if (this.checkOverlap(player, this.robots) && !invincibilityOff) {
+            if (this.checkOverlap(player, this.robots)) {
+                if(!invincibilityOn){
                 this.screenShake();
                 this.playerDamaged();
-                
+                }
             }
 
 
@@ -213,11 +214,11 @@ BackTogether.Level1.prototype = {
         
         if(keys['I'].isDown && !iKeyDown){
             iKeyDown = true;
-            if(!invincibilityOff){
-                invincibilityOff = true;
+            if(!invincibilityOn){
+                invincibilityOn = true;
             }
             else{
-                invincibilityOff = false;
+                invincibilityOn = false;
             }
         }
         if(keys['I'].isUp){
@@ -225,9 +226,8 @@ BackTogether.Level1.prototype = {
         }
 
         this.playerVictory();
-
         this.updateRobots();
-
+        this.playerAttack();
     },
 
     checkOverlap: function (spriteA, spriteB) {
@@ -240,6 +240,19 @@ BackTogether.Level1.prototype = {
     },
     screenShake: function () {
         this.camera.shake(0.01, 100);
+    },
+    
+    playerAttack: function(){
+        if(player.body.x < this.robot1.x && player.body.velocity.x >= 0 && this.robot1.body.velocity.x > 0){
+            invincibilityOn = true;
+        }
+        else if(player.body.x > this.robot1.x && player.body.velocity.x <= 0 && this.robot1.body.velocity.x < 0){
+            invincibilityOn = true;
+        }
+        else{
+            invincibilityOn = false;
+        }
+        console.log(invincibilityOn);
     },
 
     propUser: function () {
@@ -525,7 +538,7 @@ BackTogether.Level1.prototype = {
         r.body.addRectangle(59, 90, 0, -8);
         r.body.addRectangle(155, 55, 0, 67);
 
-        r.body.moveLeft(100);
+        r.body.velocity.x = 100;
         r.body.velocity.y = 0;
 
         r.states = [['left', 'idle'], ['left', 'left'],
@@ -542,7 +555,7 @@ BackTogether.Level1.prototype = {
         this.robots.children.forEach(function (r) {
             if (r.state == "left") {
                 if (timeNow < r.stateTime) {
-                    r.body.moveLeft(100);
+                    r.body.velocity.x = -25;
                     r.animations.play('left');
                 } else {
                     r.face = 'left';
@@ -550,7 +563,7 @@ BackTogether.Level1.prototype = {
                 }
             } else if (r.state == "right") {
                 if (timeNow < r.stateTime) {
-                    r.body.moveRight(100);
+                    r.body.velocity.x = 25;
                     r.animations.play("right");
                 } else {
                     r.face = 'right';
