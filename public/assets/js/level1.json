@@ -126,6 +126,26 @@
                  "width":64,
                  "x":700,
                  "y":1000
+                }, 
+                {
+                 "gid":9,
+                 "height":64,
+                 "id":10,
+                 "name":"itemBox",
+                 "properties":
+                    {
+                     "type":"itemBox"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1155.88,
+                 "y":1183.51090909091
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -134,7 +154,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":9,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":64,

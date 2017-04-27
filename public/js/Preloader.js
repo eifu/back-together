@@ -21,7 +21,7 @@ BackTogether.Preloader.prototype = {
         this.load.image('menuBtnCard', 'assets/images/menuBtnCard.png');
         this.load.spritesheet('levelBtn', 'assets/images/levelBtn.png', 110, 60);
         this.load.image('disabledLevelBtn', 'assets/images/disabledLevelBtn.png');
-        this.load.spritesheet('item1', 'assets/images/item1.png',32,32);
+        this.load.spritesheet('itemBox', 'assets/images/itemBox.png',32,32);
         this.load.spritesheet('heartbeat', 'assets/images/heartbeat.png',256, 256);
         this.load.image('healthbar', 'assets/images/healthbar_green.png');
         this.load.spritesheet('numbers', 'assets/images/numbers.png',32,32);
@@ -44,10 +44,14 @@ BackTogether.Preloader.prototype = {
         this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
         this.load.image('droneLight', 'assets/images/droneLight.png');
         this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
+
         this.load.image('bodyMap', 'assets/images/bodyMap.png');
         this.load.image('arrowLeft', 'assets/images/arrowLeft.png');
         this.load.image('arrowRight', 'assets/images/arrowRight.png');
         this.load.image('capsule', 'assets/images/capsule.png');
+
+
+        this.load.image('firstItemCard', 'assets/images/firstItemCard.png');
 
 
         this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 100, 200);
