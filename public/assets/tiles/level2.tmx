@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="64" tileheight="64" nextobjectid="63">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="64" tileheight="64" nextobjectid="90">
  <tileset firstgid="1" name="tileset2" tilewidth="64" tileheight="64" tilecount="15" columns="3">
   <image source="../images/tileset2.png" width="192" height="320"/>
  </tileset>
@@ -41,34 +41,144 @@
     <property name="type" value="playerEnd"/>
    </properties>
   </object>
-  <object id="48" name="robot1Left" gid="9" x="576" y="832" width="64" height="64">
+  <object id="48" name="r1l" gid="9" x="576" y="832" width="64" height="64">
    <properties>
-    <property name="type" value="robot1Left"/>
+    <property name="type" value="r1l"/>
    </properties>
   </object>
-  <object id="49" name="robot1Right" gid="9" x="832" y="832" width="64" height="64">
+  <object id="49" name="r1r" gid="9" x="832" y="832" width="64" height="64">
    <properties>
-    <property name="type" value="robot1Right"/>
+    <property name="type" value="r1r"/>
    </properties>
   </object>
-  <object id="50" name="drone1Left" gid="9" x="323.031" y="570" width="64" height="64">
+  <object id="50" name="d1l" gid="9" x="323.031" y="570" width="64" height="64">
    <properties>
-    <property name="type" value="drone1Left"/>
+    <property name="type" value="d1l"/>
    </properties>
   </object>
-  <object id="51" name="drone1Right" gid="9" x="1264" y="570" width="64" height="64">
+  <object id="51" name="d1r" gid="9" x="1264" y="570" width="64" height="64">
    <properties>
-    <property name="type" value="drone1Right"/>
+    <property name="type" value="d1r"/>
    </properties>
   </object>
-  <object id="52" name="drone1Start" gid="9" x="769.03" y="570" width="64" height="64">
+  <object id="52" name="d1s" gid="9" x="769.03" y="570" width="64" height="64">
    <properties>
-    <property name="type" value="drone1Start"/>
+    <property name="type" value="d1s"/>
    </properties>
   </object>
-  <object id="53" name="robot1Start" gid="9" x="704" y="704" width="64" height="64">
+  <object id="53" name="r1s" gid="9" x="704" y="704" width="64" height="64">
    <properties>
-    <property name="type" value="robot1Start"/>
+    <property name="type" value="r1s"/>
+   </properties>
+  </object>
+  <object id="63" name="table1Left" gid="11" x="608.647" y="1151.65" width="64" height="64">
+   <properties>
+    <property name="type" value="table1Left"/>
+   </properties>
+  </object>
+  <object id="64" name="table1Right" gid="11" x="797.884" y="1147.71" width="64" height="64">
+   <properties>
+    <property name="type" value="table1Right"/>
+   </properties>
+  </object>
+  <object id="65" name="table2Left" gid="11" x="1379.39" y="1151.65" width="64" height="64">
+   <properties>
+    <property name="type" value="table2Left"/>
+   </properties>
+  </object>
+  <object id="66" name="table2Right" gid="11" x="1566.66" y="1153.62" width="64" height="64">
+   <properties>
+    <property name="type" value="table2Right"/>
+   </properties>
+  </object>
+  <object id="67" name="table3Left" gid="11" x="2020.04" y="1151.65" width="64" height="64">
+   <properties>
+    <property name="type" value="table3Left"/>
+   </properties>
+  </object>
+  <object id="68" name="talbe3Right" gid="11" x="2205.33" y="1149.68" width="64" height="64">
+   <properties>
+    <property name="type" value="table3Right"/>
+   </properties>
+  </object>
+  <object id="69" name="table4Left" gid="11" x="3169.26" y="1149.68" width="64" height="64">
+   <properties>
+    <property name="type" value="table4Left"/>
+   </properties>
+  </object>
+  <object id="70" name="table4Right" gid="11" x="3547.74" y="1149.68" width="64" height="64">
+   <properties>
+    <property name="type" value="table4Right"/>
+   </properties>
+  </object>
+  <object id="71" name="table5Left" gid="11" x="4129.25" y="1151.65" width="64" height="64">
+   <properties>
+    <property name="type" value="table5Left"/>
+   </properties>
+  </object>
+  <object id="74" name="table5Right" gid="11" x="4318.48" y="1149.68" width="64" height="64">
+   <properties>
+    <property name="type" value="table5Right"/>
+   </properties>
+  </object>
+  <object id="75" name="d2l" gid="11" x="892.56" y="672.953" width="64" height="64">
+   <properties>
+    <property name="type" value="d2l"/>
+   </properties>
+  </object>
+  <object id="76" name="d2s" gid="11" x="1465.45" y="664.445" width="64" height="64">
+   <properties>
+    <property name="type" value="d2s"/>
+   </properties>
+  </object>
+  <object id="77" name="d2r" gid="11" x="2012.81" y="653.1" width="64" height="64">
+   <properties>
+    <property name="type" value="d2r"/>
+   </properties>
+  </object>
+  <object id="78" name="d3l" gid="11" x="1726.37" y="559.51" width="64" height="64">
+   <properties>
+    <property name="type" value="d3l"/>
+   </properties>
+  </object>
+  <object id="79" name="d3s" gid="11" x="2336.12" y="573.69" width="64" height="64">
+   <properties>
+    <property name="type" value="d3s"/>
+   </properties>
+  </object>
+  <object id="80" name="d3r" gid="11" x="2943.04" y="548.166" width="64" height="64">
+   <properties>
+    <property name="type" value="d3r"/>
+   </properties>
+  </object>
+  <object id="81" name="d4l" gid="11" x="2676.45" y="687.133" width="64" height="64">
+   <properties>
+    <property name="type" value="d4l"/>
+   </properties>
+  </object>
+  <object id="82" name="d4s" gid="11" x="3348.6" y="688.827" width="64" height="64">
+   <properties>
+    <property name="type" value="d4s"/>
+   </properties>
+  </object>
+  <object id="83" name="d4r" gid="11" x="3756.23" y="671.81" width="64" height="64">
+   <properties>
+    <property name="type" value="d4r"/>
+   </properties>
+  </object>
+  <object id="84" name="d5l" gid="11" x="3533.62" y="601.164" width="64" height="64">
+   <properties>
+    <property name="type" value="d5l"/>
+   </properties>
+  </object>
+  <object id="85" name="d5s" gid="11" x="4148.16" y="583.3" width="64" height="64">
+   <properties>
+    <property name="type" value="d5s"/>
+   </properties>
+  </object>
+  <object id="86" name="d5r" gid="11" x="4731.76" y="592.962" width="64" height="64">
+   <properties>
+    <property name="type" value="d5r"/>
    </properties>
   </object>
  </objectgroup>
