@@ -62,6 +62,7 @@ BackTogether.Level2.prototype = {
         this.initPlayer();
         this.initItems();
         this.initText();
+        this.initTimer();
         // this.initRobots();
         this.initDrones();
 
@@ -120,34 +121,9 @@ BackTogether.Level2.prototype = {
             }
         }
 
-        var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
-        volIcon.anchor.setTo(0.5, 0.5);
 
-        var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
-            if(!volumeOn){
-                icon = 'volDownIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = true;
-                pop.mute = true;
-                crash.mute = true;
-            }
-            else{
-                icon = 'volUpIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = false;
-                pop.mute = false;
-                crash.mute = false;
-            }
-        }, 2, 1, 0);
+        this.initVolIcon();
 
-        volBtn.anchor.setTo(0.5, 0.5);
-        volBtn.width = 55;
-        volBtn.height = 60;
-        volBtn.fixedToCamera = true;
-        volIcon.fixedToCamera = true;
-        game.world.bringToTop(volIcon);
 
     },
 
@@ -175,13 +151,15 @@ BackTogether.Level2.prototype = {
         } else {
 
             // this.drones.forEach(function(d){
-                
+
             // })
-            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOff && !(576 < player.body.x && player.body.x < 832) ) {
+            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOff && !(576 < player.body.x && player.body.x < 832)) {
                 this.screenShake();
+                this.healthPoint -= 50;
+                this.healthbar.scale.setTo(1, this.healthPoint / 1000);
                 this.hidePopUp.visible = true;
-            } else{
-                 this.hidePopUp.visible = false;
+            } else {
+                this.hidePopUp.visible = false;
             }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
@@ -513,17 +491,17 @@ BackTogether.Level2.prototype = {
         _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
         this.drone1.leftPos = this.findObjectsByType('drone1Left', map, 'objectsLayer')
-        this.drone1.rightPos =this.findObjectsByType('drone1Right', map, 'objectsLayer');
+        this.drone1.rightPos = this.findObjectsByType('drone1Right', map, 'objectsLayer');
 
         _drone2Start = this.findObjectsByType('drone2Start', map, 'objectsLayer')
         this.drone2 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
         this.drone2.leftPos = this.findObjectsByType('drone2Left', map, 'objectsLayer')
-        this.drone2.rightPos =this.findObjectsByType('drone2Right', map, 'objectsLayer');
+        this.drone2.rightPos = this.findObjectsByType('drone2Right', map, 'objectsLayer');
 
         _drone1Start = this.findObjectsByType('drone3Start', map, 'objectsLayer')
         this.drone3 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
         this.drone3.leftPos = this.findObjectsByType('drone3Left', map, 'objectsLayer')
-        this.drone3.rightPos =this.findObjectsByType('drone3Right', map, 'objectsLayer');
+        this.drone3.rightPos = this.findObjectsByType('drone3Right', map, 'objectsLayer');
 
     },
 
@@ -540,7 +518,7 @@ BackTogether.Level2.prototype = {
         this.physics.p2.enable(d.light, true);
         d.light.body.data.gravityScale = 0;
         d.light.anchor.setTo(0.5, 0);
-        d.light.scale.setTo(10,10);
+        d.light.scale.setTo(10, 10);
         d.light.body.clearShapes();
         // d.light.body.addRectangle(128, 256, 0, 160, 0);
         // d.lightRangeLeft.body.addPolygon({}, [[0,0],[0,38],[6,55],[22,63]]);
@@ -704,34 +682,34 @@ BackTogether.Level2.prototype = {
         pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
         pausedBtnCardText.anchor.setTo(0.5, 0.5);
 
-        mmBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', function(){
-        pausedLayer.destroy();
-        cancelBtn.destroy();
-        pausedBtnCard.destroy();
-        pausedBtnCardText.destroy();
-        resetBtn.destroy();
-        resetIcon.destroy();
-        mmBtn.destroy();
-        mmIcon.destroy();
-        inventoryBtn.destroy();
-        inventoryTxt.destroy();
+        mmBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', function () {
+            pausedLayer.destroy();
+            cancelBtn.destroy();
+            pausedBtnCard.destroy();
+            pausedBtnCardText.destroy();
+            resetBtn.destroy();
+            resetIcon.destroy();
+            mmBtn.destroy();
+            mmIcon.destroy();
+            inventoryBtn.destroy();
+            inventoryTxt.destroy();
 
-        for (var i = 0; i < player.itemBtns.length; i++) {
-            player.itemBtns[i].destroy();
-        }
-        for (var i = 0; i < player.itemNums.length; i++) {
-            player.itemNums[i].destroy();
-        }
+            for (var i = 0; i < player.itemBtns.length; i++) {
+                player.itemBtns[i].destroy();
+            }
+            for (var i = 0; i < player.itemNums.length; i++) {
+                player.itemNums[i].destroy();
+            }
 
-        player.itemBtns = [];
-        player.itemNums = [];
+            player.itemBtns = [];
+            player.itemNums = [];
 
-        // Unpause the game
-        this.paused = false;
-            
-        game.state.start('MainMenu')
+            // Unpause the game
+            this.paused = false;
+
+            game.state.start('MainMenu')
         }, game, 2, 1, 0);
-        
+
         mmBtn.anchor.setTo(0.5, 0.5);
         mmBtn.scale.setTo(1.6, 1.6);
 
@@ -828,6 +806,63 @@ BackTogether.Level2.prototype = {
     inventoryItemOnClick: function (e) {
         console.log('inventory item pressed');
         console.log(e.key);
+    },
+    initVolIcon: function () {
+        var volIcon = this.add.sprite(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, icon);
+        volIcon.anchor.setTo(0.5, 0.5);
+
+        var volBtn = this.add.button(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, 'volBtn', function () {
+            if (!volumeOn) {
+                icon = 'volDownIcon';
+                volIcon.loadTexture(icon);
+                volumeOn = !volumeOn;
+                music.mute = true;
+                pop.mute = true;
+                crash.mute = true;
+            }
+            else {
+                icon = 'volUpIcon';
+                volIcon.loadTexture(icon);
+                volumeOn = !volumeOn;
+                music.mute = false;
+                pop.mute = false;
+                crash.mute = false;
+            }
+        }, 2, 1, 0);
+
+        volBtn.anchor.setTo(0.5, 0.5);
+        volBtn.width = 55;
+        volBtn.height = 60;
+        volBtn.fixedToCamera = true;
+        volIcon.fixedToCamera = true;
+        this.world.bringToTop(volIcon);
+    },
+    initTimer:function(){
+
+        this.healthPoint = 6000;
+
+        this.healthbar = this.add.image(this.camera.view.width - 120, 120, 'healthbar');
+        this.healthbar.anchor.setTo(0, 0);
+        this.healthbar.scale.setTo(1, this.healthPoint / 1000);
+        this.healthbar.fixedToCamera = true;
+
+
+        // console.log(this.camera.view);
+        this.heart = this.add.sprite(this.camera.view.width - 80, 120, 'heartbeat');
+        this.heart.anchor.setTo(0.5, 0.5);
+
+        this.heart.animations.add('normal', [0, 1, 2, 3, 4, 5], 10, true);
+
+        this.heart.animations.add('slow', [0, 0, 1, 2, 3, 3, 4, 5], 10, true);
+        this.heart.animations.add('quick', [0, 2, 4, 5], 10, true);
+
+        this.heart.animations.play('slow');
+
+        this.heart.fixedToCamera = true;
+
+
+
+    
     }
 
 }
