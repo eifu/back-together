@@ -62,6 +62,7 @@ BackTogether.Level2.prototype = {
         this.initPlayer();
         this.initItems();
         this.initText();
+        this.initTimer();
         // this.initRobots();
         this.initDrones();
 
@@ -120,34 +121,9 @@ BackTogether.Level2.prototype = {
             }
         }
 
-        var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
-        volIcon.anchor.setTo(0.5, 0.5);
 
-        var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
-            if(!volumeOn){
-                icon = 'volDownIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = true;
-                pop.mute = true;
-                crash.mute = true;
-            }
-            else{
-                icon = 'volUpIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = false;
-                pop.mute = false;
-                crash.mute = false;
-            }
-        }, 2, 1, 0);
+        this.initVolIcon();
 
-        volBtn.anchor.setTo(0.5, 0.5);
-        volBtn.width = 55;
-        volBtn.height = 60;
-        volBtn.fixedToCamera = true;
-        volIcon.fixedToCamera = true;
-        game.world.bringToTop(volIcon);
 
     },
 
@@ -175,13 +151,58 @@ BackTogether.Level2.prototype = {
         } else {
 
             // this.drones.forEach(function(d){
-                
+
             // })
             if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832) ) {
+
                 this.screenShake();
-                this.hidePopUp.visible = true;
-            } else{
-                 this.hidePopUp.visible = false;
+                if (this.drone1.detectTime > 0) {
+                    this.drone1.detectTime -= 20;
+                    this.drone1.light.animations.frame = 1;
+                    this.drone1.light.scale.setTo(1 * this.drone1.detectTime / 1000, 3 * this.drone1.detectTime / 1000)
+                    this.hidePopUp.visible = true;
+                } else if (this.drone1.detectTime == -1) {
+
+
+                } else {
+                    this.drone1.detectTime = -1;
+                    this.drone1.firingRobotTime = this.time.now + 3000;
+                    this.drone1.light.scale.setTo(1, 3);
+                    this.drone1.light.animations.frame = 2;
+                }
+            } else {
+
+
+                if (this.drone1.detectTime < 0) {
+                    var t = this.time.now - this.drone1.firingRobotTime;
+                    // console.log(t);
+                    if (t < -2000) {
+                        console.log('1');
+                        this.firingRobotCounting3Text.visible = true;
+                    } else if (t < -1000) {
+                        console.log('2');
+                        this.firingRobotCounting3Text.visible = false;
+                        this.firingRobotCounting2Text.visible = true;
+
+                    } else if (t < 0) {
+                        console.log('3');
+                        this.firingRobotCounting2Text.visible = false;
+                        this.firingRobotCounting1Text.visible = true;
+
+                    } else {
+                        this.firingRobotCounting1Text.visible = false;
+
+                        this.drone1.detectTime = 1000;
+                        console.log("yeah");
+                    }
+                } else {
+
+
+                    // this.drone1.detectTime = 1000;
+                    this.drone1.light.scale.setTo(1, 3);
+                    this.drone1.light.animations.frame = 0;
+                    this.hidePopUp.visible = false;
+                }
             }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
@@ -426,8 +447,24 @@ BackTogether.Level2.prototype = {
         this.hidePopUp.scale.setTo(7, 7);
         this.hidePopUp.anchor.setTo(0.5, 0.5);
         this.hidePopUp.fixedToCamera = true;
-        // console.log(this.hidePopUp); .
         this.hidePopUp.visible = false;
+
+
+        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting1Text.visible = false;
+        this.firingRobotCounting1Text.fixedToCamera = true;
+
+
+        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting2Text.visible = false;
+        this.firingRobotCounting2Text.fixedToCamera = true;
+
+
+        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting3Text.visible = false;
+        this.firingRobotCounting3Text.fixedToCamera = true;
+
+
     },
 
     findObjectsByType: function (type, map, layer) {
@@ -513,22 +550,24 @@ BackTogether.Level2.prototype = {
         _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
         this.drone1.leftPos = this.findObjectsByType('drone1Left', map, 'objectsLayer')
-        this.drone1.rightPos =this.findObjectsByType('drone1Right', map, 'objectsLayer');
+        this.drone1.rightPos = this.findObjectsByType('drone1Right', map, 'objectsLayer');
 
-        _drone2Start = this.findObjectsByType('drone2Start', map, 'objectsLayer')
-        this.drone2 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone2.leftPos = this.findObjectsByType('drone2Left', map, 'objectsLayer')
-        this.drone2.rightPos =this.findObjectsByType('drone2Right', map, 'objectsLayer');
+        // _drone2Start = this.findObjectsByType('drone2Start', map, 'objectsLayer')
+        // this.drone2 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        // this.drone2.leftPos = this.findObjectsByType('drone2Left', map, 'objectsLayer')
+        // this.drone2.rightPos = this.findObjectsByType('drone2Right', map, 'objectsLayer');
 
-        _drone1Start = this.findObjectsByType('drone3Start', map, 'objectsLayer')
-        this.drone3 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone3.leftPos = this.findObjectsByType('drone3Left', map, 'objectsLayer')
-        this.drone3.rightPos =this.findObjectsByType('drone3Right', map, 'objectsLayer');
+        // _drone1Start = this.findObjectsByType('drone3Start', map, 'objectsLayer')
+        // this.drone3 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        // this.drone3.leftPos = this.findObjectsByType('drone3Left', map, 'objectsLayer')
+        // this.drone3.rightPos = this.findObjectsByType('drone3Right', map, 'objectsLayer');
 
     },
 
     factoryDrone: function (x, y) {
         var d = this.drones.create(x, y, 'drone');
+
+        d.detectTime = 1000;
 
         this.physics.p2.enable(d, true);
         d.animations.add('left', [0, 1], 10, true);
@@ -540,11 +579,19 @@ BackTogether.Level2.prototype = {
         this.physics.p2.enable(d.light, true);
         d.light.body.data.gravityScale = 0;
         d.light.anchor.setTo(0.5, 0);
-        d.light.scale.setTo(10,10);
+        d.light.scale.setTo(1, 3);
+        d.light.animations.frame = 0;
         d.light.body.clearShapes();
-        // d.light.body.addRectangle(128, 256, 0, 160, 0);
-        // d.lightRangeLeft.body.addPolygon({}, [[0,0],[0,38],[6,55],[22,63]]);
         d.light.sendToBack();
+
+        d.lightShadow = this.add.sprite(x, y + 30, 'droneLight');
+        this.physics.p2.enable(d.lightShadow, true);
+        d.lightShadow.body.data.gravityScale = 0;
+        d.lightShadow.anchor.setTo(0.5, 0);
+        d.lightShadow.scale.setTo(1, 3);
+        d.lightShadow.animations.frame = 0;
+        d.lightShadow.body.clearShapes();
+        d.lightShadow.sendToBack();
 
 
 
@@ -570,6 +617,7 @@ BackTogether.Level2.prototype = {
                     d.face = 'right';
                     d.body.moveRight(100);
                     d.light.body.moveRight(100);
+                    d.lightShadow.body.moveRight(100);
                 } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x) {
 
                     if (d.face == "left") {
@@ -577,6 +625,7 @@ BackTogether.Level2.prototype = {
                         d.body.moveLeft(100);
 
                         d.light.body.moveLeft(100);
+                        d.lightShadow.body.moveLeft(100);
                         d.animations.play('left');
 
 
@@ -584,6 +633,7 @@ BackTogether.Level2.prototype = {
 
                         d.body.moveRight(100);
                         d.light.body.moveRight(100);
+                        d.lightShadow.body.moveRight(100);
                         d.animations.play('right');
 
                     }
@@ -704,34 +754,34 @@ BackTogether.Level2.prototype = {
         pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
         pausedBtnCardText.anchor.setTo(0.5, 0.5);
 
-        mmBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', function(){
-        pausedLayer.destroy();
-        cancelBtn.destroy();
-        pausedBtnCard.destroy();
-        pausedBtnCardText.destroy();
-        resetBtn.destroy();
-        resetIcon.destroy();
-        mmBtn.destroy();
-        mmIcon.destroy();
-        inventoryBtn.destroy();
-        inventoryTxt.destroy();
+        mmBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'pausedBtn', function () {
+            pausedLayer.destroy();
+            cancelBtn.destroy();
+            pausedBtnCard.destroy();
+            pausedBtnCardText.destroy();
+            resetBtn.destroy();
+            resetIcon.destroy();
+            mmBtn.destroy();
+            mmIcon.destroy();
+            inventoryBtn.destroy();
+            inventoryTxt.destroy();
 
-        for (var i = 0; i < player.itemBtns.length; i++) {
-            player.itemBtns[i].destroy();
-        }
-        for (var i = 0; i < player.itemNums.length; i++) {
-            player.itemNums[i].destroy();
-        }
+            for (var i = 0; i < player.itemBtns.length; i++) {
+                player.itemBtns[i].destroy();
+            }
+            for (var i = 0; i < player.itemNums.length; i++) {
+                player.itemNums[i].destroy();
+            }
 
-        player.itemBtns = [];
-        player.itemNums = [];
+            player.itemBtns = [];
+            player.itemNums = [];
 
-        // Unpause the game
-        this.paused = false;
-            
-        game.state.start('MainMenu')
+            // Unpause the game
+            this.paused = false;
+
+            game.state.start('MainMenu')
         }, game, 2, 1, 0);
-        
+
         mmBtn.anchor.setTo(0.5, 0.5);
         mmBtn.scale.setTo(1.6, 1.6);
 
@@ -828,6 +878,63 @@ BackTogether.Level2.prototype = {
     inventoryItemOnClick: function (e) {
         console.log('inventory item pressed');
         console.log(e.key);
+    },
+    initVolIcon: function () {
+        var volIcon = this.add.sprite(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, icon);
+        volIcon.anchor.setTo(0.5, 0.5);
+
+        var volBtn = this.add.button(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, 'volBtn', function () {
+            if (!volumeOn) {
+                icon = 'volDownIcon';
+                volIcon.loadTexture(icon);
+                volumeOn = !volumeOn;
+                music.mute = true;
+                pop.mute = true;
+                crash.mute = true;
+            }
+            else {
+                icon = 'volUpIcon';
+                volIcon.loadTexture(icon);
+                volumeOn = !volumeOn;
+                music.mute = false;
+                pop.mute = false;
+                crash.mute = false;
+            }
+        }, 2, 1, 0);
+
+        volBtn.anchor.setTo(0.5, 0.5);
+        volBtn.width = 55;
+        volBtn.height = 60;
+        volBtn.fixedToCamera = true;
+        volIcon.fixedToCamera = true;
+        this.world.bringToTop(volIcon);
+    },
+    initTimer: function () {
+
+        this.healthPoint = 6000;
+
+        this.healthbar = this.add.image(this.camera.view.width - 120, 120, 'healthbar');
+        this.healthbar.anchor.setTo(0, 0);
+        this.healthbar.scale.setTo(1, this.healthPoint / 1000);
+        this.healthbar.fixedToCamera = true;
+
+
+        // console.log(this.camera.view);
+        this.heart = this.add.sprite(this.camera.view.width - 80, 120, 'heartbeat');
+        this.heart.anchor.setTo(0.5, 0.5);
+
+        this.heart.animations.add('normal', [0, 1, 2, 3, 4, 5], 10, true);
+
+        this.heart.animations.add('slow', [0, 0, 1, 2, 3, 3, 4, 5], 10, true);
+        this.heart.animations.add('quick', [0, 2, 4, 5], 10, true);
+
+        this.heart.animations.play('slow');
+
+        this.heart.fixedToCamera = true;
+
+
+
+
     }
 
 }
