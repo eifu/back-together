@@ -697,18 +697,22 @@ BackTogether.Level1.prototype = {
         objectiveCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + game.world.height/3, 'objectiveCard')
         objectiveCard.anchor.setTo(0.5, 0.5);
 
-        objectiveCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Objective: \n ASSASSINATION STYLE ... \n When the robot turns around, \n make contact with its butt.\n There is a switch to turn it off.', { font: '32px Aclonica', fill: '#FFF' });
+        objectiveCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Objective: \n ASSASSINATION STYLE ... \n When the robot turns around, \n run against its butt.\n There is a switch to turn it off.', { font: '32px Aclonica', fill: '#FFF' });
         objectiveCardText.anchor.setTo(0.5, 0);
 
-        okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + 520, 'okIcon', function(){
+        okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + 550, 'okBtn', function(){
             objectiveCard.destroy();
             okBtn.destroy();
+            okIcon.destroy();
             objectiveCardText.destroy();
             game.paused = false;
         }, game, 2, 1, 0);
         okBtn.anchor.setTo(0.5, 0.5);
-//        okBtn.scale.setTo(1.6, 1.6);
-        game.world.bringToTop(okBtn);
+        okBtn.scale.setTo(4, 4);
+            
+        okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + 550, 'okIcon');
+        okIcon.anchor.setTo(0.5, 0.5);
+        game.world.bringToTop(okIcon);
         game.paused = true;
     },
     
