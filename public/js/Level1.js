@@ -164,7 +164,7 @@ BackTogether.Level1.prototype = {
                 var tempThis = this;
                 this.robots.children.forEach(function (r) {
                  if(tempThis.checkOverlap(player, r)){
-                     if(!r.switchedOff && !r.vulnerable){
+                     if(!r.switchedOff && !r.vulnerable && !invincibilityOn){
                          tempThis.screenShake();
                          tempThis.playerDamaged();
                      }
