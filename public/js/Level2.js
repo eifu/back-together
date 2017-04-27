@@ -157,8 +157,10 @@ BackTogether.Level2.prototype = {
                 this.screenShake();
                 this.healthPoint -= 50;
                 this.healthbar.scale.setTo(1, this.healthPoint / 1000);
+                this.drone1.light.animations.frame = 1;
                 this.hidePopUp.visible = true;
             } else {
+                this.drone1.light.animations.frame = 0;
                 this.hidePopUp.visible = false;
             }
 
@@ -518,7 +520,8 @@ BackTogether.Level2.prototype = {
         this.physics.p2.enable(d.light, true);
         d.light.body.data.gravityScale = 0;
         d.light.anchor.setTo(0.5, 0);
-        d.light.scale.setTo(10, 10);
+        d.light.scale.setTo(1, 3);
+        d.light.animations.frame = 0;
         d.light.body.clearShapes();
         // d.light.body.addRectangle(128, 256, 0, 160, 0);
         // d.lightRangeLeft.body.addPolygon({}, [[0,0],[0,38],[6,55],[22,63]]);

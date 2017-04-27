@@ -49,7 +49,7 @@ BackTogether.Preloader.prototype = {
         this.load.image('arrowRight', 'assets/images/arrowRight.png');
 
 
-        this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 128, 64);
+        this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 100, 200);
         this.load.audio('bg', ['assets/audio/bgMusic.mp3', 'assets/audio/bgMusic.ogg']);
         this.load.tilemap('map1', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
