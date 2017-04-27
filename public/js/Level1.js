@@ -696,7 +696,7 @@ BackTogether.Level1.prototype = {
 
         objectiveCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + game.world.height/3, 'objectiveCard')
         objectiveCard.anchor.setTo(0.5, 0.5);
-
+        objectiveCard.scale.setTo(7, 4);
         objectiveCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Objective: \n ASSASSINATION STYLE ... \n When the robot turns around, \n run against its butt.\n There is a switch to turn it off.', { font: '32px Aclonica', fill: '#FFF' });
         objectiveCardText.anchor.setTo(0.5, 0);
 
