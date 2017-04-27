@@ -143,6 +143,12 @@ BackTogether.LevelSelecting.prototype = {
         game.add.tween(volIcon).to({ y: this.camera.view.centerY + game.height / 2.5 }, 500, Phaser.Easing.Bounce.Out, true);
         
         game.world.bringToTop(volIcon);
+
+        // console.log(this);
+        this.fullBody = this.add.image(this.camera.view.centerX - 400, this.camera.view.centerY, 'bodyMap');
+        this.fullBody.anchor.setTo(0.5,0.5);
+        this.fullBody.scale.setTo(0.6,0.6);
+
     },
     update: function () {
         if(keys['ONE'].isDown){

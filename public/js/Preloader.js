@@ -44,6 +44,7 @@ BackTogether.Preloader.prototype = {
         this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
         this.load.image('droneLight', 'assets/images/droneLight.png');
         this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
+        this.load.image('bodyMap', 'assets/images/bodyMap.png');
 
 
         this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 128, 64);
