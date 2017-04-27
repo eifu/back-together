@@ -15,6 +15,7 @@ var player;
 var playerStartPos;
 var playerEndPos;
 var map;
+var itemBox;
 
 BackTogether.Level1.prototype = {
 
@@ -47,6 +48,7 @@ BackTogether.Level1.prototype = {
         this.initText();
         this.initHealthBar();
         this.initRobots();
+        this.initItemBox();
 
         var inputs = [
             Phaser.Keyboard.ONE,
@@ -363,6 +365,13 @@ BackTogether.Level1.prototype = {
 
 
     },
+    initItemBox: function(){
+        var itemBoxPos = this.findObjectsByType('itemBox', map, 'objectsLayer');
+        itemBox = this.add.sprite(itemBoxPos[0].x, itemBoxPos[0].y, 'itemBox');
+        itemBox.animations.add('normal', [0, 1, 2, 3], 10, true);
+        itemBox.animations.play('normal');
+    },
+    
     initPlayer: function () {
         // The player and its settings
         playerStartPos = this.findObjectsByType('playerStart', map, 'objectsLayer')
