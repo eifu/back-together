@@ -493,15 +493,15 @@ BackTogether.Level2.prototype = {
         this.drone1.leftPos = this.findObjectsByType('drone1Left', map, 'objectsLayer')
         this.drone1.rightPos = this.findObjectsByType('drone1Right', map, 'objectsLayer');
 
-        _drone2Start = this.findObjectsByType('drone2Start', map, 'objectsLayer')
-        this.drone2 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone2.leftPos = this.findObjectsByType('drone2Left', map, 'objectsLayer')
-        this.drone2.rightPos = this.findObjectsByType('drone2Right', map, 'objectsLayer');
+        // _drone2Start = this.findObjectsByType('drone2Start', map, 'objectsLayer')
+        // this.drone2 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        // this.drone2.leftPos = this.findObjectsByType('drone2Left', map, 'objectsLayer')
+        // this.drone2.rightPos = this.findObjectsByType('drone2Right', map, 'objectsLayer');
 
-        _drone1Start = this.findObjectsByType('drone3Start', map, 'objectsLayer')
-        this.drone3 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone3.leftPos = this.findObjectsByType('drone3Left', map, 'objectsLayer')
-        this.drone3.rightPos = this.findObjectsByType('drone3Right', map, 'objectsLayer');
+        // _drone1Start = this.findObjectsByType('drone3Start', map, 'objectsLayer')
+        // this.drone3 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
+        // this.drone3.leftPos = this.findObjectsByType('drone3Left', map, 'objectsLayer')
+        // this.drone3.rightPos = this.findObjectsByType('drone3Right', map, 'objectsLayer');
 
     },
 
