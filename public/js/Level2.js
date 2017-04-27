@@ -129,7 +129,7 @@ BackTogether.Level2.prototype = {
 
     update: function (game) {
 
-
+//        console.log(player.body.x + " " this.robots.x);
         for (var i = 0; i < this.items.length; i++) {
             this.items.children[i].frame = 0;
         }
@@ -153,7 +153,8 @@ BackTogether.Level2.prototype = {
             // this.drones.forEach(function(d){
 
             // })
-            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOff && !(576 < player.body.x && player.body.x < 832)) {
+
+            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832) ) {
                 this.screenShake();
                 if (this.drone1.detectTime > 0) {
                     this.drone1.detectTime -= 20;
@@ -274,11 +275,11 @@ BackTogether.Level2.prototype = {
 
         if (keys['I'].isDown && !iKeyDown) {
             iKeyDown = true;
-            if (!invincibilityOff) {
-                invincibilityOff = true;
+            if (!invincinbilityOn) {
+                invincinbilityOn = true;
             }
             else {
-                invincibilityOff = false;
+                invincinbilityOn = false;
             }
         }
         if (keys['I'].isUp) {
