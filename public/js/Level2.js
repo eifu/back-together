@@ -153,7 +153,7 @@ BackTogether.Level2.prototype = {
 
     update: function (game) {
 
-
+//        console.log(player.body.x + " " this.robots.x);
         for (var i = 0; i < this.items.length; i++) {
             this.items.children[i].frame = 0;
         }

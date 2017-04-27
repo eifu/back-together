@@ -152,16 +152,27 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-            if (this.checkOverlap(player, this.robots)) {
-                if(!invincibilityOn){
-                this.screenShake();
-                this.playerDamaged();
-                }
-                else{
-                    this.robot1.switchedOff = true;
-                }
-            }
-
+//            if (this.checkOverlap(player, this.robots)) {
+//                if(!invincibilityOn){
+//                this.screenShake();
+//                this.playerDamaged();
+//                }
+//                else{
+//                    this.robot1.switchedOff = true;
+//                }
+            
+            
+                this.robots.children.forEach(function (r) {
+                 if(this.checkOverlap(player, r)){
+                     if(!r.switchedOff && !r.vulnerable){
+                         this.screenShake();
+                         this.player.Damaged();
+                     }
+                     else {
+                         r.switchedOff = true;
+                     }
+                 }   
+                });
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
@@ -248,18 +259,18 @@ BackTogether.Level1.prototype = {
     },
     
     playerAttack: function(){
-        if(player.body.x < this.robot1.x && player.body.velocity.x >= 0 && this.robot1.body.velocity.x >= 0){
-            invincibilityOn = true;
+        this.robots.children.forEach(function (r) {
+        if(player.body.x < r.x && player.body.velocity.x >= 0 && r.body.velocity.x >= 0 || r.switchedOff){
+            r.vulnerable = true;
         }
-        else if(player.body.x > this.robot1.x && player.body.velocity.x <= 0 && this.robot1.body.velocity.x <= 0){
-            invincibilityOn = true;
+        else if(player.body.x > r.x && player.body.velocity.x <= 0 && r.body.velocity.x <= 0 || r.switchedOff){
+            r.vulnerable = true;
         }
         else{
-            invincibilityOn = false;
+            r.vulnerable = false;
         }
-        
-        console.log(invincibilityOn);
-    },
+        }
+    )},
 
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
@@ -523,8 +534,7 @@ BackTogether.Level1.prototype = {
 
         this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
         this.robot1.robot1Left = _robot1Left;
-        this.robot1.robot1Right = _robot1Right;
-        this.robot1.switchedOff = false;
+        this.robot1.robot1Right = _robot1Right
     },
 
     factoryRobot: function (x, y) {
@@ -551,7 +561,8 @@ BackTogether.Level1.prototype = {
         ['right', 'idle'], ['right', 'right'],
         ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
         r.state = 'idle';
-
+        r.switchedOff = false;
+        r.vulnerable = false;
         return r;
     },
     updateRobots: function () {
@@ -598,6 +609,10 @@ BackTogether.Level1.prototype = {
 
                 }
             }
+            }
+            else{
+                r.body.velocity.x = 0;
+                r.animations.frame = 0;
             }
         })
     },
