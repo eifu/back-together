@@ -38,7 +38,8 @@ BackTogether.Level2.prototype = {
 
         //        legsLayer.resizeWorld();
         //        objectsLayer.resizeWorld();
-        map.setCollisionBetween(1, 8);
+        map.setCollisionBetween(1, 10);
+        // map.setCollisionBetween()
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
@@ -65,6 +66,8 @@ BackTogether.Level2.prototype = {
         this.initTimer();
         // this.initRobots();
         this.initDrones();
+
+        this.capsules = [];
 
         var inputs = [
             Phaser.Keyboard.ONE,
@@ -129,7 +132,7 @@ BackTogether.Level2.prototype = {
 
     update: function (game) {
 
-//        console.log(player.body.x + " " this.robots.x);
+        //        console.log(player.body.x + " " this.robots.x);
         for (var i = 0; i < this.items.length; i++) {
             this.items.children[i].frame = 0;
         }
@@ -153,57 +156,116 @@ BackTogether.Level2.prototype = {
             // this.drones.forEach(function(d){
 
             // })
+<<<<<<< HEAD
             if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832) ) {
 
                 this.screenShake();
+=======
+
+            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832)) {
+>>>>>>> eifu
                 if (this.drone1.detectTime > 0) {
+                    this.screenShake();
+
                     this.drone1.detectTime -= 20;
                     this.drone1.light.animations.frame = 1;
                     this.drone1.light.scale.setTo(1 * this.drone1.detectTime / 1000, 3 * this.drone1.detectTime / 1000)
                     this.hidePopUp.visible = true;
-                } else if (this.drone1.detectTime == -1) {
 
+                    console.log('166');
 
-                } else {
-                    this.drone1.detectTime = -1;
-                    this.drone1.firingRobotTime = this.time.now + 3000;
-                    this.drone1.light.scale.setTo(1, 3);
-                    this.drone1.light.animations.frame = 2;
+                    if (this.drone1.detectTime <= 0) {
+                        this.drone1.firingRobotTime = this.time.now + 3000;
+                        this.drone1.light.scale.setTo(1, 3);
+                        this.drone1.light.animations.frame = 2;
+
+                        console.log('150');
+                    }
                 }
             } else {
+                this.hidePopUp.visible = false;
+                this.drone1.light.scale.setTo(1, 3);
+                this.drone1.light.animations.frame = 0;
+            }
 
 
-                if (this.drone1.detectTime < 0) {
-                    var t = this.time.now - this.drone1.firingRobotTime;
-                    // console.log(t);
-                    if (t < -2000) {
-                        console.log('1');
-                        this.firingRobotCounting3Text.visible = true;
-                    } else if (t < -1000) {
-                        console.log('2');
-                        this.firingRobotCounting3Text.visible = false;
-                        this.firingRobotCounting2Text.visible = true;
+            if (this.drone1.detectTime <= 0) {
+                console.log("177")
+                this.drone1.light.animations.frame = 2;
 
-                    } else if (t < 0) {
-                        console.log('3');
-                        this.firingRobotCounting2Text.visible = false;
-                        this.firingRobotCounting1Text.visible = true;
+                var t = this.drone1.firingRobotTime - this.time.now;
+                // console.log(t);
+                if (t > 2000) {
+                    console.log('1');
+                    this.firingRobotCounting3Text.visible = true;
+                } else if (t > 1000) {
+                    console.log('2');
+                    this.firingRobotCounting3Text.visible = false;
+                    this.firingRobotCounting2Text.visible = true;
 
-                    } else {
-                        this.firingRobotCounting1Text.visible = false;
+                } else if (t > 0) {
+                    console.log('3');
+                    this.firingRobotCounting2Text.visible = false;
+                    this.firingRobotCounting1Text.visible = true;
 
-                        this.drone1.detectTime = 1000;
-                        console.log("yeah");
-                    }
                 } else {
+                    this.firingRobotCounting1Text.visible = false;
 
+                    this.drone1.detectTime = 1000;
 
-                    // this.drone1.detectTime = 1000;
-                    this.drone1.light.scale.setTo(1, 3);
-                    this.drone1.light.animations.frame = 0;
-                    this.hidePopUp.visible = false;
+                    var c = this.add.sprite(this.drone1.x, this.drone1.y, 'capsule');
+                    c.animations.frame = 0;
+                    this.physics.p2.enable(c);
+                    c.body.data.gravityScale = 10;
+                    c.body.setCircle(25);
+                    if (this.drone1.body.velocity.x > 0) {
+                        c.body.velocity.x = 200;
+                    } else {
+                        c.body.velocity.x = -200;
+                    }
+
+                    c.hatchingTime = this.time.now + 10000;
+
+                    this.capsules.push(c);
+
+                    console.log("yeah");
                 }
             }
+            var now = this.time.now;
+            this.capsules.forEach(function (c, i, object) {
+                var t = c.hatchingTime - now;
+                if (t>9000){
+
+                }else if (t > 4000) {
+                    c.scale.setTo(1.2, 1.2);
+                    c.body.setCircle(30);
+                }else if (t > 3000) {
+                    c.scale.setTo(1.6, 1.6);
+                    c.body.setCircle(40);
+                }else if (t > 2000) {
+                    c.scale.setTo(2.4, 2.4);
+                    c.body.setCircle(60);
+                }else if (t > 1000) {
+                    c.scale.setTo(3.2, 3.2);
+                    c.body.setCircle(80);
+                }
+                else if (t > 500){
+
+                }
+                else if ( t > 400) {
+                    c.animations.frame = 1;
+                } else if (t > 300) {
+                    c.animations.frame = 2;
+                } else if (t > 200) {
+                    c.animations.frame = 3;
+                } else if (t > 100) {
+                    c.animations.frame = 4;
+                } else if (t > 0) {
+                    object.slice(i, 1); // remove the capsule from the array;
+                }
+
+            });
+
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
@@ -450,18 +512,21 @@ BackTogether.Level2.prototype = {
         this.hidePopUp.visible = false;
 
 
-        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '64px Aclonica', fill: '#F00' });
         this.firingRobotCounting1Text.visible = false;
+        this.firingRobotCounting1Text.scale.setTo(2, 2);
         this.firingRobotCounting1Text.fixedToCamera = true;
 
 
-        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '64px Aclonica', fill: '#F00' });
         this.firingRobotCounting2Text.visible = false;
+        this.firingRobotCounting2Text.scale.setTo(2, 2);
         this.firingRobotCounting2Text.fixedToCamera = true;
 
 
-        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '64px Aclonica', fill: '#F00' });
         this.firingRobotCounting3Text.visible = false;
+        this.firingRobotCounting3Text.scale.setTo(2, 2);
         this.firingRobotCounting3Text.fixedToCamera = true;
 
 
