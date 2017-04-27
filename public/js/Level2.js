@@ -67,6 +67,8 @@ BackTogether.Level2.prototype = {
         // this.initRobots();
         this.initDrones();
 
+        this.capsules = [];
+
         var inputs = [
             Phaser.Keyboard.ONE,
             Phaser.Keyboard.TWO,
@@ -185,17 +187,17 @@ BackTogether.Level2.prototype = {
                 console.log("177")
                 this.drone1.light.animations.frame = 2;
 
-                var t = this.time.now - this.drone1.firingRobotTime;
+                var t = this.drone1.firingRobotTime - this.time.now;
                 // console.log(t);
-                if (t < -2000) {
+                if (t > 2000) {
                     console.log('1');
                     this.firingRobotCounting3Text.visible = true;
-                } else if (t < -1000) {
+                } else if (t > 1000) {
                     console.log('2');
                     this.firingRobotCounting3Text.visible = false;
                     this.firingRobotCounting2Text.visible = true;
 
-                } else if (t < 0) {
+                } else if (t > 0) {
                     console.log('3');
                     this.firingRobotCounting2Text.visible = false;
                     this.firingRobotCounting1Text.visible = true;
@@ -205,19 +207,55 @@ BackTogether.Level2.prototype = {
 
                     this.drone1.detectTime = 1000;
 
-                    var capsule = this.add.sprite(this.drone1.x, this.drone1.y, 'capsule');
-                    this.physics.p2.enable(capsule, true);
-                    capsule.body.data.gravityScale = 1;
-                    capsule.body.setCircle(25);
-                    if (this.drone1.body.velocity.x > 0){
-                        capsule.body.velocity.x = 200;
-                    }else{
-                        capsule.body.velocity.x = -200;
+                    var c = this.add.sprite(this.drone1.x, this.drone1.y, 'capsule');
+                    c.animations.frame = 0;
+                    this.physics.p2.enable(c);
+                    c.body.data.gravityScale = 10;
+                    c.body.setCircle(25);
+                    if (this.drone1.body.velocity.x > 0) {
+                        c.body.velocity.x = 200;
+                    } else {
+                        c.body.velocity.x = -200;
                     }
+
+                    c.hatchingTime = this.time.now + 10000;
+
+                    this.capsules.push(c);
 
                     console.log("yeah");
                 }
             }
+            var now = this.time.now;
+            this.capsules.forEach(function (c, i, object) {
+                var t = c.hatchingTime - now;
+                if (t>5000){
+
+                }else if (t > 4000) {
+                    console.log('capsule 4');
+                    c.animations.frame = 1;
+                    c.scale.setTo(2, 2);
+                    c.body.setCircle(50);
+                } else if (t > 3000) {
+                    console.log('capsule 3');
+                    c.animations.frame = 2;
+                    c.scale.setTo(3, 3);
+                    c.body.setCircle(75);
+                } else if (t > 2000) {
+                    console.log('capsule 2');
+                    c.animations.frame = 3;
+                    c.scale.setTo(4, 4);
+                    c.body.setCircle(100);
+                } else if (t > 1000) {
+                    console.log('capsule 1');
+                    c.animations.frame = 4;
+                    c.scale.setTo(5, 5);
+                    c.body.setCircle(125);
+                } else if (t > 0) {
+                    console.log('capsule 0');
+                    object.slice(i, 1); // remove the capsule from the array;
+                }
+
+            });
 
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
