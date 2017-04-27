@@ -228,30 +228,33 @@ BackTogether.Level2.prototype = {
             var now = this.time.now;
             this.capsules.forEach(function (c, i, object) {
                 var t = c.hatchingTime - now;
-                if (t>5000){
+                if (t>9000){
 
                 }else if (t > 4000) {
-                    console.log('capsule 4');
+                    c.scale.setTo(1.2, 1.2);
+                    c.body.setCircle(30);
+                }else if (t > 3000) {
+                    c.scale.setTo(1.6, 1.6);
+                    c.body.setCircle(40);
+                }else if (t > 2000) {
+                    c.scale.setTo(2.4, 2.4);
+                    c.body.setCircle(60);
+                }else if (t > 1000) {
+                    c.scale.setTo(3.2, 3.2);
+                    c.body.setCircle(80);
+                }
+                else if (t > 500){
+
+                }
+                else if ( t > 400) {
                     c.animations.frame = 1;
-                    c.scale.setTo(2, 2);
-                    c.body.setCircle(50);
-                } else if (t > 3000) {
-                    console.log('capsule 3');
+                } else if (t > 300) {
                     c.animations.frame = 2;
-                    c.scale.setTo(3, 3);
-                    c.body.setCircle(75);
-                } else if (t > 2000) {
-                    console.log('capsule 2');
+                } else if (t > 200) {
                     c.animations.frame = 3;
-                    c.scale.setTo(4, 4);
-                    c.body.setCircle(100);
-                } else if (t > 1000) {
-                    console.log('capsule 1');
+                } else if (t > 100) {
                     c.animations.frame = 4;
-                    c.scale.setTo(5, 5);
-                    c.body.setCircle(125);
                 } else if (t > 0) {
-                    console.log('capsule 0');
                     object.slice(i, 1); // remove the capsule from the array;
                 }
 
