@@ -38,7 +38,8 @@ BackTogether.Level2.prototype = {
 
         //        legsLayer.resizeWorld();
         //        objectsLayer.resizeWorld();
-        map.setCollisionBetween(1, 8);
+        map.setCollisionBetween(1, 10);
+        // map.setCollisionBetween()
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
@@ -203,6 +204,16 @@ BackTogether.Level2.prototype = {
                     this.firingRobotCounting1Text.visible = false;
 
                     this.drone1.detectTime = 1000;
+
+                    var capsule = this.add.sprite(this.drone1.x, this.drone1.y, 'capsule');
+                    this.physics.p2.enable(capsule, true);
+                    capsule.body.data.gravityScale = 1;
+                    capsule.body.setCircle(25);
+                    if (this.drone1.body.velocity.x > 0){
+                        capsule.body.velocity.x = 200;
+                    }else{
+                        capsule.body.velocity.x = -200;
+                    }
 
                     console.log("yeah");
                 }
@@ -454,18 +465,21 @@ BackTogether.Level2.prototype = {
         this.hidePopUp.visible = false;
 
 
-        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '64px Aclonica', fill: '#F00' });
         this.firingRobotCounting1Text.visible = false;
+        this.firingRobotCounting1Text.scale.setTo(2, 2);
         this.firingRobotCounting1Text.fixedToCamera = true;
 
 
-        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '64px Aclonica', fill: '#F00' });
         this.firingRobotCounting2Text.visible = false;
+        this.firingRobotCounting2Text.scale.setTo(2, 2);
         this.firingRobotCounting2Text.fixedToCamera = true;
 
 
-        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '64px Aclonica', fill: '#F00' });
         this.firingRobotCounting3Text.visible = false;
+        this.firingRobotCounting3Text.scale.setTo(2, 2);
         this.firingRobotCounting3Text.fixedToCamera = true;
 
 
