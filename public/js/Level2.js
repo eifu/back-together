@@ -156,14 +156,10 @@ BackTogether.Level2.prototype = {
             // this.drones.forEach(function(d){
 
             // })
-<<<<<<< HEAD
-            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832) ) {
 
-                this.screenShake();
-=======
 
             if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832)) {
->>>>>>> eifu
+
                 if (this.drone1.detectTime > 0) {
                     this.screenShake();
 
