@@ -160,19 +160,32 @@ BackTogether.Level1.prototype = {
 //                else{
 //                    this.robot1.switchedOff = true;
 //                }
-            
-            
+//            
+                var tempThis = this;
                 this.robots.children.forEach(function (r) {
-                 if(this.checkOverlap(player, r)){
+                 if(tempThis.checkOverlap(player, r)){
                      if(!r.switchedOff && !r.vulnerable){
-                         this.screenShake();
-                         this.player.Damaged();
+                         tempThis.screenShake();
+                         tempThis.playerDamaged();
                      }
                      else {
                          r.switchedOff = true;
                      }
                  }   
                 });
+            
+            
+//            for(var i = 0; i < this.robots.children.length; i++){
+//                if(this.checkOverlap(player, this.robots.children[i])){
+//                    if(!this.robots.children[i].switchedOff && !this.robots.children[i].vulnerable){
+//                        this.screenShake();
+//                        this.player.Damaged();
+//                    }
+//                    else{
+//                        this.robots.children[i].switchedOff = true;
+//                    }
+//                    }
+//                }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
