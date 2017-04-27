@@ -155,15 +155,53 @@ BackTogether.Level2.prototype = {
             // })
             if (this.checkOverlap(player, this.drone1.light) && !invincibilityOff && !(576 < player.body.x && player.body.x < 832)) {
                 this.screenShake();
-                this.drone1.detectTime -= 20;
-                this.drone1.light.animations.frame = 1; 
-                this.drone1.light.scale.setTo(1 * this.drone1.detectTime / 1000, 3 * this.drone1.detectTime / 1000)
-                this.hidePopUp.visible = true;
+                if (this.drone1.detectTime > 0) {
+                    this.drone1.detectTime -= 20;
+                    this.drone1.light.animations.frame = 1;
+                    this.drone1.light.scale.setTo(1 * this.drone1.detectTime / 1000, 3 * this.drone1.detectTime / 1000)
+                    this.hidePopUp.visible = true;
+                } else if (this.drone1.detectTime == -1) {
+
+
+                } else {
+                    this.drone1.detectTime = -1;
+                    this.drone1.firingRobotTime = this.time.now + 3000;
+                    this.drone1.light.scale.setTo(1, 3);
+                    this.drone1.light.animations.frame = 2;
+                }
             } else {
-                // this.drone1.detectTime = 1000;
-                this.drone1.light.scale.setTo(1,3);
-                this.drone1.light.animations.frame = 0;
-                this.hidePopUp.visible = false;
+
+
+                if (this.drone1.detectTime < 0) {
+                    var t = this.time.now - this.drone1.firingRobotTime;
+                    // console.log(t);
+                    if (t < -2000) {
+                        console.log('1');
+                        this.firingRobotCounting3Text.visible = true;
+                    } else if (t < -1000) {
+                        console.log('2');
+                        this.firingRobotCounting3Text.visible = false;
+                        this.firingRobotCounting2Text.visible = true;
+
+                    } else if (t < 0) {
+                        console.log('3');
+                        this.firingRobotCounting2Text.visible = false;
+                        this.firingRobotCounting1Text.visible = true;
+
+                    } else {
+                        this.firingRobotCounting1Text.visible = false;
+
+                        this.drone1.detectTime = 1000;
+                        console.log("yeah");
+                    }
+                } else {
+
+
+                    // this.drone1.detectTime = 1000;
+                    this.drone1.light.scale.setTo(1, 3);
+                    this.drone1.light.animations.frame = 0;
+                    this.hidePopUp.visible = false;
+                }
             }
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
@@ -408,8 +446,24 @@ BackTogether.Level2.prototype = {
         this.hidePopUp.scale.setTo(7, 7);
         this.hidePopUp.anchor.setTo(0.5, 0.5);
         this.hidePopUp.fixedToCamera = true;
-        // console.log(this.hidePopUp); .
         this.hidePopUp.visible = false;
+
+
+        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting1Text.visible = false;
+        this.firingRobotCounting1Text.fixedToCamera = true;
+
+
+        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting2Text.visible = false;
+        this.firingRobotCounting2Text.fixedToCamera = true;
+
+
+        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '60px Aclonica', fill: '#F00' });
+        this.firingRobotCounting3Text.visible = false;
+        this.firingRobotCounting3Text.fixedToCamera = true;
+
+
     },
 
     findObjectsByType: function (type, map, layer) {
