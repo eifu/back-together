@@ -4,8 +4,8 @@ BackTogether.Preloader = function (game) {
 
 var music;
 var pop;
-var volumeOff = false;
-var icon = 'volDownIcon';
+var volumeOn = false;
+var icon = 'volUpIcon';
 
 BackTogether.Preloader.prototype = {
 
@@ -45,6 +45,8 @@ BackTogether.Preloader.prototype = {
         this.load.image('droneLight', 'assets/images/droneLight.png');
         this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
         this.load.image('bodyMap', 'assets/images/bodyMap.png');
+        this.load.image('arrowLeft', 'assets/images/arrowLeft.png');
+        this.load.image('arrowRight', 'assets/images/arrowRight.png');
 
 
         this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 128, 64);
