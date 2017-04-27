@@ -129,7 +129,7 @@ BackTogether.Level2.prototype = {
 
     update: function (game) {
 
-//        console.log(player.body.x + " " this.robots.x);
+        //        console.log(player.body.x + " " this.robots.x);
         for (var i = 0; i < this.items.length; i++) {
             this.items.children[i].frame = 0;
         }
@@ -154,56 +154,60 @@ BackTogether.Level2.prototype = {
 
             // })
 
-            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832) ) {
-                this.screenShake();
+            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832)) {
                 if (this.drone1.detectTime > 0) {
+                    this.screenShake();
+
                     this.drone1.detectTime -= 20;
                     this.drone1.light.animations.frame = 1;
                     this.drone1.light.scale.setTo(1 * this.drone1.detectTime / 1000, 3 * this.drone1.detectTime / 1000)
                     this.hidePopUp.visible = true;
-                } else if (this.drone1.detectTime == -1) {
 
+                    console.log('166');
 
-                } else {
-                    this.drone1.detectTime = -1;
-                    this.drone1.firingRobotTime = this.time.now + 3000;
-                    this.drone1.light.scale.setTo(1, 3);
-                    this.drone1.light.animations.frame = 2;
+                    if (this.drone1.detectTime <= 0) {
+                        this.drone1.firingRobotTime = this.time.now + 3000;
+                        this.drone1.light.scale.setTo(1, 3);
+                        this.drone1.light.animations.frame = 2;
+
+                        console.log('150');
+                    }
                 }
             } else {
+                this.hidePopUp.visible = false;
+                this.drone1.light.scale.setTo(1, 3);
+                this.drone1.light.animations.frame = 0;
+            }
 
 
-                if (this.drone1.detectTime < 0) {
-                    var t = this.time.now - this.drone1.firingRobotTime;
-                    // console.log(t);
-                    if (t < -2000) {
-                        console.log('1');
-                        this.firingRobotCounting3Text.visible = true;
-                    } else if (t < -1000) {
-                        console.log('2');
-                        this.firingRobotCounting3Text.visible = false;
-                        this.firingRobotCounting2Text.visible = true;
+            if (this.drone1.detectTime <= 0) {
+                console.log("177")
+                this.drone1.light.animations.frame = 2;
 
-                    } else if (t < 0) {
-                        console.log('3');
-                        this.firingRobotCounting2Text.visible = false;
-                        this.firingRobotCounting1Text.visible = true;
+                var t = this.time.now - this.drone1.firingRobotTime;
+                // console.log(t);
+                if (t < -2000) {
+                    console.log('1');
+                    this.firingRobotCounting3Text.visible = true;
+                } else if (t < -1000) {
+                    console.log('2');
+                    this.firingRobotCounting3Text.visible = false;
+                    this.firingRobotCounting2Text.visible = true;
 
-                    } else {
-                        this.firingRobotCounting1Text.visible = false;
+                } else if (t < 0) {
+                    console.log('3');
+                    this.firingRobotCounting2Text.visible = false;
+                    this.firingRobotCounting1Text.visible = true;
 
-                        this.drone1.detectTime = 1000;
-                        console.log("yeah");
-                    }
                 } else {
+                    this.firingRobotCounting1Text.visible = false;
 
+                    this.drone1.detectTime = 1000;
 
-                    // this.drone1.detectTime = 1000;
-                    this.drone1.light.scale.setTo(1, 3);
-                    this.drone1.light.animations.frame = 0;
-                    this.hidePopUp.visible = false;
+                    console.log("yeah");
                 }
             }
+
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
