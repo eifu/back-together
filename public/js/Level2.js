@@ -333,11 +333,11 @@ BackTogether.Level2.prototype = {
 
         if (keys['I'].isDown && !iKeyDown) {
             iKeyDown = true;
-            if (!invincinbilityOn) {
-                invincinbilityOn = true;
+            if (!invincibilityOn) {
+                invincibilityOn = true;
             }
             else {
-                invincinbilityOn = false;
+                invincibilityOn = false;
             }
         }
         if (keys['I'].isUp) {
