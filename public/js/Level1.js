@@ -17,6 +17,7 @@ var playerEndPos;
 var map;
 var itemBox;
 var gameItems;
+var popup = false;
 
 BackTogether.Level1.prototype = {
 
@@ -79,7 +80,7 @@ BackTogether.Level1.prototype = {
 
         function unpause(event) {
             // Only act if paused
-            if (game.paused) {
+            if (game.paused && !popup) {
                 pausedLayer.destroy();
                 cancelBtn.destroy();
                 pausedBtnCard.destroy();
@@ -281,6 +282,7 @@ BackTogether.Level1.prototype = {
     },
     
     userFirstItem: function(game){
+        popup = true;
         var firstItemCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'firstItemCard')
         firstItemCard.anchor.setTo(0.5, 0.5);
         firstItemCard.scale.setTo(7, 4);
@@ -293,6 +295,7 @@ BackTogether.Level1.prototype = {
             okIcon.destroy();
             firstItemCardText.destroy();
             game.paused = false;
+            popup = false;
         }, game, 2, 1, 0);
         okBtn.anchor.setTo(0.5, 0.5);
         okBtn.scale.setTo(4, 4);
@@ -776,6 +779,7 @@ BackTogether.Level1.prototype = {
     },
     
         initObjectiveScreen: function (game) {
+        popup = true;
         objectiveCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + game.world.height/3, 'objectiveCard')
         objectiveCard.anchor.setTo(0.5, 0.5);
         objectiveCard.scale.setTo(7, 4);
@@ -788,6 +792,7 @@ BackTogether.Level1.prototype = {
             okIcon.destroy();
             objectiveCardText.destroy();
             game.paused = false;
+            popup = false;
         }, game, 2, 1, 0);
         okBtn.anchor.setTo(0.5, 0.5);
         okBtn.scale.setTo(4, 4);
