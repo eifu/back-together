@@ -155,11 +155,13 @@ BackTogether.Level2.prototype = {
             // })
             if (this.checkOverlap(player, this.drone1.light) && !invincibilityOff && !(576 < player.body.x && player.body.x < 832)) {
                 this.screenShake();
-                this.healthPoint -= 50;
-                this.healthbar.scale.setTo(1, this.healthPoint / 1000);
-                this.drone1.light.animations.frame = 1;
+                this.drone1.detectTime -= 20;
+                this.drone1.light.animations.frame = 1; 
+                this.drone1.light.scale.setTo(1 * this.drone1.detectTime / 1000, 3 * this.drone1.detectTime / 1000)
                 this.hidePopUp.visible = true;
             } else {
+                // this.drone1.detectTime = 1000;
+                this.drone1.light.scale.setTo(1,3);
                 this.drone1.light.animations.frame = 0;
                 this.hidePopUp.visible = false;
             }
@@ -510,6 +512,8 @@ BackTogether.Level2.prototype = {
     factoryDrone: function (x, y) {
         var d = this.drones.create(x, y, 'drone');
 
+        d.detectTime = 1000;
+
         this.physics.p2.enable(d, true);
         d.animations.add('left', [0, 1], 10, true);
         d.animations.add('left_damaged', [2, 3], 10, true)
@@ -523,9 +527,16 @@ BackTogether.Level2.prototype = {
         d.light.scale.setTo(1, 3);
         d.light.animations.frame = 0;
         d.light.body.clearShapes();
-        // d.light.body.addRectangle(128, 256, 0, 160, 0);
-        // d.lightRangeLeft.body.addPolygon({}, [[0,0],[0,38],[6,55],[22,63]]);
         d.light.sendToBack();
+
+        d.lightShadow = this.add.sprite(x, y + 30, 'droneLight');
+        this.physics.p2.enable(d.lightShadow, true);
+        d.lightShadow.body.data.gravityScale = 0;
+        d.lightShadow.anchor.setTo(0.5, 0);
+        d.lightShadow.scale.setTo(1, 3);
+        d.lightShadow.animations.frame = 0;
+        d.lightShadow.body.clearShapes();
+        d.lightShadow.sendToBack();
 
 
 
@@ -551,6 +562,7 @@ BackTogether.Level2.prototype = {
                     d.face = 'right';
                     d.body.moveRight(100);
                     d.light.body.moveRight(100);
+                    d.lightShadow.body.moveRight(100);
                 } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x) {
 
                     if (d.face == "left") {
@@ -558,6 +570,7 @@ BackTogether.Level2.prototype = {
                         d.body.moveLeft(100);
 
                         d.light.body.moveLeft(100);
+                        d.lightShadow.body.moveLeft(100);
                         d.animations.play('left');
 
 
@@ -565,6 +578,7 @@ BackTogether.Level2.prototype = {
 
                         d.body.moveRight(100);
                         d.light.body.moveRight(100);
+                        d.lightShadow.body.moveRight(100);
                         d.animations.play('right');
 
                     }
@@ -840,7 +854,7 @@ BackTogether.Level2.prototype = {
         volIcon.fixedToCamera = true;
         this.world.bringToTop(volIcon);
     },
-    initTimer:function(){
+    initTimer: function () {
 
         this.healthPoint = 6000;
 
@@ -865,7 +879,7 @@ BackTogether.Level2.prototype = {
 
 
 
-    
+
     }
 
 }
