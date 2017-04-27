@@ -131,6 +131,8 @@ BackTogether.Level1.prototype = {
         volBtn.fixedToCamera = true;
         volIcon.fixedToCamera = true;
         game.world.bringToTop(volIcon);
+        
+        this.initObjectiveScreen(game);
 
     },
 
@@ -154,6 +156,9 @@ BackTogether.Level1.prototype = {
                 if(!invincibilityOn){
                 this.screenShake();
                 this.playerDamaged();
+                }
+                else{
+                    this.robot1.switchedOff = true;
                 }
             }
 
@@ -243,15 +248,16 @@ BackTogether.Level1.prototype = {
     },
     
     playerAttack: function(){
-        if(player.body.x < this.robot1.x && player.body.velocity.x >= 0 && this.robot1.body.velocity.x > 0){
+        if(player.body.x < this.robot1.x && player.body.velocity.x >= 0 && this.robot1.body.velocity.x >= 0){
             invincibilityOn = true;
         }
-        else if(player.body.x > this.robot1.x && player.body.velocity.x <= 0 && this.robot1.body.velocity.x < 0){
+        else if(player.body.x > this.robot1.x && player.body.velocity.x <= 0 && this.robot1.body.velocity.x <= 0){
             invincibilityOn = true;
         }
         else{
             invincibilityOn = false;
         }
+        
         console.log(invincibilityOn);
     },
 
@@ -518,7 +524,7 @@ BackTogether.Level1.prototype = {
         this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
         this.robot1.robot1Left = _robot1Left;
         this.robot1.robot1Right = _robot1Right;
-
+        this.robot1.switchedOff = false;
     },
 
     factoryRobot: function (x, y) {
@@ -553,6 +559,7 @@ BackTogether.Level1.prototype = {
         var timeNow = this.time.now;
 
         this.robots.children.forEach(function (r) {
+            if(!r.switchedOff){
             if (r.state == "left") {
                 if (timeNow < r.stateTime) {
                     r.body.velocity.x = -25;
@@ -590,6 +597,7 @@ BackTogether.Level1.prototype = {
                     }
 
                 }
+            }
             }
         })
     },
@@ -683,6 +691,27 @@ BackTogether.Level1.prototype = {
         }
 
     },
+    
+        initObjectiveScreen: function (game) {
+
+        objectiveCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + game.world.height/3, 'objectiveCard')
+        objectiveCard.anchor.setTo(0.5, 0.5);
+
+        objectiveCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Objective: \n ASSASSINATION STYLE ... \n When the robot turns around, \n make contact with its butt.\n There is a switch to turn it off.', { font: '32px Aclonica', fill: '#FFF' });
+        objectiveCardText.anchor.setTo(0.5, 0);
+
+        okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + 520, 'okIcon', function(){
+            objectiveCard.destroy();
+            okBtn.destroy();
+            objectiveCardText.destroy();
+            game.paused = false;
+        }, game, 2, 1, 0);
+        okBtn.anchor.setTo(0.5, 0.5);
+//        okBtn.scale.setTo(1.6, 1.6);
+        game.world.bringToTop(okBtn);
+        game.paused = true;
+    },
+    
     resetOnClick: function () {
         this.score = 0;
         this.state.restart();

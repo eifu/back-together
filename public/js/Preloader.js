@@ -63,7 +63,7 @@ BackTogether.Preloader.prototype = {
         this.load.image('hold', 'assets/images/hold.png');
         this.load.image('tileset', 'assets/images/tileset.png');
         this.load.image('tileset2', 'assets/images/tileset2.png');
-        
+        this.load.image('objectiveCard', 'assets/images/objectiveCard.png');
         this.load.audio('crash', ['assets/audio/crash.mp3', 'assets/audio/crash.ogg']);
         
     },
