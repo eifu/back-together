@@ -44,7 +44,7 @@ BackTogether.Preloader.prototype = {
         this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
         this.load.image('droneLight', 'assets/images/droneLight.png');
         this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
-
+        this.load.image('firstItemCard', 'assets/images/firstItemCard.png');
 
         this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 128, 64);
         this.load.audio('bg', ['assets/audio/bgMusic.mp3', 'assets/audio/bgMusic.ogg']);

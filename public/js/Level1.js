@@ -16,11 +16,11 @@ var playerStartPos;
 var playerEndPos;
 var map;
 var itemBox;
+var gameItems;
 
 BackTogether.Level1.prototype = {
 
     create: function (game) {
-        
         game.physics.startSystem(Phaser.Physics.P2JS);
 
         WebFont.load(wfconfig);
@@ -259,6 +259,48 @@ BackTogether.Level1.prototype = {
         this.playerVictory();
         this.updateRobots();
         this.playerAttack();
+        
+//        player.items = { 'invisible': 2, 'stink': 1 };
+        this.collectItem(player, itemBox, game);
+    },
+        collectItem: function(obj1, obj2, game){
+            if(this.checkOverlap(obj1, obj2)){
+            if(!obj2.taken){
+                obj2.taken = true;
+                obj2.visible = false;
+                
+                //player.items will change to gameItems whenever we create more than 2 items
+                var randomItem = Math.floor((Math.random() * Object.keys(obj1.items).length));
+                var item = gameItems[randomItem];
+                player.items[item]++;
+                
+                // rest of the code in this collectItem should only be for level 1 after player got his/her very first game item ever
+                this.userFirstItem(game);
+            }
+        }
+    },
+    
+    userFirstItem: function(game){
+        var firstItemCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'firstItemCard')
+        firstItemCard.anchor.setTo(0.5, 0.5);
+        firstItemCard.scale.setTo(7, 4);
+        firstItemCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY - firstItemCard.height/3, ' CONGRATULATIONS! \n You just received your first game item! \n Press spacebar to view inventory.', { font: '32px Aclonica', fill: '#FFF' });
+        firstItemCardText.anchor.setTo(0.5, 0);
+
+        okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + firstItemCard.height/3, 'okBtn', function(){
+            firstItemCard.destroy();
+            okBtn.destroy();
+            okIcon.destroy();
+            firstItemCardText.destroy();
+            game.paused = false;
+        }, game, 2, 1, 0);
+        okBtn.anchor.setTo(0.5, 0.5);
+        okBtn.scale.setTo(4, 4);
+            
+        okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + firstItemCard.height/3, 'okIcon');
+        okIcon.anchor.setTo(0.5, 0.5);
+        game.world.bringToTop(okIcon);
+        game.paused = true;
     },
 
     checkOverlap: function (spriteA, spriteB) {
@@ -368,6 +410,7 @@ BackTogether.Level1.prototype = {
     initItemBox: function(){
         var itemBoxPos = this.findObjectsByType('itemBox', map, 'objectsLayer');
         itemBox = this.add.sprite(itemBoxPos[0].x, itemBoxPos[0].y, 'itemBox');
+        itemBox.taken = false;
         itemBox.animations.add('normal', [0, 1, 2, 3], 10, true);
         itemBox.animations.play('normal');
     },
@@ -403,7 +446,10 @@ BackTogether.Level1.prototype = {
         player.items = { 'invisible': 2, 'stink': 1 };
         player.itemBtns = [];
         player.itemNums = [];
-
+        
+        gameItems = [];
+        gameItems.push('invisible');
+        gameItems.push('stink');
     },
     initText: function () {
         // the level
@@ -730,7 +776,6 @@ BackTogether.Level1.prototype = {
     },
     
         initObjectiveScreen: function (game) {
-
         objectiveCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + game.world.height/3, 'objectiveCard')
         objectiveCard.anchor.setTo(0.5, 0.5);
         objectiveCard.scale.setTo(7, 4);
