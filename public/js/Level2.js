@@ -67,7 +67,11 @@ BackTogether.Level2.prototype = {
         // this.initRobots();
         this.initDrones();
 
-        this.capsules = [];
+        this.initTables();
+
+        this.capsules = this.add.group();
+
+        
 
         var inputs = [
             Phaser.Keyboard.ONE,
@@ -153,102 +157,101 @@ BackTogether.Level2.prototype = {
 
         } else {
 
-            // this.drones.forEach(function(d){
 
-            // })
+            var tempCheckOverlap = this.checkOverlap;
+            var tempThis = this;
+
+            var hidePopUpBool = false;
+
+            this.drones.children.forEach(function (d) {
+                if (tempCheckOverlap(player, d.light) && !invincibilityOn && !(tempThis.isUnderTable(player))) {
+
+                    if (d.detectTime > 0) {
+                        tempThis.screenShake();
+
+                        d.detectTime -= 20;
+                        d.light.animations.frame = 1;
+                        d.light.scale.setTo(1 * d.detectTime / 1000, 3 * d.detectTime / 1000)
+                        hidePopUpBool = true;
 
 
-            if (this.checkOverlap(player, this.drone1.light) && !invincibilityOn && !(576 < player.body.x && player.body.x < 832)) {
+                        if (d.detectTime <= 0) {
+                            d.firingRobotTime = tempThis.time.now + 3000;
+                            d.light.scale.setTo(1, 3);
+                            d.light.animations.frame = 2;
 
-                if (this.drone1.detectTime > 0) {
-                    this.screenShake();
-
-                    this.drone1.detectTime -= 20;
-                    this.drone1.light.animations.frame = 1;
-                    this.drone1.light.scale.setTo(1 * this.drone1.detectTime / 1000, 3 * this.drone1.detectTime / 1000)
-                    this.hidePopUp.visible = true;
-
-                    console.log('166');
-
-                    if (this.drone1.detectTime <= 0) {
-                        this.drone1.firingRobotTime = this.time.now + 3000;
-                        this.drone1.light.scale.setTo(1, 3);
-                        this.drone1.light.animations.frame = 2;
-
-                        console.log('150');
+                        }
                     }
-                }
-            } else {
-                this.hidePopUp.visible = false;
-                this.drone1.light.scale.setTo(1, 3);
-                this.drone1.light.animations.frame = 0;
-            }
-
-
-            if (this.drone1.detectTime <= 0) {
-                console.log("177")
-                this.drone1.light.animations.frame = 2;
-
-                var t = this.drone1.firingRobotTime - this.time.now;
-                // console.log(t);
-                if (t > 2000) {
-                    console.log('1');
-                    this.firingRobotCounting3Text.visible = true;
-                } else if (t > 1000) {
-                    console.log('2');
-                    this.firingRobotCounting3Text.visible = false;
-                    this.firingRobotCounting2Text.visible = true;
-
-                } else if (t > 0) {
-                    console.log('3');
-                    this.firingRobotCounting2Text.visible = false;
-                    this.firingRobotCounting1Text.visible = true;
-
                 } else {
-                    this.firingRobotCounting1Text.visible = false;
 
-                    this.drone1.detectTime = 1000;
+                    d.light.scale.setTo(1, 3);
+                    d.light.animations.frame = 0;
+                }
 
-                    var c = this.add.sprite(this.drone1.x, this.drone1.y, 'capsule');
-                    c.animations.frame = 0;
-                    this.physics.p2.enable(c);
-                    c.body.data.gravityScale = 10;
-                    c.body.setCircle(25);
-                    if (this.drone1.body.velocity.x > 0) {
-                        c.body.velocity.x = 200;
+
+                if (d.detectTime <= 0) {
+                    d.light.animations.frame = 2;
+
+                    var t = d.firingRobotTime - tempThis.time.now;
+                    // console.log(t);
+                    if (t > 2000) {
+                        tempThis.firingRobotCounting3Text.visible = true;
+                    } else if (t > 1000) {
+                        tempThis.firingRobotCounting3Text.visible = false;
+                        tempThis.firingRobotCounting2Text.visible = true;
+
+                    } else if (t > 0) {
+                        tempThis.firingRobotCounting2Text.visible = false;
+                        tempThis.firingRobotCounting1Text.visible = true;
+
                     } else {
-                        c.body.velocity.x = -200;
+                        tempThis.firingRobotCounting1Text.visible = false;
+
+                        d.detectTime = 1000;
+
+                        var c = tempThis.capsules.create(d.x, d.y, 'capsule');
+                        c.animations.frame = 0;
+                        tempThis.physics.p2.enable(c);
+                        c.body.data.gravityScale = 10;
+                        c.body.setCircle(25);
+                        if (d.body.velocity.x > 0) {
+                            c.body.velocity.x = 400;
+                        } else {
+                            c.body.velocity.x = -400;
+                        }
+
+                        c.hatchingTime = tempThis.time.now + 10000;
+
                     }
-
-                    c.hatchingTime = this.time.now + 10000;
-
-                    this.capsules.push(c);
-
-                    console.log("yeah");
                 }
+
+
+            });
+
+            if (hidePopUpBool) {
+                this.hidePopUp.visible = true;
+            }else{
+                this.hidePopUp.visible = false;
             }
-            var now = this.time.now;
-            this.capsules.forEach(function (c, i, object) {
+
+
+            var now = tempThis.time.now;
+            tempThis.capsules.children.forEach(function (c, i, object) {
                 var t = c.hatchingTime - now;
-                if (t>9000){
+                if (t > 5000) {
 
-                }else if (t > 4000) {
-                    c.scale.setTo(1.2, 1.2);
-                    c.body.setCircle(30);
-                }else if (t > 3000) {
-                    c.scale.setTo(1.6, 1.6);
-                    c.body.setCircle(40);
-                }else if (t > 2000) {
-                    c.scale.setTo(2.4, 2.4);
-                    c.body.setCircle(60);
-                }else if (t > 1000) {
-                    c.scale.setTo(3.2, 3.2);
-                    c.body.setCircle(80);
+                } else if (t > 1000) {
+
+                    var circle = 25 + (80 - 25) * (5000 - t) / 4000;
+                    var scale = 1 + (3.2 - 1) * (5000 - t) / 4000;
+
+                    c.scale.setTo(scale, scale);
+                    c.body.setCircle(circle);
                 }
-                else if (t > 500){
+                else if (t > 500) {
 
                 }
-                else if ( t > 400) {
+                else if (t > 400) {
                     c.animations.frame = 1;
                 } else if (t > 300) {
                     c.animations.frame = 2;
@@ -261,6 +264,9 @@ BackTogether.Level2.prototype = {
                 }
 
             });
+
+
+
 
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
@@ -608,20 +614,40 @@ BackTogether.Level2.prototype = {
     },
     initDrones: function () {
         this.drones = this.add.group();
-        _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
+        _drone1Start = this.findObjectsByType('d1s', map, 'objectsLayer')
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone1.leftPos = this.findObjectsByType('drone1Left', map, 'objectsLayer')
-        this.drone1.rightPos = this.findObjectsByType('drone1Right', map, 'objectsLayer');
+        this.drone1.leftPos = this.findObjectsByType('d1l', map, 'objectsLayer')[0];
+        this.drone1.rightPos = this.findObjectsByType('d1r', map, 'objectsLayer')[0];
+        console.log(this.drone1.leftPos);
 
-        // _drone2Start = this.findObjectsByType('drone2Start', map, 'objectsLayer')
-        // this.drone2 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        // this.drone2.leftPos = this.findObjectsByType('drone2Left', map, 'objectsLayer')
-        // this.drone2.rightPos = this.findObjectsByType('drone2Right', map, 'objectsLayer');
 
-        // _drone1Start = this.findObjectsByType('drone3Start', map, 'objectsLayer')
-        // this.drone3 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        // this.drone3.leftPos = this.findObjectsByType('drone3Left', map, 'objectsLayer')
-        // this.drone3.rightPos = this.findObjectsByType('drone3Right', map, 'objectsLayer');
+        _drone2Start = this.findObjectsByType('d2s', map, 'objectsLayer')
+        this.drone2 = this.factoryDrone(_drone2Start[0].x, _drone2Start[0].y);
+        this.drone2.leftPos = this.findObjectsByType('d2l', map, 'objectsLayer')[0];
+        this.drone2.rightPos = this.findObjectsByType('d2r', map, 'objectsLayer')[0];
+        console.log(this.drone2.leftPos);
+
+
+        _drone3Start = this.findObjectsByType('d3s', map, 'objectsLayer')
+        this.drone3 = this.factoryDrone(_drone3Start[0].x, _drone3Start[0].y);
+        this.drone3.leftPos = this.findObjectsByType('d3l', map, 'objectsLayer')[0];
+        this.drone3.rightPos = this.findObjectsByType('d3r', map, 'objectsLayer')[0];
+        console.log(this.drone3.leftPos);
+
+
+        _drone4Start = this.findObjectsByType('d4s', map, 'objectsLayer')
+        this.drone4 = this.factoryDrone(_drone4Start[0].x, _drone4Start[0].y);
+        this.drone4.leftPos = this.findObjectsByType('d4l', map, 'objectsLayer')[0];
+        this.drone4.rightPos = this.findObjectsByType('d4r', map, 'objectsLayer')[0];
+        console.log(this.drone4.leftPos);
+
+
+        _drone5Start = this.findObjectsByType('d5s', map, 'objectsLayer')
+        this.drone5 = this.factoryDrone(_drone5Start[0].x, _drone5Start[0].y);
+        this.drone5.leftPos = this.findObjectsByType('d5l', map, 'objectsLayer')[0];
+        this.drone5.rightPos = this.findObjectsByType('d5r', map, 'objectsLayer')[0];
+        console.log(this.drone5.leftPos);
+
 
     },
 
@@ -674,12 +700,12 @@ BackTogether.Level2.prototype = {
             if (d.state == 'patrol') {
                 // goomba
                 // console.log(d.rightPos[0].x);
-                if (d.body.x < d.leftPos[0].x) {
+                if (d.body.x < d.leftPos.x) {
                     d.face = 'right';
                     d.body.moveRight(100);
                     d.light.body.moveRight(100);
                     d.lightShadow.body.moveRight(100);
-                } else if (d.leftPos[0].x <= d.body.x && d.body.x <= d.rightPos[0].x) {
+                } else if (d.leftPos.x <= d.body.x && d.body.x <= d.rightPos.x) {
 
                     if (d.face == "left") {
 
@@ -721,8 +747,8 @@ BackTogether.Level2.prototype = {
         _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
 
         this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
-        this.robot1.robot1Left = _robot1Left;
-        this.robot1.robot1Right = _robot1Right;
+        this.robot1.robot1Left = _robot1Left[0];
+        this.robot1.robot1Right = _robot1Right[0];
 
     },
 
@@ -996,6 +1022,37 @@ BackTogether.Level2.prototype = {
 
 
 
-    }
+    },
+    initTables: function () {
+
+        this.tables = [];
+
+        var t = [this.findObjectsByType('table1Left', map, 'objectsLayer')[0], this.findObjectsByType('table1Right', map, 'objectsLayer')[0]];
+        this.tables.push(t);
+
+        var t = [this.findObjectsByType('table2Left', map, 'objectsLayer')[0], this.findObjectsByType('table2Right', map, 'objectsLayer')[0]];
+        this.tables.push(t);
+
+        var t = [this.findObjectsByType('table3Left', map, 'objectsLayer')[0], this.findObjectsByType('table3Right', map, 'objectsLayer')[0]];
+        this.tables.push(t);
+
+        var t = [this.findObjectsByType('table4Left', map, 'objectsLayer')[0], this.findObjectsByType('table4Right', map, 'objectsLayer')[0]];
+        this.tables.push(t);
+
+        var t = [this.findObjectsByType('table5Left', map, 'objectsLayer')[0], this.findObjectsByType('table5Right', map, 'objectsLayer')[0]];
+        this.tables.push(t);
+
+        console.log(this.tables);
+
+    },
+
+    isUnderTable: function (player) {
+
+        return this.tables.some(function (e, i, obj) {
+            return e[0].x < player.body.x && player.body.x < e[1].x;
+        });
+
+    },
+
 
 }
