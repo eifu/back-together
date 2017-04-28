@@ -844,7 +844,7 @@ BackTogether.Level1.prototype = {
             okIcon.destroy();
             image.destroy();
             confirmCardText.destroy();
-            
+            popup = false;
             player.items[item]--;
             
             for(var i = 0 ; i < pauseScreenBtns.length; i++){
@@ -868,7 +868,7 @@ BackTogether.Level1.prototype = {
             okIcon.destroy();
             image.destroy();
             confirmCardText.destroy();
-            
+            popup = false;
         for(var i = 0 ; i < pauseScreenBtns.length; i++){
             pauseScreenBtns[i].inputEnabled = true;
         }
