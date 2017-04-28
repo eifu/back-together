@@ -9,11 +9,22 @@ var icon = 'volUpIcon';
 
 BackTogether.Preloader.prototype = {
 
-    preload: function () {
-        this.preloadBar = this.add.sprite(this.world.centerX, this.world.centerY, "preloadBar");
-
+    preload: function (game) {
+        this.preloadBar = this.add.sprite(this.world.centerX, this.world.centerY + this.game.height/3, "preloadBar");
+        
+        this.stage.backgroundColor = "#b71c1c";
+        this.robot = this.add.sprite(this.game.world.centerX - this.game.width/2, this.game.world.centerY - this.game.height/4, 'robot');
+        this.robot.scale.setTo(2.5, 2.5);
+        this.drone = this.add.sprite(this.game.world.centerX, this.game.world.centerY - this.game.height/3, 'drone');
+        this.drone.anchor.setTo(0.5);
+        this.scientist = this.add.sprite(this.game.world.centerX + this.game.width/3, this.game.world.centerY, 'enemy1');
+        this.scientist.anchor.setTo(0.5, 0.5);
+        this.splashHand = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'splashHand');
+        this.splashHand.anchor.setTo(0.5, 0.5);
+        this.splashHand.scale.setTo(5, 5);
+        
         this.preloadBar.anchor.setTo(0.5, 0.5);
-
+        this.preloadBar.scale.setTo(3, 1);
         this.time.advancedTiming = true;
 
         this.load.setPreloadSprite(this.preloadBar);
@@ -40,8 +51,8 @@ BackTogether.Preloader.prototype = {
         this.load.image('nextIcon', 'assets/images/nextIcon.png');
         this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
         this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
-        this.load.spritesheet('robot', 'assets/images/robot.png',166,200);
-        this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
+//        this.load.spritesheet('robot', 'assets/images/robot.png',166,200);
+//        this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
         this.load.image('droneLight', 'assets/images/droneLight.png');
         this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
 
@@ -65,7 +76,7 @@ BackTogether.Preloader.prototype = {
         this.load.tilemap('lvl2', 'assets/js/level2.json', null, Phaser.Tilemap.TILED_JSON);
         this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
         this.load.atlasJSONArray('arm', 'assets/images/arm.png', 'assets/js/arm.json');
-        this.load.atlasJSONArray('enemy1', 'assets/images/enemy1.png', 'assets/js/enemy1.json');
+//        this.load.atlasJSONArray('enemy1', 'assets/images/enemy1.png', 'assets/js/enemy1.json');
         this.load.audio('pop', ['assets/audio/pop.mp3', 'assets/audio/pop.ogg']);
         this.load.spritesheet('pipe', 'assets/images/pipe.png', 64, 16);
         this.load.image('hold', 'assets/images/hold.png');
@@ -75,17 +86,20 @@ BackTogether.Preloader.prototype = {
         this.load.audio('crash', ['assets/audio/crash.mp3', 'assets/audio/crash.ogg']);
         this.load.spritesheet('okBtn', 'assets/images/okBtn.png', 24, 24);
         
+    
     },
 
     create: function () {
+        WebFont.load(wfconfig);
         music = this.add.audio('bg');
         music.loop = true;
         music.play();
         pop = this.add.audio('pop');
         crash = this.add.audio('crash');
         this.state.start("MainMenu");
-        
-    }
+        }
+
+    
 
 }
 
