@@ -616,6 +616,7 @@ BackTogether.Level2.prototype = {
         this.drone1.rightPos = this.findObjectsByType('d1r', map, 'objectsLayer')[0];
         console.log(this.drone1.leftPos);
 
+
         _drone2Start = this.findObjectsByType('d2s', map, 'objectsLayer')
         this.drone2 = this.factoryDrone(_drone2Start[0].x, _drone2Start[0].y);
         this.drone2.leftPos = this.findObjectsByType('d2l', map, 'objectsLayer')[0];
@@ -1042,13 +1043,17 @@ BackTogether.Level2.prototype = {
     },
 
     isUnderTable: function (player) {
-        this.tables.forEach(function (t) {
-            if (t[0].x < player.body.x && player.body.x < t[1].x) {
-                return true;
-            }
-        })
+        // this.tables.forEach(function (t) {
+        //     if (t[0].x < player.body.x && player.body.x < t[1].x) {
+        //         return true;
+        //     }
+        // })
 
-        return false;
-    }
+        return this.tables.some(function (e, i, obj) {
+            return e[0].x < player.body.x && player.body.x < e[1].x;
+        });
+
+    },
+
 
 }
