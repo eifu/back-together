@@ -69,7 +69,9 @@ BackTogether.Level2.prototype = {
 
         this.initTables();
 
-        this.capsules = [];
+        this.capsules = this.add.group();
+
+        
 
         var inputs = [
             Phaser.Keyboard.ONE,
@@ -181,8 +183,7 @@ BackTogether.Level2.prototype = {
                         }
                     }
                 } else {
-                    // tempThis.hidePopUp.visible = false;
-                    // hidePopUpBool = hidePopUpBool;
+
                     d.light.scale.setTo(1, 3);
                     d.light.animations.frame = 0;
                 }
@@ -208,20 +209,18 @@ BackTogether.Level2.prototype = {
 
                         d.detectTime = 1000;
 
-                        var c = tempThis.add.sprite(d.x, d.y, 'capsule');
+                        var c = tempThis.capsules.create(d.x, d.y, 'capsule');
                         c.animations.frame = 0;
                         tempThis.physics.p2.enable(c);
                         c.body.data.gravityScale = 10;
                         c.body.setCircle(25);
                         if (d.body.velocity.x > 0) {
-                            c.body.velocity.x = 200;
+                            c.body.velocity.x = 400;
                         } else {
-                            c.body.velocity.x = -200;
+                            c.body.velocity.x = -400;
                         }
 
                         c.hatchingTime = tempThis.time.now + 10000;
-
-                        tempThis.capsules.push(c);
 
                     }
                 }
@@ -237,7 +236,7 @@ BackTogether.Level2.prototype = {
 
 
             var now = tempThis.time.now;
-            tempThis.capsules.forEach(function (c, i, object) {
+            tempThis.capsules.children.forEach(function (c, i, object) {
                 var t = c.hatchingTime - now;
                 if (t > 5000) {
 
