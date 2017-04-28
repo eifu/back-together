@@ -18,6 +18,7 @@ var map;
 var itemBox;
 var gameItems;
 var popup = false;
+var pauseScreenBtns;
 
 BackTogether.Level1.prototype = {
 
@@ -695,6 +696,8 @@ BackTogether.Level1.prototype = {
     },
 
     initPausedScreen: function (game) {
+        pauseScreenBtns = [];
+        
         pausedLayer = map.createLayer('pausedLayer');
         pausedLayer.resizeWorld();
         pausedLayer.alpha = 0.6;
@@ -707,6 +710,7 @@ BackTogether.Level1.prototype = {
         cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, game, 2, 1, 0);
         cancelBtn.anchor.setTo(0.5, 0.5);
         cancelBtn.scale.setTo(0.3, 0.3);
+        pauseScreenBtns.push(cancelBtn);
 
         pausedBtnCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY + 260, 'Press Spacebar to resume', { font: '32px Aclonica', fill: '#FFF' });
         pausedBtnCardText.anchor.setTo(0.5, 0.5);
@@ -737,8 +741,10 @@ BackTogether.Level1.prototype = {
         this.paused = false;
             
         game.state.start('MainMenu')}, game, 2, 1, 0);
+        
         mmBtn.anchor.setTo(0.5, 0.5);
         mmBtn.scale.setTo(1.6, 1.6);
+        pauseScreenBtns.push(mmBtn);
 
         mmIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY + 55, 'mainMenuIcon');
         mmIcon.anchor.setTo(0.5, 0.5);
@@ -748,6 +754,7 @@ BackTogether.Level1.prototype = {
         resetBtn = this.add.button(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'pausedBtn', this.resetOnClick, game, 2, 1, 0);
         resetBtn.anchor.setTo(0.5, 0.5);
         resetBtn.scale.setTo(1.6, 1.6);
+        pauseScreenBtns.push(resetBtn);
 
         resetIcon = this.add.sprite(this.camera.view.centerX - 134, this.camera.view.centerY - 55, 'resetIcon');
         resetIcon.anchor.setTo(0.5, 0.5);
@@ -775,6 +782,7 @@ BackTogether.Level1.prototype = {
             var item1 = this.add.button(x, y, key, this.inventoryItemOnClick, this, 2, 1, 0);
             item1.anchor.setTo(0.5, 0.5);
             player.itemBtns.push(item1);
+            pauseScreenBtns.push(item1);
 
             var num = this.add.text(x + 16, y + 16, obj, { font: '32px Aclonica', fill: '#000' });
             num.anchor.setTo(0.5, 0.5);
@@ -812,6 +820,10 @@ BackTogether.Level1.prototype = {
     },
     
     initConfirmItem(item, message){
+        for(var i = 0 ; i < pauseScreenBtns.length; i++){
+            pauseScreenBtns[i].inputEnabled = false;
+        }
+        
         popup = true;
         var confirmCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'objectiveCard');
         confirmCard.anchor.setTo(0.5, 0.5);
@@ -832,8 +844,14 @@ BackTogether.Level1.prototype = {
             okIcon.destroy();
             image.destroy();
             confirmCardText.destroy();
-            this.game.paused = false;
-            popup = false;
+            
+            player.items[item]--;
+            
+            for(var i = 0 ; i < pauseScreenBtns.length; i++){
+            pauseScreenBtns[i].inputEnabled = true;
+        }
+//            this.game.paused = false;
+//            popup = false;
         }, this, 2, 1, 0);
         okBtn.anchor.setTo(0.5, 0.5);
         okBtn.scale.setTo(4, 4);
@@ -850,8 +868,12 @@ BackTogether.Level1.prototype = {
             okIcon.destroy();
             image.destroy();
             confirmCardText.destroy();
-            this.game.paused = false;
-            popup = false;
+            
+        for(var i = 0 ; i < pauseScreenBtns.length; i++){
+            pauseScreenBtns[i].inputEnabled = true;
+        }
+//            this.game.paused = false;
+//            popup = false;
         }, this, 2, 1, 0);
         noBtn.anchor.setTo(0.5, 0.5);
         noBtn.scale.setTo(4, 4);
@@ -910,6 +932,7 @@ BackTogether.Level1.prototype = {
     inventoryItemOnClick: function (e, game) {
 //        console.log('inventory item pressed');
         var message = "Ahhh ... " + e.key +  "!\n Want to use it?";
+        
         this.initConfirmItem(e.key, message)
     },
     playerVictory: function () {
