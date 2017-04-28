@@ -769,8 +769,10 @@ BackTogether.Level1.prototype = {
 
             var x = this.camera.view.centerX + i * 32;
             var y = this.camera.view.centerY - 58 + i + 32
+            
+//            var invenTemp = this.inventoryItemOnClick(key, game);
 
-            var item1 = this.add.button(x, y, key, this.inventoryItemOnClick, game, 2, 1, 0);
+            var item1 = this.add.button(x, y, key, this.inventoryItemOnClick, this, 2, 1, 0);
             item1.anchor.setTo(0.5, 0.5);
             player.itemBtns.push(item1);
 
@@ -807,6 +809,57 @@ BackTogether.Level1.prototype = {
         okIcon.anchor.setTo(0.5, 0.5);
         game.world.bringToTop(okIcon);
         game.paused = true;
+    },
+    
+    initConfirmItem(item, message){
+        popup = true;
+        var confirmCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'objectiveCard');
+        confirmCard.anchor.setTo(0.5, 0.5);
+        confirmCard.scale.setTo(7, 4);
+        
+        var image = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY - confirmCard.height/4, item);
+        image.anchor.setTo(0.5, 0.5);
+        image.scale.setTo(3, 3);
+        
+        var confirmCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY, message, { font: '32px Aclonica', fill: '#FFF' });
+        confirmCardText.anchor.setTo(0.5, 0);
+
+        var okBtn = this.add.button(this.camera.view.centerX - confirmCard.width/5, this.camera.view.centerY + confirmCard.height/3, 'yesBtn', function(){
+            confirmCard.destroy();
+            noBtn.destroy();
+            noIcon.destroy();
+            okBtn.destroy();
+            okIcon.destroy();
+            image.destroy();
+            confirmCardText.destroy();
+            this.game.paused = false;
+            popup = false;
+        }, this, 2, 1, 0);
+        okBtn.anchor.setTo(0.5, 0.5);
+        okBtn.scale.setTo(4, 4);
+            
+        var okIcon = this.add.sprite(this.camera.view.centerX- confirmCard.width/5, this.camera.view.centerY + confirmCard.height/3, 'okIcon');
+        okIcon.anchor.setTo(0.5, 0.5);
+        this.world.bringToTop(okIcon);
+        
+        var noBtn = this.add.button(this.camera.view.centerX + confirmCard.width/5, this.camera.view.centerY + confirmCard.height/3, 'noBtn', function(){
+            confirmCard.destroy();
+            noBtn.destroy();
+            noIcon.destroy();
+            okBtn.destroy();
+            okIcon.destroy();
+            image.destroy();
+            confirmCardText.destroy();
+            this.game.paused = false;
+            popup = false;
+        }, this, 2, 1, 0);
+        noBtn.anchor.setTo(0.5, 0.5);
+        noBtn.scale.setTo(4, 4);
+            
+        var noIcon = this.add.sprite(this.camera.view.centerX + confirmCard.width/5, this.camera.view.centerY + confirmCard.height/3, 'cancelIcon');
+        noIcon.anchor.setTo(0.5, 0.5);
+        noIcon.scale.setTo(1.25, 1.25);
+        this.world.bringToTop(noIcon);
     },
     
     resetOnClick: function () {
@@ -854,9 +907,10 @@ BackTogether.Level1.prototype = {
         inventoryTxt.visible = !inventoryTxt.visible;
         item1.visible = !item1.visible;
     },
-    inventoryItemOnClick: function (e) {
-        console.log('inventory item pressed');
-        console.log(e.key);
+    inventoryItemOnClick: function (e, game) {
+//        console.log('inventory item pressed');
+        var message = "Ahhh ... " + e.key +  "!\n Want to use it?";
+        this.initConfirmItem(e.key, message)
     },
     playerVictory: function () {
         if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
