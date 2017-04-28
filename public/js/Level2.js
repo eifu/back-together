@@ -155,11 +155,12 @@ BackTogether.Level2.prototype = {
 
         } else {
 
-            // this.drones.forEach(function(d){
 
-            // })
             var tempCheckOverlap = this.checkOverlap;
             var tempThis = this;
+
+            var hidePopUpBool = false;
+
             this.drones.children.forEach(function (d) {
                 if (tempCheckOverlap(player, d.light) && !invincibilityOn && !(tempThis.isUnderTable(player))) {
 
@@ -169,7 +170,7 @@ BackTogether.Level2.prototype = {
                         d.detectTime -= 20;
                         d.light.animations.frame = 1;
                         d.light.scale.setTo(1 * d.detectTime / 1000, 3 * d.detectTime / 1000)
-                        tempThis.hidePopUp.visible = true;
+                        hidePopUpBool = true;
 
 
                         if (d.detectTime <= 0) {
@@ -180,7 +181,8 @@ BackTogether.Level2.prototype = {
                         }
                     }
                 } else {
-                    tempThis.hidePopUp.visible = false;
+                    // tempThis.hidePopUp.visible = false;
+                    // hidePopUpBool = hidePopUpBool;
                     d.light.scale.setTo(1, 3);
                     d.light.animations.frame = 0;
                 }
@@ -223,43 +225,46 @@ BackTogether.Level2.prototype = {
 
                     }
                 }
-                var now = tempThis.time.now;
-                tempThis.capsules.forEach(function (c, i, object) {
-                    var t = c.hatchingTime - now;
-                    if (t > 5000) {
-
-                    } else if (t > 4000) {
-                        c.scale.setTo(1.2, 1.2);
-                        c.body.setCircle(30);
-                    } else if (t > 3000) {
-                        c.scale.setTo(1.6, 1.6);
-                        c.body.setCircle(40);
-                    } else if (t > 2000) {
-                        c.scale.setTo(2.4, 2.4);
-                        c.body.setCircle(60);
-                    } else if (t > 1000) {
-                        c.scale.setTo(3.2, 3.2);
-                        c.body.setCircle(80);
-                    }
-                    else if (t > 500) {
-
-                    }
-                    else if (t > 400) {
-                        c.animations.frame = 1;
-                    } else if (t > 300) {
-                        c.animations.frame = 2;
-                    } else if (t > 200) {
-                        c.animations.frame = 3;
-                    } else if (t > 100) {
-                        c.animations.frame = 4;
-                    } else if (t > 0) {
-                        object.slice(i, 1); // remove the capsule from the array;
-                    }
-
-                });
 
 
-            })
+            });
+
+            if (hidePopUpBool) {
+                this.hidePopUp.visible = true;
+            }else{
+                this.hidePopUp.visible = false;
+            }
+
+
+            var now = tempThis.time.now;
+            tempThis.capsules.forEach(function (c, i, object) {
+                var t = c.hatchingTime - now;
+                if (t > 5000) {
+
+                } else if (t > 1000) {
+
+                    var circle = 25 + (80 - 25) * (5000 - t) / 4000;
+                    var scale = 1 + (3.2 - 1) * (5000 - t) / 4000;
+
+                    c.scale.setTo(scale, scale);
+                    c.body.setCircle(circle);
+                }
+                else if (t > 500) {
+
+                }
+                else if (t > 400) {
+                    c.animations.frame = 1;
+                } else if (t > 300) {
+                    c.animations.frame = 2;
+                } else if (t > 200) {
+                    c.animations.frame = 3;
+                } else if (t > 100) {
+                    c.animations.frame = 4;
+                } else if (t > 0) {
+                    object.slice(i, 1); // remove the capsule from the array;
+                }
+
+            });
 
 
 
@@ -1043,11 +1048,6 @@ BackTogether.Level2.prototype = {
     },
 
     isUnderTable: function (player) {
-        // this.tables.forEach(function (t) {
-        //     if (t[0].x < player.body.x && player.body.x < t[1].x) {
-        //         return true;
-        //     }
-        // })
 
         return this.tables.some(function (e, i, obj) {
             return e[0].x < player.body.x && player.body.x < e[1].x;
