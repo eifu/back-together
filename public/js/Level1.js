@@ -172,6 +172,10 @@ BackTogether.Level1.prototype = {
                          tempThis.playerDamaged();
                      }
                      else {
+                         if(!r.switchedOff){
+                             message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
+                             tempThis.congratsCardPopup(game, message);
+                         }
                          r.switchedOff = true;
                      }
                  }   
@@ -276,31 +280,33 @@ BackTogether.Level1.prototype = {
                 player.items[item]++;
                 
                 // rest of the code in this collectItem should only be for level 1 after player got his/her very first game item ever
-                this.userFirstItem(game);
+                var message = "CONGRATULATIONS! \n You just received your first game item! \n After clicking OK, Press spacebar\n to view inventory."
+                this.congratsCardPopup(game, message);
             }
         }
     },
     
-    userFirstItem: function(game){
+    congratsCardPopup: function(game, message){
         popup = true;
-        var firstItemCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'firstItemCard')
-        firstItemCard.anchor.setTo(0.5, 0.5);
-        firstItemCard.scale.setTo(7, 4);
-        firstItemCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY - firstItemCard.height/3, ' CONGRATULATIONS! \n You just received your first game item! \n After clicking OK, Press spacebar\n to view inventory.', { font: '32px Aclonica', fill: '#FFF' });
-        firstItemCardText.anchor.setTo(0.5, 0);
+        var congratsCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'congratsCard')
+        congratsCard.anchor.setTo(0.5, 0.5);
+        congratsCard.scale.setTo(7, 4);
+        congratsCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY - congratsCard.height/3, message, { font: '32px Aclonica', fill: '#FFF' });
+        congratsCardText.anchor.setTo(0.5, 0);
 
-        okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + firstItemCard.height/3, 'okBtn', function(){
-            firstItemCard.destroy();
+        okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + congratsCard.height/3, 'okBtn', function(){
+            congratsCard.destroy();
             okBtn.destroy();
             okIcon.destroy();
-            firstItemCardText.destroy();
+            congratsCardText.destroy();
+            console.log("a");
             game.paused = false;
             popup = false;
         }, game, 2, 1, 0);
         okBtn.anchor.setTo(0.5, 0.5);
         okBtn.scale.setTo(4, 4);
             
-        okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + firstItemCard.height/3, 'okIcon');
+        okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + congratsCard.height/3, 'okIcon');
         okIcon.anchor.setTo(0.5, 0.5);
         game.world.bringToTop(okIcon);
         game.paused = true;

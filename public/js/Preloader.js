@@ -62,7 +62,7 @@ BackTogether.Preloader.prototype = {
         this.load.spritesheet('capsule', 'assets/images/capsule.png', 50, 50);
 
 
-        this.load.image('firstItemCard', 'assets/images/firstItemCard.png');
+        this.load.image('congratsCard', 'assets/images/congratsCard.png');
 
 
         this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 100, 200);
