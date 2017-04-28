@@ -286,7 +286,7 @@ BackTogether.Level1.prototype = {
         var firstItemCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'firstItemCard')
         firstItemCard.anchor.setTo(0.5, 0.5);
         firstItemCard.scale.setTo(7, 4);
-        firstItemCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY - firstItemCard.height/3, ' CONGRATULATIONS! \n You just received your first game item! \n Press spacebar to view inventory.', { font: '32px Aclonica', fill: '#FFF' });
+        firstItemCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY - firstItemCard.height/3, ' CONGRATULATIONS! \n You just received your first game item! \n After clicking OK, Press spacebar\n to view inventory.', { font: '32px Aclonica', fill: '#FFF' });
         firstItemCardText.anchor.setTo(0.5, 0);
 
         okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + firstItemCard.height/3, 'okBtn', function(){
