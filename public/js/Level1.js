@@ -242,9 +242,11 @@ BackTogether.Level1.prototype = {
             iKeyDown = true;
             if (!invincibilityOn) {
                 invincibilityOn = true;
+                this.toggleOnClick();
             }
             else {
                 invincibilityOn = false;
+                this.toggleOnClick();
             }
         }
         if (keys['I'].isUp) {
@@ -473,6 +475,9 @@ BackTogether.Level1.prototype = {
     toggleOnClick: function () {
         if (this.togglePausedMenuBtnOn.visible == true){
             console.log('toggle turns Off');            
+             invincibilityOn = false;
+        } else {
+             invincibilityOn = true;
         }
 
         this.togglePausedMenuBtnOff.visible = !this.togglePausedMenuBtnOff.visible;
