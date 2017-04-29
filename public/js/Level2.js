@@ -64,14 +64,14 @@ BackTogether.Level2.prototype = {
         this.initItems();
         this.initText();
         this.initTimer();
-        // this.initRobots();
+        this.initRobots();
         this.initDrones();
 
         this.initTables();
 
         this.capsules = this.add.group();
 
-        
+
 
         var inputs = [
             Phaser.Keyboard.ONE,
@@ -230,7 +230,7 @@ BackTogether.Level2.prototype = {
 
             if (hidePopUpBool) {
                 this.hidePopUp.visible = true;
-            }else{
+            } else {
                 this.hidePopUp.visible = false;
             }
 
@@ -260,6 +260,10 @@ BackTogether.Level2.prototype = {
                 } else if (t > 100) {
                     c.animations.frame = 4;
                 } else if (t > 0) {
+
+                    tempThis.robot1 = tempThis.factoryRobot(c.x, c.y);
+                    c.destroy(); 
+
                     object.slice(i, 1); // remove the capsule from the array;
                 }
 
@@ -351,7 +355,7 @@ BackTogether.Level2.prototype = {
         }
 
         // this.updateEnemies();
-        // this.updateRobots();
+        this.updateRobots();
         this.updateDrones();
 
     },
@@ -730,6 +734,7 @@ BackTogether.Level2.prototype = {
                     d.face = 'left';
                     d.body.moveLeft(100);
                     d.light.body.moveLeft(100);
+                    d.lightShadow.body.moveLeft(100);
                 }
 
             } else {
@@ -742,13 +747,13 @@ BackTogether.Level2.prototype = {
     initRobots: function () {
         this.robots = this.add.group();
 
-        _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
-        _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
-        _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
+        // _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
+        // _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
+        // _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
 
-        this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
-        this.robot1.robot1Left = _robot1Left[0];
-        this.robot1.robot1Right = _robot1Right[0];
+        // this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
+        // this.robot1.robot1Left = _robot1Left[0];
+        // this.robot1.robot1Right = _robot1Right[0];
 
     },
 
@@ -805,11 +810,11 @@ BackTogether.Level2.prototype = {
                     if (Math.random() < 0.5) {
                         r.state = 'left';
                         r.face = 'left';
-                        r.stateTime = timeNow + 1000;
+                        r.stateTime = timeNow + 5000;
                     } else {
                         r.state = 'right';
                         r.state = 'right';
-                        r.stateTime = timeNow + 1000;
+                        r.stateTime = timeNow + 5000;
                     }
                 } else {
                     r.animations.stop();
