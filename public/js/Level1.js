@@ -777,9 +777,9 @@ BackTogether.Level1.prototype = {
             if (!player.items.hasOwnProperty(key)) continue;
 
             var obj = player.items[key];
-
+            console.log("item: " + key);
             var x = this.camera.view.centerX + i * 32;
-            var y = this.camera.view.centerY - 58 + i + 32
+            var y = this.camera.view.centerY - 58 + i + 32;
 
             //            var invenTemp = this.inventoryItemOnClick(key, game);
 
@@ -851,7 +851,24 @@ BackTogether.Level1.prototype = {
             this.paused = false;
             popup = false; 
             player.items[item]--;
+            var indexOfItem = Object.keys(player.items).indexOf(item);
+            var x = player.itemNums[indexOfItem].x;
+            var y = player.itemNums[indexOfItem].y;
             
+            player.itemNums[indexOfItem].destroy();
+            
+            var num = this.add.text(x, y, player.items[item], { font: '32px Aclonica', fill: '#000' });
+            num.anchor.setTo(0.5, 0.5);
+            num.scale.setTo(0.5, 0.5);
+            
+            
+            
+            player.itemNums.push(num);
+            
+//            player.itemNums[indexOfItem].destroy();
+//            for (var i = 0; i < player.itemNums.length; i++) {
+//                player.itemNums[i].destroy();
+//            }
             for(var i = 0 ; i < pauseScreenBtns.length; i++){
             pauseScreenBtns[i].inputEnabled = true;
         }
