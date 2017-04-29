@@ -355,7 +355,7 @@ BackTogether.Level2.prototype = {
         }
 
         // this.updateEnemies();
-        // this.updateRobots();
+        this.updateRobots();
         this.updateDrones();
 
     },
@@ -809,11 +809,11 @@ BackTogether.Level2.prototype = {
                     if (Math.random() < 0.5) {
                         r.state = 'left';
                         r.face = 'left';
-                        r.stateTime = timeNow + 1000;
+                        r.stateTime = timeNow + 5000;
                     } else {
                         r.state = 'right';
                         r.state = 'right';
-                        r.stateTime = timeNow + 1000;
+                        r.stateTime = timeNow + 5000;
                     }
                 } else {
                     r.animations.stop();
