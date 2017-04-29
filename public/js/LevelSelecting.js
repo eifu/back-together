@@ -137,8 +137,9 @@ BackTogether.LevelSelecting.prototype = {
             b = this.add.button(x, y - 50, 'disabledLevelBtn',
                 function () {
                     console.log("currently rocked.");
+                    console.log(this);
                     this.camera.shake(0.01, 100);
-                }
+                },this
                 , 2, 1, 0);
 
         }
