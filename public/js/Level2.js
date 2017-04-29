@@ -734,6 +734,7 @@ BackTogether.Level2.prototype = {
                     d.face = 'left';
                     d.body.moveLeft(100);
                     d.light.body.moveLeft(100);
+                    d.lightShadow.body.moveLeft(100);
                 }
 
             } else {
