@@ -158,7 +158,7 @@ BackTogether.MainMenu.prototype = {
             helpTxt.anchor.setTo(0.5, 0.5);
             helpTxt.alpha = 0;
 
-            helpTxt2 = game.add.text(this.camera.view.centerX, this.camera.view.centerY+ 45, "←:left \n →:right \n ↑:jump \n ↓:hold item or drop item", helpFontStyle);
+            helpTxt2 = game.add.text(this.camera.view.centerX, this.camera.view.centerY+ 45, "←:left \n →:right \n ↓:hold item or drop item", helpFontStyle);
             helpTxt2.anchor.setTo(0.5, 0.5);
             helpTxt2.alpha = 0;
 

@@ -137,8 +137,9 @@ BackTogether.LevelSelecting.prototype = {
             b = this.add.button(x, y - 50, 'disabledLevelBtn',
                 function () {
                     console.log("currently rocked.");
+                    console.log(this);
                     this.camera.shake(0.01, 100);
-                }
+                },this
                 , 2, 1, 0);
 
         }
@@ -247,7 +248,7 @@ BackTogether.LevelSelecting.prototype = {
 
             this.buttons = [];
             for (var x = 0; x < 3; x++) {
-                this.buttons.push(this.createButton(levelSelecting, x,
+                this.buttons.push(this.createButton(this, x,
                     this.camera.view.centerX + (x - 1) * 250, this.camera.view.centerY, 200, 100));
             }
             this.initHandAnimation();
