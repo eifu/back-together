@@ -197,21 +197,29 @@ BackTogether.Level1.prototype = {
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
-                if (player.animations.frame == 1) {
+                if (player.animations.frame == 0) {
+                    player.body.velocity.x = -600;
+                } else if (player.animations.frame == 1) {
                     player.body.velocity.x = -800;
-                } else {
-                    player.body.velocity.x = 0;
-                }
+                } else if (player.animations.frame == 2) {
+                    player.body.velocity.x = -600;
+                } else  {
+                    player.body.velocity.x = -400;
+                } 
                 player.animations.play('left');
                 player.face = 'left';
             }
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
-                if (player.animations.frame == 5) {
+                if (player.animations.frame == 4) {
+                    player.body.velocity.x = 600;
+                } else if (player.animations.frame == 5) {
                     player.body.velocity.x = 800;
-                } else {
-                    player.body.velocity.x = 0;
-                }
+                } else if (player.animations.frame == 6) {
+                    player.body.velocity.x = 600;
+                } else  {
+                    player.body.velocity.x = 400;
+                } 
                 player.animations.play('right');
                 player.face = 'right';
             } else {
