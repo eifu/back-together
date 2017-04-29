@@ -156,7 +156,7 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-       
+
             var tempThis = this;
             this.robots.children.forEach(function (r) {
                 if (tempThis.checkOverlap(player, r)) {
@@ -242,9 +242,11 @@ BackTogether.Level1.prototype = {
             iKeyDown = true;
             if (!invincibilityOn) {
                 invincibilityOn = true;
+                this.toggleOnClick();
             }
             else {
                 invincibilityOn = false;
+                this.toggleOnClick();
             }
         }
         if (keys['I'].isUp) {
@@ -456,8 +458,30 @@ BackTogether.Level1.prototype = {
 
         //  The score
         this.scoreText = this.add.text(100, 100, 'Score: 0', { font: '32px Aclonica', fill: '#000' });
+
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
+
+        // toggle button. 
+        this.togglePausedMenuBtnOn = this.add.button(100, 140, 'toggleBtnOn', this.toggleOnClick, this, 2, 1, 0);
+        this.togglePausedMenuBtnOn.scale.setTo(0.5, 0.5);
+        this.togglePausedMenuBtnOn.fixedToCamera = true;
+        this.togglePausedMenuBtnOn.visible = false;
+
+        this.togglePausedMenuBtnOff = this.add.button(100, 140, 'toggleBtnOff', this.toggleOnClick, this, 2, 1, 0);
+        this.togglePausedMenuBtnOff.scale.setTo(0.5, 0.5);
+        this.togglePausedMenuBtnOff.fixedToCamera = true;
+    },
+    toggleOnClick: function () {
+        if (this.togglePausedMenuBtnOn.visible == true){
+            console.log('toggle turns Off');            
+             invincibilityOn = false;
+        } else {
+             invincibilityOn = true;
+        }
+
+        this.togglePausedMenuBtnOff.visible = !this.togglePausedMenuBtnOff.visible;
+        this.togglePausedMenuBtnOn.visible = !this.togglePausedMenuBtnOn.visible;
     },
 
     findObjectsByType: function (type, map, layer) {
@@ -684,13 +708,13 @@ BackTogether.Level1.prototype = {
                 r.body.velocity.x = 0;
                 r.animations.frame = 0;
                 r.alpha -= 0.005;               // change opacity so that it looks like it disappear.
-                if (r.alpha <= 0){
-                            console.log(obj);
+                if (r.alpha <= 0) {
+                    console.log(obj);
 
                     console.log('disappear');
                     r.destroy();
                     obj.slice(i, 1); // remove the dead robot from the array.
-                            console.log(obj);
+                    console.log(obj);
 
                 }
             }
