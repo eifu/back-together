@@ -248,7 +248,7 @@ BackTogether.LevelSelecting.prototype = {
 
             this.buttons = [];
             for (var x = 0; x < 3; x++) {
-                this.buttons.push(this.createButton(levelSelecting, x,
+                this.buttons.push(this.createButton(this, x,
                     this.camera.view.centerX + (x - 1) * 250, this.camera.view.centerY, 200, 100));
             }
             this.initHandAnimation();
