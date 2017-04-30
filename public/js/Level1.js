@@ -462,26 +462,42 @@ BackTogether.Level1.prototype = {
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
 
-        // toggle button. 
-        this.togglePausedMenuBtnOn = this.add.button(100, 140, 'toggleBtnOn', this.toggleOnClick, this, 2, 1, 0);
-        this.togglePausedMenuBtnOn.scale.setTo(0.5, 0.5);
-        this.togglePausedMenuBtnOn.fixedToCamera = true;
-        this.togglePausedMenuBtnOn.visible = false;
+        // toggle button for input.
+        this.toggleInputBtnKeyboard = this.add.button(100, 140, 'toggleInputBtnKeyboard', this.toggleOnClick, this, 2, 1, 0);
+        this.toggleInputBtnKeyboard.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnKeyboard.fixedToCamera = true;
+        this.toggleInputBtnKeyboard.WASDIcon = this.add.image(240, 140, 'WASDIcon');
+        this.toggleInputBtnKeyboard.WASDIcon.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnKeyboard.WASDIcon.fixedToCamera = true;
+        this.toggleInputBtnKeyboard.cursorIcon = this.add.image(320, 140, 'cursorIcon');
+        this.toggleInputBtnKeyboard.cursorIcon.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnKeyboard.cursorIcon.fixedToCamera = true;
 
-        this.togglePausedMenuBtnOff = this.add.button(100, 140, 'toggleBtnOff', this.toggleOnClick, this, 2, 1, 0);
-        this.togglePausedMenuBtnOff.scale.setTo(0.5, 0.5);
-        this.togglePausedMenuBtnOff.fixedToCamera = true;
+
+        this.toggleInputBtnMouse = this.add.button(100, 140, 'toggleInputBtnMouse', this.toggleOnClick, this, 2, 1, 0);
+        this.toggleInputBtnMouse.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnMouse.fixedToCamera = true;
+        this.toggleInputBtnMouse.visible = false;
+        this.toggleInputBtnMouse.mouseIcon = this.add.image(240, 140, 'mouseIcon');
+        this.toggleInputBtnMouse.mouseIcon.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnMouse.mouseIcon.fixedToCamera = true;
+        this.toggleInputBtnMouse.mouseIcon.visible = false;
+
     },
     toggleOnClick: function () {
-        if (this.togglePausedMenuBtnOn.visible == true){
-            console.log('toggle turns Off');            
-             invincibilityOn = false;
+        if (this.toggleInputBtnKeyboard.visible == true) {
+            console.log('toggle keyboard turns Off');
         } else {
-             invincibilityOn = true;
+            console.log('toggle mouse turns off');
         }
 
-        this.togglePausedMenuBtnOff.visible = !this.togglePausedMenuBtnOff.visible;
-        this.togglePausedMenuBtnOn.visible = !this.togglePausedMenuBtnOn.visible;
+        this.toggleInputBtnKeyboard.visible = !this.toggleInputBtnKeyboard.visible;
+        this.toggleInputBtnKeyboard.WASDIcon.visible = !this.toggleInputBtnKeyboard.WASDIcon.visible;
+        this.toggleInputBtnKeyboard.cursorIcon.visible = !this.toggleInputBtnKeyboard.cursorIcon.visible;
+
+        this.toggleInputBtnMouse.visible = !this.toggleInputBtnMouse.visible;
+        this.toggleInputBtnMouse.mouseIcon.visible = !this.toggleInputBtnMouse.mouseIcon.visible;
+
     },
 
     findObjectsByType: function (type, map, layer) {

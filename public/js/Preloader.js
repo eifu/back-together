@@ -84,8 +84,11 @@ BackTogether.Preloader.prototype = {
                 this.load.image('objectiveCard', 'assets/images/objectiveCard2.png');
                 this.load.audio('crash', ['assets/audio/crash.mp3', 'assets/audio/crash.ogg']);
                 this.load.spritesheet('okBtn', 'assets/images/okBtn.png', 24, 24);
-                this.load.spritesheet('toggleBtnOn', 'assets/images/toggleBtnOn.png', 250, 100);
-                this.load.spritesheet('toggleBtnOff', 'assets/images/toggleBtnOff.png', 250, 100);
+                this.load.spritesheet('toggleInputBtnKeyboard', 'assets/images/toggleInputBtnKeyboard.png', 250, 100);
+                this.load.spritesheet('toggleInputBtnMouse', 'assets/images/toggleInputBtnMouse.png', 250, 100);
+                this.load.image('mouseIcon', 'assets/images/mouseIcon.png');
+                this.load.image('WASDIcon', 'assets/images/WASDIcon.png');
+                this.load.image('cursorIcon', 'assets/images/cursorIcon.png');
 
         },
 
