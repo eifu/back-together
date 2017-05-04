@@ -51,6 +51,7 @@ BackTogether.Level1.prototype = {
         this.initHealthBar();
         this.initRobots();
         this.initItemBox();
+        this.initVolIcon();
 
         var inputs = [
             Phaser.Keyboard.ONE,
@@ -81,7 +82,12 @@ BackTogether.Level1.prototype = {
 
         function unpause(event) {
             // Only act if paused
-            if (game.paused && !popup) {
+            if (popup) {
+                console.log('109');
+
+
+
+            } else if (game.paused) {
                 pausedLayer.destroy();
                 cancelBtn.destroy();
                 pausedBtnCard.destroy();
@@ -107,34 +113,7 @@ BackTogether.Level1.prototype = {
             }
         }
 
-        var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
-        volIcon.anchor.setTo(0.5, 0.5);
 
-        var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
-            if (!volumeOn) {
-                icon = 'volDownIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = true;
-                pop.mute = true;
-                crash.mute = true;
-            }
-            else {
-                icon = 'volUpIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = false;
-                pop.mute = false;
-                crash.mute = false;
-            }
-        }, 2, 1, 0);
-
-        volBtn.anchor.setTo(0.5, 0.5);
-        volBtn.width = 55;
-        volBtn.height = 60;
-        volBtn.fixedToCamera = true;
-        volIcon.fixedToCamera = true;
-        game.world.bringToTop(volIcon);
 
         this.initObjectiveScreen(game);
 
@@ -169,7 +148,7 @@ BackTogether.Level1.prototype = {
                     else {
                         if (!r.switchedOff) {
                             message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
-                            tempThis.congratsCardPopup(game, message);
+                            tempThis.initPopupCard(game, message);
                         }
                         r.switchedOff = true;
                     }
@@ -272,34 +251,34 @@ BackTogether.Level1.prototype = {
 
                 // rest of the code in this collectItem should only be for level 1 after player got his/her very first game item ever
                 var message = "CONGRATULATIONS! \n You just received your first game item! \n After clicking OK, Press spacebar\n to view inventory."
-                this.congratsCardPopup(game, message);
+                this.initPopupCard(game, message);
             }
         }
     },
 
-    congratsCardPopup: function (game, message) {
+    initPopupCard: function (game, message) {
         popup = true;
-        var congratsCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'congratsCard')
-        congratsCard.anchor.setTo(0.5, 0.5);
-        congratsCard.scale.setTo(7, 4);
-        congratsCardText = this.add.text(this.camera.view.centerX, this.camera.view.centerY - congratsCard.height / 3, message, { font: '32px Aclonica', fill: '#FFF' });
-        congratsCardText.anchor.setTo(0.5, 0);
+        var popupCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'popupCard')
+        popupCard.anchor.setTo(0.5, 0.5);
+        popupCard.scale.setTo(7, 4);
+        popupCard.txt = this.add.text(this.camera.view.centerX, this.camera.view.centerY - popupCard.height / 3, message, { font: '32px Aclonica', fill: '#FFF' });
+        popupCard.txt.anchor.setTo(0.5, 0);
 
-        okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + congratsCard.height / 3, 'okBtn', function () {
-            congratsCard.destroy();
-            okBtn.destroy();
-            okIcon.destroy();
-            congratsCardText.destroy();
+        popupCard.okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + popupCard.height / 3, 'okBtn', function () {
+            popupCard.destroy();
+            popupCard.okBtn.destroy();
+            popupCard.okIcon.destroy();
+            popupCard.txt.destroy();
             console.log("a");
             game.paused = false;
             popup = false;
         }, game, 2, 1, 0);
-        okBtn.anchor.setTo(0.5, 0.5);
-        okBtn.scale.setTo(4, 4);
+        popupCard.okBtn.anchor.setTo(0.5, 0.5);
+        popupCard.okBtn.scale.setTo(4, 4);
 
-        okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + congratsCard.height / 3, 'okIcon');
-        okIcon.anchor.setTo(0.5, 0.5);
-        game.world.bringToTop(okIcon);
+        popupCard.okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + popupCard.height / 3, 'okIcon');
+        popupCard.okIcon.anchor.setTo(0.5, 0.5);
+        game.world.bringToTop(popupCard.okIcon);
         game.paused = true;
     },
 
@@ -680,19 +659,19 @@ BackTogether.Level1.prototype = {
 
         this.robots.children.forEach(function (r, i, obj) {
             if (!r.switchedOff) {
-               
-                if (timeNow > r.stateTime){
-                    if (r.state == "left"){
+
+                if (timeNow > r.stateTime) {
+                    if (r.state == "left") {
                         r.state = "leftIdle";
                         r.stateTime = timeNow + 3000;
-                    }else if (r.state == "right"){
+                    } else if (r.state == "right") {
                         r.state = "rightIdle";
                         r.stateTime = timeNow + 3000;
-                    }else { // r.state == "leftIdle" or r.state == "rightIdle"
-                        if (Math.random() < 0.9){
-                            if (r.state == "leftIdle"){
+                    } else { // r.state == "leftIdle" or r.state == "rightIdle"
+                        if (Math.random() < 0.9) {
+                            if (r.state == "leftIdle") {
                                 r.state = 'rightIdle';
-                            }else {
+                            } else {
                                 r.state = 'leftIdle';
                             }
 
@@ -700,7 +679,7 @@ BackTogether.Level1.prototype = {
                         } else {
                             if (Math.random() < 0.5) {
                                 r.state = 'left';
-                            }else {
+                            } else {
                                 r.state = 'right';
                             }
 
@@ -710,14 +689,14 @@ BackTogether.Level1.prototype = {
                     }
 
 
-                }else{
+                } else {
                     r.animations.play(r.state);
-                    if (r.state == 'left'){
+                    if (r.state == 'left') {
                         r.body.moveLeft(100);
-                    } else if (r.state == 'right'){
+                    } else if (r.state == 'right') {
                         r.body.moveRight(100);
                     }
-        
+
                 }
 
             }
@@ -866,8 +845,55 @@ BackTogether.Level1.prototype = {
         game.world.bringToTop(okIcon);
         game.paused = true;
     },
+    resetOnClick: function () {
+        this.score = 0;
+        this.state.restart();
+        this.paused = false;
+    },
+    restartLvl: function () {
+        this.game.state.start('LevelSelecting');
+    },
+    returnMM: function () {
+        game.state.start('MainMenu');
+        //        console.log(game.state);
+    },
+    nextLvl: function () {
+        console.log("to be implemented");
+    },
 
-    initConfirmItem(item, message) {
+    resumeOnClick: function () {
+        pausedLayer.destroy();
+        cancelBtn.destroy();
+        pausedBtnCard.destroy();
+        pausedBtnCardText.destroy();
+        resetBtn.destroy();
+        resetIcon.destroy();
+        mmBtn.destroy();
+        mmIcon.destroy();
+        inventoryBtn.destroy();
+        inventoryTxt.destroy();
+
+        for (var i = 0; i < player.itemBtns.length; i++) {
+            player.itemBtns[i].destroy();
+        }
+        for (var i = 0; i < player.itemNums.length; i++) {
+            player.itemNums[i].destroy();
+        }
+
+        player.itemBtns = [];
+        player.itemNums = [];
+
+        // Unpause the game
+        this.paused = false;
+    },
+    inventortOnClick: function () {
+        inventoryTxt.visible = !inventoryTxt.visible;
+        item1.visible = !item1.visible;
+    },
+    inventoryItemOnClick: function (e, game) {
+        //        console.log('inventory item pressed');
+        var message = "Ahhh ... " + e.key + "!\n Want to use it?";
+
         for (var i = 0; i < pauseScreenBtns.length; i++) {
             pauseScreenBtns[i].inputEnabled = false;
         }
@@ -931,57 +957,35 @@ BackTogether.Level1.prototype = {
         noIcon.scale.setTo(1.25, 1.25);
         this.world.bringToTop(noIcon);
     },
+    initVolIcon: function () {
+        var volIcon = this.add.sprite(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, icon);
+        volIcon.anchor.setTo(0.5, 0.5);
 
-    resetOnClick: function () {
-        this.score = 0;
-        this.state.restart();
-        this.paused = false;
-    },
-    restartLvl: function () {
-        this.game.state.start('LevelSelecting');
-    },
-    returnMM: function () {
-        game.state.start('MainMenu');
-        //        console.log(game.state);
-    },
-    nextLvl: function () {
-        console.log("to be implemented");
-    },
+        var volBtn = this.add.button(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, 'volBtn', function () {
+            if (!volumeOn) {
+                icon = 'volDownIcon';
+                volIcon.loadTexture(icon);
+                volumeOn = !volumeOn;
+                music.mute = true;
+                pop.mute = true;
+                crash.mute = true;
+            }
+            else {
+                icon = 'volUpIcon';
+                volIcon.loadTexture(icon);
+                volumeOn = !volumeOn;
+                music.mute = false;
+                pop.mute = false;
+                crash.mute = false;
+            }
+        }, 2, 1, 0);
 
-    resumeOnClick: function () {
-        pausedLayer.destroy();
-        cancelBtn.destroy();
-        pausedBtnCard.destroy();
-        pausedBtnCardText.destroy();
-        resetBtn.destroy();
-        resetIcon.destroy();
-        mmBtn.destroy();
-        mmIcon.destroy();
-        inventoryBtn.destroy();
-        inventoryTxt.destroy();
-
-        for (var i = 0; i < player.itemBtns.length; i++) {
-            player.itemBtns[i].destroy();
-        }
-        for (var i = 0; i < player.itemNums.length; i++) {
-            player.itemNums[i].destroy();
-        }
-
-        player.itemBtns = [];
-        player.itemNums = [];
-
-        // Unpause the game
-        this.paused = false;
-    },
-    inventortOnClick: function () {
-        inventoryTxt.visible = !inventoryTxt.visible;
-        item1.visible = !item1.visible;
-    },
-    inventoryItemOnClick: function (e, game) {
-        //        console.log('inventory item pressed');
-        var message = "Ahhh ... " + e.key + "!\n Want to use it?";
-
-        this.initConfirmItem(e.key, message)
+        volBtn.anchor.setTo(0.5, 0.5);
+        volBtn.width = 55;
+        volBtn.height = 60;
+        volBtn.fixedToCamera = true;
+        volIcon.fixedToCamera = true;
+        this.world.bringToTop(volIcon);
     },
     playerVictory: function () {
         if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
