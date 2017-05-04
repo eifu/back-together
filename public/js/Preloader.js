@@ -13,7 +13,7 @@ BackTogether.Preloader.prototype = {
                 this.preloadBar = this.add.sprite(this.world.centerX, this.world.centerY + this.game.height / 3, "preloadBar");
 
                 this.stage.backgroundColor = "#b71c1c";
-                this.robot = this.add.sprite(this.game.world.centerX - this.game.width / 2, this.game.world.centerY - this.game.height / 4, 'robot');
+                this.robot = this.add.sprite(this.game.world.centerX - this.game.width / 2, this.game.world.centerY - this.game.height / 4, 'splashRobot');
                 this.robot.scale.setTo(2.5, 2.5);
                 this.drone = this.add.sprite(this.game.world.centerX, this.game.world.centerY - this.game.height / 3, 'drone');
                 this.drone.anchor.setTo(0.5);
@@ -73,8 +73,13 @@ BackTogether.Preloader.prototype = {
                 this.load.image('volUpIcon', 'assets/images/VolUpIcon.png');
                 this.load.tilemap('lvl1', 'assets/js/level1.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('lvl2', 'assets/js/level2.json', null, Phaser.Tilemap.TILED_JSON);
+
+                
                 this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
                 this.load.atlasJSONArray('arm', 'assets/images/arm.png', 'assets/js/arm.json');
+                this.load.atlasJSONArray('robot', 'assets/images/robot.png', 'assets/js/robot.json');
+
+
                 //        this.load.atlasJSONArray('enemy1', 'assets/images/enemy1.png', 'assets/js/enemy1.json');
                 this.load.audio('pop', ['assets/audio/pop.mp3', 'assets/audio/pop.ogg']);
                 this.load.spritesheet('pipe', 'assets/images/pipe.png', 64, 16);

@@ -647,10 +647,11 @@ BackTogether.Level1.prototype = {
     factoryRobot: function (x, y) {
         var r = this.robots.create(x, y, 'robot');
         this.physics.p2.enable(r, true);
-        r.animations.add('right_attack', [0, 1], 10, true);
-        r.animations.add('right', [2, 3], 10, true)
-        r.animations.add('left_attack', [4, 5], 10, true);
-        r.animations.add("left", [6, 7], 10, true);
+
+        r.animations.add('leftIdle', Phaser.Animation.generateFrameNames('l', 1, 22), 10, true);
+        r.animations.add('rightIdle', Phaser.Animation.generateFrameNames('r', 1, 22), 10, true);
+        r.animations.add('left', Phaser.Animation.generateFrameNames('leftWalk', 1, 2), 10, true);
+        r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
 
         r.animations.play("left");
         r.face = 'left';
@@ -699,11 +700,11 @@ BackTogether.Level1.prototype = {
                         if (Math.random() < 0.5) {
                             r.state = 'left';
                             r.face = 'left';
-                            r.stateTime = timeNow + 1000;
+                            r.stateTime = timeNow + 3000;
                         } else {
                             r.state = 'right';
                             r.state = 'right';
-                            r.stateTime = timeNow + 1000;
+                            r.stateTime = timeNow + 3000;
                         }
                     } else {
                         r.animations.stop();

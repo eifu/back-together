@@ -33,13 +33,8 @@ BackTogether.Level2.prototype = {
 
         platformLayer.resizeWorld();
 
-        //        objectsLayer = map.createLayer('objectsLayer');
-        //        console.log(objectsLayer);
 
-        //        legsLayer.resizeWorld();
-        //        objectsLayer.resizeWorld();
         map.setCollisionBetween(1, 10);
-        // map.setCollisionBetween()
         // setCollisionBetween takes two indexes, starting and ending position.
         // BlackTile is at 1st position, RedTile is at 2nd position,
         // (1,1) makes only BlackTile collidable.
@@ -354,7 +349,6 @@ BackTogether.Level2.prototype = {
             iKeyDown = false;
         }
 
-        // this.updateEnemies();
         this.updateRobots();
         this.updateDrones();
 
@@ -760,10 +754,12 @@ BackTogether.Level2.prototype = {
     factoryRobot: function (x, y) {
         var r = this.robots.create(x, y, 'robot');
         this.physics.p2.enable(r, true);
-        r.animations.add('right_attack', [0, 1], 10, true);
-        r.animations.add('right', [2, 3], 10, true)
-        r.animations.add('left_attack', [4, 5], 10, true);
-        r.animations.add("left", [6, 7], 10, true);
+
+        r.animations.add('leftIdle', Phaser.Animation.generateFrameNames('l', 1, 22), 10, true);
+        r.animations.add('rightIdle', Phaser.Animation.generateFrameNames('r', 1, 22), 10, true);
+        r.animations.add('left', Phaser.Animation.generateFrameNames('leftWalk', 1, 2), 10, true);
+        r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
+
 
         r.animations.play("left");
         r.face = 'left';

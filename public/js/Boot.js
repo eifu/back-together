@@ -19,7 +19,7 @@ BackTogether.Boot.prototype = {
     preload:function(){
         
         this.load.image("preloadBar", "assets/images/preloadBar.png");
-        this.load.spritesheet('robot', 'assets/images/robot.png',166,200);
+        this.load.spritesheet('splashRobot', 'assets/images/robot.png',166,200);
         this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
         this.load.image('splashHand', 'assets/images/SplashHand.png');
         this.load.atlasJSONArray('enemy1', 'assets/images/enemy1.png', 'assets/js/enemy1.json');
