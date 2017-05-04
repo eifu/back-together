@@ -156,7 +156,7 @@ BackTogether.Level1.prototype = {
             player.damaged = true;
 
         } else {
-       
+
             var tempThis = this;
             this.robots.children.forEach(function (r) {
                 if (tempThis.checkOverlap(player, r)) {
@@ -242,9 +242,11 @@ BackTogether.Level1.prototype = {
             iKeyDown = true;
             if (!invincibilityOn) {
                 invincibilityOn = true;
+                this.toggleOnClick();
             }
             else {
                 invincibilityOn = false;
+                this.toggleOnClick();
             }
         }
         if (keys['I'].isUp) {
@@ -456,8 +458,46 @@ BackTogether.Level1.prototype = {
 
         //  The score
         this.scoreText = this.add.text(100, 100, 'Score: 0', { font: '32px Aclonica', fill: '#000' });
+
         this.levelText.fixedToCamera = true;
         this.scoreText.fixedToCamera = true;
+
+        // toggle button for input.
+        this.toggleInputBtnKeyboard = this.add.button(100, 140, 'toggleInputBtnKeyboard', this.toggleOnClick, this, 2, 1, 0);
+        this.toggleInputBtnKeyboard.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnKeyboard.fixedToCamera = true;
+        this.toggleInputBtnKeyboard.WASDIcon = this.add.image(240, 140, 'WASDIcon');
+        this.toggleInputBtnKeyboard.WASDIcon.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnKeyboard.WASDIcon.fixedToCamera = true;
+        this.toggleInputBtnKeyboard.cursorIcon = this.add.image(320, 140, 'cursorIcon');
+        this.toggleInputBtnKeyboard.cursorIcon.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnKeyboard.cursorIcon.fixedToCamera = true;
+
+
+        this.toggleInputBtnMouse = this.add.button(100, 140, 'toggleInputBtnMouse', this.toggleOnClick, this, 2, 1, 0);
+        this.toggleInputBtnMouse.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnMouse.fixedToCamera = true;
+        this.toggleInputBtnMouse.visible = false;
+        this.toggleInputBtnMouse.mouseIcon = this.add.image(240, 140, 'mouseIcon');
+        this.toggleInputBtnMouse.mouseIcon.scale.setTo(0.5, 0.5);
+        this.toggleInputBtnMouse.mouseIcon.fixedToCamera = true;
+        this.toggleInputBtnMouse.mouseIcon.visible = false;
+
+    },
+    toggleOnClick: function () {
+        if (this.toggleInputBtnKeyboard.visible == true) {
+            console.log('toggle keyboard turns Off');
+        } else {
+            console.log('toggle mouse turns off');
+        }
+
+        this.toggleInputBtnKeyboard.visible = !this.toggleInputBtnKeyboard.visible;
+        this.toggleInputBtnKeyboard.WASDIcon.visible = !this.toggleInputBtnKeyboard.WASDIcon.visible;
+        this.toggleInputBtnKeyboard.cursorIcon.visible = !this.toggleInputBtnKeyboard.cursorIcon.visible;
+
+        this.toggleInputBtnMouse.visible = !this.toggleInputBtnMouse.visible;
+        this.toggleInputBtnMouse.mouseIcon.visible = !this.toggleInputBtnMouse.mouseIcon.visible;
+
     },
 
     findObjectsByType: function (type, map, layer) {
@@ -607,13 +647,14 @@ BackTogether.Level1.prototype = {
     factoryRobot: function (x, y) {
         var r = this.robots.create(x, y, 'robot');
         this.physics.p2.enable(r, true);
-        r.animations.add('right_attack', [0, 1], 10, true);
-        r.animations.add('right', [2, 3], 10, true)
-        r.animations.add('left_attack', [4, 5], 10, true);
-        r.animations.add("left", [6, 7], 10, true);
+
+        r.animations.add('leftIdle', Phaser.Animation.generateFrameNames('l', 1, 22), 10, true);
+        r.animations.add('rightIdle', Phaser.Animation.generateFrameNames('r', 1, 22), 10, true);
+        r.animations.add('left', Phaser.Animation.generateFrameNames('leftWalk', 1, 2), 10, true);
+        r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
 
         r.animations.play("left");
-        r.face = 'left';
+        r.state = 'left';
 
         r.body.clearShapes();
 
@@ -630,6 +671,7 @@ BackTogether.Level1.prototype = {
         r.state = 'idle';
         r.switchedOff = false;
         r.vulnerable = false;
+        r.stateTime = this.time.now;
         return r;
     },
     updateRobots: function () {
@@ -638,44 +680,46 @@ BackTogether.Level1.prototype = {
 
         this.robots.children.forEach(function (r, i, obj) {
             if (!r.switchedOff) {
-                if (r.state == "left") {
-                    if (timeNow < r.stateTime) {
-                        r.body.velocity.x = -25;
-                        r.animations.play('left');
-                    } else {
-                        r.face = 'left';
-                        r.state = 'idle';
-                    }
-                } else if (r.state == "right") {
-                    if (timeNow < r.stateTime) {
-                        r.body.velocity.x = 25;
-                        r.animations.play("right");
-                    } else {
-                        r.face = 'right';
-                        r.state = 'idle';
-                    }
-                } else if (r.state == 'idle') {
-                    if (Math.random() < 0.1) {
-                        if (Math.random() < 0.5) {
-                            r.state = 'left';
-                            r.face = 'left';
-                            r.stateTime = timeNow + 1000;
-                        } else {
-                            r.state = 'right';
-                            r.state = 'right';
-                            r.stateTime = timeNow + 1000;
-                        }
-                    } else {
-                        r.animations.stop();
+               
+                if (timeNow > r.stateTime){
+                    if (r.state == "left"){
+                        r.state = "leftIdle";
+                        r.stateTime = timeNow + 3000;
+                    }else if (r.state == "right"){
+                        r.state = "rightIdle";
+                        r.stateTime = timeNow + 3000;
+                    }else { // r.state == "leftIdle" or r.state == "rightIdle"
+                        if (Math.random() < 0.9){
+                            if (r.state == "leftIdle"){
+                                r.state = 'rightIdle';
+                            }else {
+                                r.state = 'leftIdle';
+                            }
 
-                        if (r.face == 'left') {
-                            r.animations.frame = 2;
+                            r.stateTime = timeNow + 2000;
                         } else {
-                            r.animations.frame = 6;
+                            if (Math.random() < 0.5) {
+                                r.state = 'left';
+                            }else {
+                                r.state = 'right';
+                            }
+
+                            r.stateTime = timeNow + 3000;
                         }
 
                     }
+
+
+                }else{
+                    r.animations.play(r.state);
+                    if (r.state == 'left'){
+                        r.body.moveLeft(100);
+                    } else if (r.state == 'right'){
+                        r.body.moveRight(100);
+                    }
+        
                 }
+
             }
             else {
                 // if the robot is attacked, and it is already dead,
@@ -684,13 +728,13 @@ BackTogether.Level1.prototype = {
                 r.body.velocity.x = 0;
                 r.animations.frame = 0;
                 r.alpha -= 0.005;               // change opacity so that it looks like it disappear.
-                if (r.alpha <= 0){
-                            console.log(obj);
+                if (r.alpha <= 0) {
+                    console.log(obj);
 
                     console.log('disappear');
                     r.destroy();
                     obj.slice(i, 1); // remove the dead robot from the array.
-                            console.log(obj);
+                    console.log(obj);
 
                 }
             }
