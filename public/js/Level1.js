@@ -654,7 +654,7 @@ BackTogether.Level1.prototype = {
         r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
 
         r.animations.play("left");
-        r.face = 'left';
+        r.state = 'left';
 
         r.body.clearShapes();
 
@@ -671,6 +671,7 @@ BackTogether.Level1.prototype = {
         r.state = 'idle';
         r.switchedOff = false;
         r.vulnerable = false;
+        r.stateTime = this.time.now;
         return r;
     },
     updateRobots: function () {
@@ -679,44 +680,46 @@ BackTogether.Level1.prototype = {
 
         this.robots.children.forEach(function (r, i, obj) {
             if (!r.switchedOff) {
-                if (r.state == "left") {
-                    if (timeNow < r.stateTime) {
-                        r.body.velocity.x = -25;
-                        r.animations.play('left');
-                    } else {
-                        r.face = 'left';
-                        r.state = 'idle';
-                    }
-                } else if (r.state == "right") {
-                    if (timeNow < r.stateTime) {
-                        r.body.velocity.x = 25;
-                        r.animations.play("right");
-                    } else {
-                        r.face = 'right';
-                        r.state = 'idle';
-                    }
-                } else if (r.state == 'idle') {
-                    if (Math.random() < 0.1) {
-                        if (Math.random() < 0.5) {
-                            r.state = 'left';
-                            r.face = 'left';
-                            r.stateTime = timeNow + 3000;
-                        } else {
-                            r.state = 'right';
-                            r.state = 'right';
-                            r.stateTime = timeNow + 3000;
-                        }
-                    } else {
-                        r.animations.stop();
+               
+                if (timeNow > r.stateTime){
+                    if (r.state == "left"){
+                        r.state = "leftIdle";
+                        r.stateTime = timeNow + 3000;
+                    }else if (r.state == "right"){
+                        r.state = "rightIdle";
+                        r.stateTime = timeNow + 3000;
+                    }else { // r.state == "leftIdle" or r.state == "rightIdle"
+                        if (Math.random() < 0.9){
+                            if (r.state == "leftIdle"){
+                                r.state = 'rightIdle';
+                            }else {
+                                r.state = 'leftIdle';
+                            }
 
-                        if (r.face == 'left') {
-                            r.animations.frame = 2;
+                            r.stateTime = timeNow + 2000;
                         } else {
-                            r.animations.frame = 6;
+                            if (Math.random() < 0.5) {
+                                r.state = 'left';
+                            }else {
+                                r.state = 'right';
+                            }
+
+                            r.stateTime = timeNow + 3000;
                         }
 
                     }
+
+
+                }else{
+                    r.animations.play(r.state);
+                    if (r.state == 'left'){
+                        r.body.moveLeft(100);
+                    } else if (r.state == 'right'){
+                        r.body.moveRight(100);
+                    }
+        
                 }
+
             }
             else {
                 // if the robot is attacked, and it is already dead,

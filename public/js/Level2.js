@@ -760,9 +760,8 @@ BackTogether.Level2.prototype = {
         r.animations.add('left', Phaser.Animation.generateFrameNames('leftWalk', 1, 2), 10, true);
         r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
 
-
         r.animations.play("left");
-        r.face = 'left';
+        r.state = 'left';
 
         r.body.clearShapes();
 
@@ -770,60 +769,84 @@ BackTogether.Level2.prototype = {
         r.body.addRectangle(59, 90, 0, -8);
         r.body.addRectangle(155, 55, 0, 67);
 
-        r.body.moveLeft(100);
+        r.body.velocity.x = 100;
         r.body.velocity.y = 0;
 
         r.states = [['left', 'idle'], ['left', 'left'],
         ['right', 'idle'], ['right', 'right'],
         ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
         r.state = 'idle';
-
+        r.switchedOff = false;
+        r.vulnerable = false;
+        r.stateTime = this.time.now;
         return r;
     },
     updateRobots: function () {
 
         var timeNow = this.time.now;
 
-        this.robots.children.forEach(function (r) {
-            if (r.state == "left") {
-                if (timeNow < r.stateTime) {
-                    r.body.moveLeft(100);
-                    r.animations.play('left');
-                } else {
-                    r.face = 'left';
-                    r.state = 'idle';
-                }
-            } else if (r.state == "right") {
-                if (timeNow < r.stateTime) {
-                    r.body.moveRight(100);
-                    r.animations.play("right");
-                } else {
-                    r.face = 'right';
-                    r.state = 'idle';
-                }
-            } else if (r.state == 'idle') {
-                if (Math.random() < 0.1) {
-                    if (Math.random() < 0.5) {
-                        r.state = 'left';
-                        r.face = 'left';
-                        r.stateTime = timeNow + 5000;
-                    } else {
-                        r.state = 'right';
-                        r.state = 'right';
-                        r.stateTime = timeNow + 5000;
-                    }
-                } else {
-                    r.animations.stop();
+        this.robots.children.forEach(function (r, i, obj) {
+            if (!r.switchedOff) {
+               
+                if (timeNow > r.stateTime){
+                    if (r.state == "left"){
+                        r.state = "leftIdle";
+                        r.stateTime = timeNow + 3000;
+                    }else if (r.state == "right"){
+                        r.state = "rightIdle";
+                        r.stateTime = timeNow + 3000;
+                    }else { // r.state == "leftIdle" or r.state == "rightIdle"
+                        if (Math.random() < 0.9){
+                            if (r.state == "leftIdle"){
+                                r.state = 'rightIdle';
+                            }else {
+                                r.state = 'leftIdle';
+                            }
 
-                    if (r.face == 'left') {
-                        r.animations.frame = 0;
-                    } else {
-                        r.animations.frame = 6;
+                            r.stateTime = timeNow + 2000;
+                        } else {
+                            if (Math.random() < 0.5) {
+                                r.state = 'left';
+                            }else {
+                                r.state = 'right';
+                            }
+
+                            r.stateTime = timeNow + 3000;
+                        }
+
                     }
+
+
+                }else{
+                    r.animations.play(r.state);
+                    if (r.state == 'left'){
+                        r.body.moveLeft(100);
+                    } else if (r.state == 'right'){
+                        r.body.moveRight(100);
+                    }
+        
+                }
+
+            }
+            else {
+                // if the robot is attacked, and it is already dead,
+
+
+                r.body.velocity.x = 0;
+                r.animations.frame = 0;
+                r.alpha -= 0.005;               // change opacity so that it looks like it disappear.
+                if (r.alpha <= 0) {
+                    console.log(obj);
+
+                    console.log('disappear');
+                    r.destroy();
+                    obj.slice(i, 1); // remove the dead robot from the array.
+                    console.log(obj);
 
                 }
             }
-        })
+        });
+
     },
     initPausedScreen: function (game) {
         pausedLayer = map.createLayer('pausedLayer');
