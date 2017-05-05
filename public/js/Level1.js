@@ -18,6 +18,7 @@ var map;
 
 var gameItems;
 var popup = false;
+var confirm = false;
 var pause = false;
 var currentCard;        // 'currentCard' is used the objectiveCard, popupCard, confirmCard.
 var confirmCard;        // 'confirmCard' is used in pausedCard, inventory event.
@@ -65,11 +66,24 @@ BackTogether.Level1.prototype = {
                     console.log('109');
                     currentCard.okBtn.destroy();
                     currentCard.okIcon.destroy();
-                    currentCard.txt.destroy();                    
+                    currentCard.txt.destroy();
                     currentCard.destroy();
                     game.paused = false;
                     popup = false;
 
+                } else if (confirm) {
+                    confirmCard.noBtn.destroy();
+                    confirmCard.noIcon.destroy();
+                    confirmCard.okBtn.destroy();
+                    confirmCard.okIcon.destroy();
+                    confirmCard.image.destroy();
+                    confirmCard.txt.destroy();
+                    confirmCard.destroy();
+                    confirm = false;
+                    pause = true;
+                    for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
+                        currentCard.pauseScreenBtns[i].inputEnabled = true;
+                    }
                 } else if (pause) {
                     pausedLayer.destroy();
                     currentCard.cancelBtn.destroy();
@@ -886,7 +900,7 @@ BackTogether.Level1.prototype = {
             currentCard.pauseScreenBtns[i].inputEnabled = false;
         }
 
-        popup = true;
+        confirm = true;
         confirmCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'objectiveCard');
         confirmCard.anchor.setTo(0.5, 0.5);
         confirmCard.scale.setTo(7, 4);
@@ -899,14 +913,14 @@ BackTogether.Level1.prototype = {
         confirmCard.txt.anchor.setTo(0.5, 0);
 
         confirmCard.okBtn = this.add.button(this.camera.view.centerX - confirmCard.width / 5, this.camera.view.centerY + confirmCard.height / 3, 'yesBtn', function () {
-            confirmCard.destroy();
             confirmCard.noBtn.destroy();
             confirmCard.noIcon.destroy();
             confirmCard.okBtn.destroy();
             confirmCard.okIcon.destroy();
             confirmCard.image.destroy();
             confirmCard.txt.destroy();
-            popup = false;
+            confirmCard.destroy();
+            confirm = false;
             player.items[e.key]--;
 
             for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
@@ -923,14 +937,14 @@ BackTogether.Level1.prototype = {
         this.world.bringToTop(confirmCard.okIcon);
 
         confirmCard.noBtn = this.add.button(this.camera.view.centerX + confirmCard.width / 5, this.camera.view.centerY + confirmCard.height / 3, 'noBtn', function () {
-            confirmCard.destroy();
             confirmCard.noBtn.destroy();
             confirmCard.noIcon.destroy();
             confirmCard.okBtn.destroy();
             confirmCard.okIcon.destroy();
             confirmCard.image.destroy();
             confirmCard.txt.destroy();
-            popup = false;
+            confirmCard.destroy();
+            confirm = false;
             for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
                 currentCard.pauseScreenBtns[i].inputEnabled = true;
             }
