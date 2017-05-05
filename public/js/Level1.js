@@ -81,25 +81,6 @@ BackTogether.Level1.prototype = {
 
         } else {
             // if player does not get damaged. 
-            var tempThis = this;
-            this.robots.children.forEach(function (r) {
-                if (tempThis.checkOverlap(player, r)) {
-                    // if the player and a robot overlap, 
-
-                    if (!r.switchedOff && !r.vulnerable && !invincibilityOn) {
-                        tempThis.screenShake();
-                        tempThis.playerDamaged();
-
-                    }
-                    else {
-                        if (!r.switchedOff) {
-                            message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
-                            tempThis.initPopupCard(game, message);
-                        }
-                        r.switchedOff = true;
-                    }
-                }
-            });
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
                 //  Move to the left
@@ -129,18 +110,17 @@ BackTogether.Level1.prototype = {
                 player.animations.play('right');
                 player.face = 'right';
             } else {
-                 console.log(player.damaged);
 
                 if (player.damaged) {
-                    if (player.face == 'left'){
+                    if (player.face == 'left') {
                         player.animations.frame = 0
-                    }else {
+                    } else {
                         player.animations.frame = 4
                     }
                 } else {
                     player.animations.stop();
-                   
-                } 
+
+                }
             }
         }
 
@@ -175,13 +155,43 @@ BackTogether.Level1.prototype = {
         if (keys['I'].isUp) {
             iKeyDown = false;
         }
+        var tempThis = this;
+        this.robots.children.forEach(function (r) {
+
+            if (tempThis.checkOverlap(player, r)) {
+                // if the player and a robot overlap, 
+
+                if (!r.vulnerable && this.playerAttackFromLeft(r) ) {
+                    r.vulnerable = true;
+                    message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
+                    tempThis.initPopupCard(game, message);
+                }
+                else if (!r.vulnerable && playerAttackFromRight(r)) {
+                    r.vulnerable = true;
+                    message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
+                    tempThis.initPopupCard(game, message);
+                }
+
+                if (!r.vulnerable && !invincibilityOn) {
+                    tempThis.screenShake();
+                    tempThis.playerDamaged();
+                }
+
+            }
+        });
 
         this.playerVictory();
         this.updateRobots();
-        this.playerAttack();
 
         this.collectItem(player, this.itemBox, game);
     },
+    playerAttackFromLeft: function (r) {
+        return player.body.x < r.x && player.body.velocity.x >= 0 && r.body.velocity.x >= 0;
+    },
+    playerAttackFromRight: function (r) {
+        return player.body.x > r.x && player.body.velocity.x <= 0 && r.body.velocity.x <= 0;
+    },
+
     collectItem: function (obj1, obj2, game) {
         if (this.checkOverlap(obj1, obj2)) {
             if (!obj2.taken) {
@@ -237,22 +247,6 @@ BackTogether.Level1.prototype = {
     screenShake: function () {
         this.camera.shake(0.01, 100);
     },
-
-    playerAttack: function () {
-        this.robots.children.forEach(function (r) {
-            if (player.body.x < r.x && player.body.velocity.x >= 0 && r.body.velocity.x >= 0 || r.switchedOff) {
-                r.vulnerable = true;
-            }
-            else if (player.body.x > r.x && player.body.velocity.x <= 0 && r.body.velocity.x <= 0 || r.switchedOff) {
-                r.vulnerable = true;
-            }
-            else {
-                r.vulnerable = false;
-            }
-        }
-        )
-    },
-
     propUser: function () {
         for (var i = 0; i < this.item.length; i++) {
             if (!this.item.children[i].held) {
@@ -1006,7 +1000,6 @@ BackTogether.Level1.prototype = {
         if (key.game.paused) {
             console.log(key);
             if (popup) {
-                console.log('109');
                 currentCard.okBtn.destroy();
                 currentCard.okIcon.destroy();
                 currentCard.txt.destroy();
