@@ -59,7 +59,7 @@ BackTogether.Level1.prototype = {
 
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
-        
+
         this.initObjectiveScreen(game);
 
     },
@@ -69,18 +69,18 @@ BackTogether.Level1.prototype = {
         player.body.velocity.x = 0;
 
         if (this.time.now < player.damagedTime) {
+            // if player gets damaged.
             if (player.face == 'left') {
                 player.animations.play('left_damaged')
-                player.body.velocity.x = 100;
+                player.body.velocity.x = 100;  // player moves back
             } else {
                 player.animations.play("right_damaged")
-                player.body.velocity.x = -100;
+                player.body.velocity.x = -100;  // player moves back
             }
 
-            player.damaged = true;
 
         } else {
-
+            // if player does not get damaged. 
             var tempThis = this;
             this.robots.children.forEach(function (r) {
                 if (tempThis.checkOverlap(player, r)) {
@@ -89,6 +89,7 @@ BackTogether.Level1.prototype = {
                     if (!r.switchedOff && !r.vulnerable && !invincibilityOn) {
                         tempThis.screenShake();
                         tempThis.playerDamaged();
+
                     }
                     else {
                         if (!r.switchedOff) {
@@ -128,20 +129,18 @@ BackTogether.Level1.prototype = {
                 player.animations.play('right');
                 player.face = 'right';
             } else {
+                 console.log(player.damaged);
 
-                if (player.damaged && player.face == 'left') {
-                    player.animations.play('left');
+                if (player.damaged) {
+                    if (player.face == 'left'){
+                        player.animations.frame = 0
+                    }else {
+                        player.animations.frame = 4
+                    }
+                } else {
                     player.animations.stop();
-                    player.damaged = false;
-                } else if (player.face == 'left') {
-                    player.animations.stop();
-                } else if (player.damaged && player.face == 'right') {
-                    player.animations.play('right');
-                    player.animations.stop();
-                    player.damaged = false;
-                } else if (player.face == 'right') {
-                    player.animations.stop();
-                }
+                   
+                } 
             }
         }
 
@@ -292,27 +291,22 @@ BackTogether.Level1.prototype = {
         }
     },
     playerDamaged: function () {
-        if (player.damagedTime < this.time.now) {
-            crash.play();
-            player.damagedTime = this.time.now + 1000;
-            if (player.face == 'left') {
-                player.face = 'left_damagd';
-            } else {
-                player.face = 'right_damaged';
-            }
-            this.healthPoint -= 1;
-            if (this.healthPoint == 0) {
-                this.game.state.start('LoseScreen');
-            } else if (this.healthPoint < 2) {
-                this.heart.animations.play("quick");
-            } else if (this.healthPoint < 4) {
-                this.heart.animations.play("normal");
-            } else {
-                this.heart.animations.play("slow");
-            }
+        crash.play();  // sound effect 
+        player.damagedTime = this.time.now + 3000;
 
-            this.healthbar.scale.setTo(1, this.healthPoint);
+        this.healthPoint -= 1;
+        if (this.healthPoint == 0) {
+            this.game.state.start('LoseScreen');
+        } else if (this.healthPoint < 2) {
+            this.heart.animations.play("quick");
+        } else if (this.healthPoint < 4) {
+            this.heart.animations.play("normal");
+        } else {
+            this.heart.animations.play("slow");
         }
+
+        this.healthbar.scale.setTo(1, this.healthPoint);
+        player.damaged = true;
 
     },
     initItems: function () {
@@ -607,30 +601,43 @@ BackTogether.Level1.prototype = {
 
                 if (timeNow > r.stateTime) {
                     if (r.state == "left") {
+                        // left -> leftIdle
                         r.state = "leftIdle";
                         r.stateTime = timeNow + 3000;
+
                     } else if (r.state == "right") {
+                        // right -> rightIdle
                         r.state = "rightIdle";
                         r.stateTime = timeNow + 3000;
+
                     } else { // r.state == "leftIdle" or r.state == "rightIdle"
                         if (Math.random() < 0.9) {
                             if (r.state == "leftIdle") {
+                                // leftIdle -> rightIdle
                                 r.state = 'rightIdle';
+                                r.stateTime = timeNow + 2000;
+
                             } else {
+                                // rightIdle -> leftIdle
                                 r.state = 'leftIdle';
+                                r.stateTime = timeNow + 2000;
+
                             }
 
-                            r.stateTime = timeNow + 2000;
+
                         } else {
                             if (Math.random() < 0.5) {
+                                // leftIdle or rightIdle -> left
                                 r.state = 'left';
+                                r.stateTime = timeNow + 3000;
+
                             } else {
+                                // leftIdle or rightIdle -> right
                                 r.state = 'right';
+                                r.stateTime = timeNow + 3000;
+
                             }
-
-                            r.stateTime = timeNow + 3000;
                         }
-
                     }
 
 
@@ -994,58 +1001,58 @@ BackTogether.Level1.prototype = {
             keys[name[i]] = keyboard.addKey(input);
         });
     },
-    unpause:function(key) {
-            // Only act if paused
-            if (key.game.paused) {
-                console.log(key);
-                if (popup) {
-                    console.log('109');
-                    currentCard.okBtn.destroy();
-                    currentCard.okIcon.destroy();
-                    currentCard.txt.destroy();
-                    currentCard.destroy();
-                    key.game.paused = false;
-                    popup = false;
+    unpause: function (key) {
+        // Only act if paused
+        if (key.game.paused) {
+            console.log(key);
+            if (popup) {
+                console.log('109');
+                currentCard.okBtn.destroy();
+                currentCard.okIcon.destroy();
+                currentCard.txt.destroy();
+                currentCard.destroy();
+                key.game.paused = false;
+                popup = false;
 
-                } else if (confirm) {
-                    confirmCard.noBtn.destroy();
-                    confirmCard.noIcon.destroy();
-                    confirmCard.okBtn.destroy();
-                    confirmCard.okIcon.destroy();
-                    confirmCard.image.destroy();
-                    confirmCard.txt.destroy();
-                    confirmCard.destroy();
-                    confirm = false;
-                    pause = true;
-                    for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
-                        currentCard.pauseScreenBtns[i].inputEnabled = true;
-                    }
-                } else if (pause) {
-                    pausedLayer.destroy();
-                    currentCard.cancelBtn.destroy();
-                    currentCard.txt.destroy();
-                    currentCard.resetBtn.destroy();
-                    currentCard.resetIcon.destroy();
-                    currentCard.mmBtn.destroy();
-                    currentCard.mmIcon.destroy();
-                    currentCard.inventory.destroy();
-                    currentCard.inventoryTxt.destroy();
-                    currentCard.destroy();
-
-                    for (var i = 0; i < player.itemBtns.length; i++) {
-                        player.itemBtns[i].destroy();
-                    }
-                    for (var i = 0; i < player.itemNums.length; i++) {
-                        player.itemNums[i].destroy();
-                    }
-                    player.itemBtns = [];
-                    player.itemNums = [];
-
-                    // Unpause the game
-                    key.game.paused = false;
-                    pause = false;
+            } else if (confirm) {
+                confirmCard.noBtn.destroy();
+                confirmCard.noIcon.destroy();
+                confirmCard.okBtn.destroy();
+                confirmCard.okIcon.destroy();
+                confirmCard.image.destroy();
+                confirmCard.txt.destroy();
+                confirmCard.destroy();
+                confirm = false;
+                pause = true;
+                for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
+                    currentCard.pauseScreenBtns[i].inputEnabled = true;
                 }
+            } else if (pause) {
+                pausedLayer.destroy();
+                currentCard.cancelBtn.destroy();
+                currentCard.txt.destroy();
+                currentCard.resetBtn.destroy();
+                currentCard.resetIcon.destroy();
+                currentCard.mmBtn.destroy();
+                currentCard.mmIcon.destroy();
+                currentCard.inventory.destroy();
+                currentCard.inventoryTxt.destroy();
+                currentCard.destroy();
+
+                for (var i = 0; i < player.itemBtns.length; i++) {
+                    player.itemBtns[i].destroy();
+                }
+                for (var i = 0; i < player.itemNums.length; i++) {
+                    player.itemNums[i].destroy();
+                }
+                player.itemBtns = [];
+                player.itemNums = [];
+
+                // Unpause the game
+                key.game.paused = false;
+                pause = false;
             }
         }
+    }
 
 }
