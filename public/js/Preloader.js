@@ -62,7 +62,7 @@ BackTogether.Preloader.prototype = {
                 this.load.spritesheet('capsule', 'assets/images/capsule.png', 50, 50);
 
                 this.load.spritesheet('yesBtn', 'assets/images/yesBtn.png', 24, 24);
-                this.load.image('congratsCard', 'assets/images/congratsCard.png');
+                this.load.image('popupCard', 'assets/images/popupCard.png');
                 this.load.spritesheet('noBtn', 'assets/images/noBtn.png', 24, 24);
                 this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 100, 200);
                 this.load.audio('bg', ['assets/audio/bgMusic.mp3', 'assets/audio/bgMusic.ogg']);
