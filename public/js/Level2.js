@@ -190,17 +190,17 @@ BackTogether.Level2.prototype = {
                     var t = d.firingRobotTime - tempThis.time.now;
                     // console.log(t);
                     if (t > 2000) {
-                        tempThis.firingRobotCounting3Text.visible = true;
+                        d.firingRobotCounting3Text.visible = true;
                     } else if (t > 1000) {
-                        tempThis.firingRobotCounting3Text.visible = false;
-                        tempThis.firingRobotCounting2Text.visible = true;
+                        d.firingRobotCounting3Text.visible = false;
+                        d.firingRobotCounting2Text.visible = true;
 
                     } else if (t > 0) {
-                        tempThis.firingRobotCounting2Text.visible = false;
-                        tempThis.firingRobotCounting1Text.visible = true;
+                        d.firingRobotCounting2Text.visible = false;
+                        d.firingRobotCounting1Text.visible = true;
 
                     } else {
-                        tempThis.firingRobotCounting1Text.visible = false;
+                        d.firingRobotCounting1Text.visible = false;
 
                         d.detectTime = 1000;
 
@@ -257,7 +257,7 @@ BackTogether.Level2.prototype = {
                 } else if (t > 0) {
 
                     tempThis.robot1 = tempThis.factoryRobot(c.x, c.y);
-                    c.destroy(); 
+                    c.destroy();
 
                     object.slice(i, 1); // remove the capsule from the array;
                 }
@@ -511,25 +511,6 @@ BackTogether.Level2.prototype = {
         this.hidePopUp.fixedToCamera = true;
         this.hidePopUp.visible = false;
 
-
-        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '64px Aclonica', fill: '#F00' });
-        this.firingRobotCounting1Text.visible = false;
-        this.firingRobotCounting1Text.scale.setTo(2, 2);
-        this.firingRobotCounting1Text.fixedToCamera = true;
-
-
-        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '64px Aclonica', fill: '#F00' });
-        this.firingRobotCounting2Text.visible = false;
-        this.firingRobotCounting2Text.scale.setTo(2, 2);
-        this.firingRobotCounting2Text.fixedToCamera = true;
-
-
-        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '64px Aclonica', fill: '#F00' });
-        this.firingRobotCounting3Text.visible = false;
-        this.firingRobotCounting3Text.scale.setTo(2, 2);
-        this.firingRobotCounting3Text.fixedToCamera = true;
-
-
     },
 
     findObjectsByType: function (type, map, layer) {
@@ -679,6 +660,22 @@ BackTogether.Level2.prototype = {
         d.lightShadow.sendToBack();
 
 
+        d.firingRobotCounting1Text = this.add.text(x, y + 200, '1', { font: '64px Aclonica', fill: '#B71C1C' });
+        d.firingRobotCounting1Text.visible = false;
+        d.firingRobotCounting1Text.scale.setTo(3, 3);
+        d.firingRobotCounting1Text.anchor.setTo(0.5,0.5);
+
+        d.firingRobotCounting2Text = this.add.text(x, y + 300, '2', { font: '64px Aclonica', fill: '#B71C1C' });
+        d.firingRobotCounting2Text.visible = false;
+        d.firingRobotCounting2Text.scale.setTo(3, 3);
+        d.firingRobotCounting2Text.anchor.setTo(0.5,0.5);
+
+        d.firingRobotCounting3Text = this.add.text(x, y + 400, '3', { font: '64px Aclonica', fill: '#B71C1C' });
+        d.firingRobotCounting3Text.visible = false;
+        d.firingRobotCounting3Text.scale.setTo(3, 3);
+        d.firingRobotCounting3Text.anchor.setTo(0.5,0.5);
+
+
 
         d.anchor.setTo(0.5, 0.5);
 
@@ -703,14 +700,21 @@ BackTogether.Level2.prototype = {
                     d.body.moveRight(100);
                     d.light.body.moveRight(100);
                     d.lightShadow.body.moveRight(100);
+                    d.firingRobotCounting1Text.x = d.body.x;
+                    d.firingRobotCounting2Text.x = d.body.x;
+                    d.firingRobotCounting3Text.x = d.body.x;
+
                 } else if (d.leftPos.x <= d.body.x && d.body.x <= d.rightPos.x) {
 
                     if (d.face == "left") {
 
                         d.body.moveLeft(100);
-
                         d.light.body.moveLeft(100);
                         d.lightShadow.body.moveLeft(100);
+                        d.firingRobotCounting1Text.x = d.body.x;
+                        d.firingRobotCounting2Text.x = d.body.x;
+                        d.firingRobotCounting3Text.x = d.body.x;
+
                         d.animations.play('left');
 
 
@@ -719,6 +723,10 @@ BackTogether.Level2.prototype = {
                         d.body.moveRight(100);
                         d.light.body.moveRight(100);
                         d.lightShadow.body.moveRight(100);
+                        d.firingRobotCounting1Text.x = d.body.x;
+                        d.firingRobotCounting2Text.x = d.body.x;
+                        d.firingRobotCounting3Text.x = d.body.x;
+
                         d.animations.play('right');
 
                     }
@@ -729,6 +737,10 @@ BackTogether.Level2.prototype = {
                     d.body.moveLeft(100);
                     d.light.body.moveLeft(100);
                     d.lightShadow.body.moveLeft(100);
+                    d.firingRobotCounting1Text.x = d.body.x;
+                    d.firingRobotCounting2Text.x = d.body.x;
+                    d.firingRobotCounting3Text.x = d.body.x;
+
                 }
 
             } else {
@@ -787,19 +799,19 @@ BackTogether.Level2.prototype = {
 
         this.robots.children.forEach(function (r, i, obj) {
             if (!r.switchedOff) {
-               
-                if (timeNow > r.stateTime){
-                    if (r.state == "left"){
+
+                if (timeNow > r.stateTime) {
+                    if (r.state == "left") {
                         r.state = "leftIdle";
                         r.stateTime = timeNow + 3000;
-                    }else if (r.state == "right"){
+                    } else if (r.state == "right") {
                         r.state = "rightIdle";
                         r.stateTime = timeNow + 3000;
-                    }else { // r.state == "leftIdle" or r.state == "rightIdle"
-                        if (Math.random() < 0.9){
-                            if (r.state == "leftIdle"){
+                    } else { // r.state == "leftIdle" or r.state == "rightIdle"
+                        if (Math.random() < 0.9) {
+                            if (r.state == "leftIdle") {
                                 r.state = 'rightIdle';
-                            }else {
+                            } else {
                                 r.state = 'leftIdle';
                             }
 
@@ -807,7 +819,7 @@ BackTogether.Level2.prototype = {
                         } else {
                             if (Math.random() < 0.5) {
                                 r.state = 'left';
-                            }else {
+                            } else {
                                 r.state = 'right';
                             }
 
@@ -817,14 +829,14 @@ BackTogether.Level2.prototype = {
                     }
 
 
-                }else{
+                } else {
                     r.animations.play(r.state);
-                    if (r.state == 'left'){
+                    if (r.state == 'left') {
                         r.body.moveLeft(100);
-                    } else if (r.state == 'right'){
+                    } else if (r.state == 'right') {
                         r.body.moveRight(100);
                     }
-        
+
                 }
 
             }
