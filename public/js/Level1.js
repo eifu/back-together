@@ -57,63 +57,9 @@ BackTogether.Level1.prototype = {
         this.initVolIcon();
         this.initKeys();
 
-        keys['SPACE'].onDown.add(unpause, self);
-
-        function unpause(event) {
-            // Only act if paused
-            if (game.paused) {
-                if (popup) {
-                    console.log('109');
-                    currentCard.okBtn.destroy();
-                    currentCard.okIcon.destroy();
-                    currentCard.txt.destroy();
-                    currentCard.destroy();
-                    game.paused = false;
-                    popup = false;
-
-                } else if (confirm) {
-                    confirmCard.noBtn.destroy();
-                    confirmCard.noIcon.destroy();
-                    confirmCard.okBtn.destroy();
-                    confirmCard.okIcon.destroy();
-                    confirmCard.image.destroy();
-                    confirmCard.txt.destroy();
-                    confirmCard.destroy();
-                    confirm = false;
-                    pause = true;
-                    for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
-                        currentCard.pauseScreenBtns[i].inputEnabled = true;
-                    }
-                } else if (pause) {
-                    pausedLayer.destroy();
-                    currentCard.cancelBtn.destroy();
-                    currentCard.txt.destroy();
-                    currentCard.resetBtn.destroy();
-                    currentCard.resetIcon.destroy();
-                    currentCard.mmBtn.destroy();
-                    currentCard.mmIcon.destroy();
-                    currentCard.inventory.destroy();
-                    currentCard.inventoryTxt.destroy();
-                    currentCard.destroy();
-
-                    for (var i = 0; i < player.itemBtns.length; i++) {
-                        player.itemBtns[i].destroy();
-                    }
-                    for (var i = 0; i < player.itemNums.length; i++) {
-                        player.itemNums[i].destroy();
-                    }
-                    player.itemBtns = [];
-                    player.itemNums = [];
-
-                    // Unpause the game
-                    game.paused = false;
-                    pause = false;
-                }
-            }
-        }
-
-
-
+        keys['SPACE'].onDown.add(this.unpause, this);
+        keys['ENTER'].onDown.add(this.unpause, this);
+        
         this.initObjectiveScreen(game);
 
     },
@@ -1029,6 +975,7 @@ BackTogether.Level1.prototype = {
             Phaser.Keyboard.RIGHT,
             Phaser.Keyboard.DOWN,
             Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.ENTER,
             Phaser.Keyboard.W,
             Phaser.Keyboard.A,
             Phaser.Keyboard.S,
@@ -1038,7 +985,7 @@ BackTogether.Level1.prototype = {
             Phaser.Keyboard.I
         ];
         var name = [
-            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P', 'I'
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'ENTER', 'W', 'A', 'S', 'D', 'O', 'P', 'I'
         ]
 
         keys = {};
@@ -1046,6 +993,59 @@ BackTogether.Level1.prototype = {
         inputs.forEach(function (input, i) {
             keys[name[i]] = keyboard.addKey(input);
         });
-    }
+    },
+    unpause:function(key) {
+            // Only act if paused
+            if (key.game.paused) {
+                console.log(key);
+                if (popup) {
+                    console.log('109');
+                    currentCard.okBtn.destroy();
+                    currentCard.okIcon.destroy();
+                    currentCard.txt.destroy();
+                    currentCard.destroy();
+                    key.game.paused = false;
+                    popup = false;
+
+                } else if (confirm) {
+                    confirmCard.noBtn.destroy();
+                    confirmCard.noIcon.destroy();
+                    confirmCard.okBtn.destroy();
+                    confirmCard.okIcon.destroy();
+                    confirmCard.image.destroy();
+                    confirmCard.txt.destroy();
+                    confirmCard.destroy();
+                    confirm = false;
+                    pause = true;
+                    for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
+                        currentCard.pauseScreenBtns[i].inputEnabled = true;
+                    }
+                } else if (pause) {
+                    pausedLayer.destroy();
+                    currentCard.cancelBtn.destroy();
+                    currentCard.txt.destroy();
+                    currentCard.resetBtn.destroy();
+                    currentCard.resetIcon.destroy();
+                    currentCard.mmBtn.destroy();
+                    currentCard.mmIcon.destroy();
+                    currentCard.inventory.destroy();
+                    currentCard.inventoryTxt.destroy();
+                    currentCard.destroy();
+
+                    for (var i = 0; i < player.itemBtns.length; i++) {
+                        player.itemBtns[i].destroy();
+                    }
+                    for (var i = 0; i < player.itemNums.length; i++) {
+                        player.itemNums[i].destroy();
+                    }
+                    player.itemBtns = [];
+                    player.itemNums = [];
+
+                    // Unpause the game
+                    key.game.paused = false;
+                    pause = false;
+                }
+            }
+        }
 
 }
