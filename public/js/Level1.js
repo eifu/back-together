@@ -63,13 +63,16 @@ BackTogether.Level1.prototype = {
             if (game.paused) {
                 if (popup) {
                     console.log('109');
-
-
+                    currentCard.okBtn.destroy();
+                    currentCard.okIcon.destroy();
+                    currentCard.txt.destroy();                    
+                    currentCard.destroy();
+                    game.paused = false;
+                    popup = false;
 
                 } else if (pause) {
                     pausedLayer.destroy();
                     currentCard.cancelBtn.destroy();
-                    currentCard.destroy();
                     currentCard.txt.destroy();
                     currentCard.resetBtn.destroy();
                     currentCard.resetIcon.destroy();
@@ -77,6 +80,7 @@ BackTogether.Level1.prototype = {
                     currentCard.mmIcon.destroy();
                     currentCard.inventory.destroy();
                     currentCard.inventoryTxt.destroy();
+                    currentCard.destroy();
 
                     for (var i = 0; i < player.itemBtns.length; i++) {
                         player.itemBtns[i].destroy();
@@ -89,6 +93,7 @@ BackTogether.Level1.prototype = {
 
                     // Unpause the game
                     game.paused = false;
+                    pause = false;
                 }
             }
         }
@@ -238,27 +243,27 @@ BackTogether.Level1.prototype = {
 
     initPopupCard: function (game, message) {
         popup = true;
-        var popupCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'popupCard')
-        popupCard.anchor.setTo(0.5, 0.5);
-        popupCard.scale.setTo(7, 4);
-        popupCard.txt = this.add.text(this.camera.view.centerX, this.camera.view.centerY - popupCard.height / 3, message, { font: '32px Aclonica', fill: '#FFF' });
-        popupCard.txt.anchor.setTo(0.5, 0);
+        currentCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'popupCard')
+        currentCard.anchor.setTo(0.5, 0.5);
+        currentCard.scale.setTo(7, 4);
+        currentCard.txt = this.add.text(this.camera.view.centerX, this.camera.view.centerY - currentCard.height / 3, message, { font: '32px Aclonica', fill: '#FFF' });
+        currentCard.txt.anchor.setTo(0.5, 0);
 
-        popupCard.okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + popupCard.height / 3, 'okBtn', function () {
-            popupCard.destroy();
-            popupCard.okBtn.destroy();
-            popupCard.okIcon.destroy();
-            popupCard.txt.destroy();
+        currentCard.okBtn = this.add.button(this.camera.view.centerX, this.camera.view.centerY + currentCard.height / 3, 'okBtn', function () {
+            currentCard.destroy();
+            currentCard.okBtn.destroy();
+            currentCard.okIcon.destroy();
+            currentCard.txt.destroy();
             console.log("a");
             game.paused = false;
             popup = false;
         }, game, 2, 1, 0);
-        popupCard.okBtn.anchor.setTo(0.5, 0.5);
-        popupCard.okBtn.scale.setTo(4, 4);
+        currentCard.okBtn.anchor.setTo(0.5, 0.5);
+        currentCard.okBtn.scale.setTo(4, 4);
 
-        popupCard.okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + popupCard.height / 3, 'okIcon');
-        popupCard.okIcon.anchor.setTo(0.5, 0.5);
-        game.world.bringToTop(popupCard.okIcon);
+        currentCard.okIcon = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY + currentCard.height / 3, 'okIcon');
+        currentCard.okIcon.anchor.setTo(0.5, 0.5);
+        game.world.bringToTop(currentCard.okIcon);
         game.paused = true;
     },
 
