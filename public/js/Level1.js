@@ -18,6 +18,7 @@ var map;
 
 var gameItems;
 var popup = false;
+var pause = false;
 var currentCard;        // 'currentCard' is used the objectiveCard, popupCard, confirmCard.
 var confirmCard;        // 'confirmCard' is used in pausedCard, inventory event.
 
@@ -53,64 +54,42 @@ BackTogether.Level1.prototype = {
         this.initRobots();
         this.initItemBox();
         this.initVolIcon();
-
-        var inputs = [
-            Phaser.Keyboard.ONE,
-            Phaser.Keyboard.TWO,
-            Phaser.Keyboard.UP,
-            Phaser.Keyboard.LEFT,
-            Phaser.Keyboard.RIGHT,
-            Phaser.Keyboard.DOWN,
-            Phaser.Keyboard.SPACEBAR,
-            Phaser.Keyboard.W,
-            Phaser.Keyboard.A,
-            Phaser.Keyboard.S,
-            Phaser.Keyboard.D,
-            Phaser.Keyboard.O,
-            Phaser.Keyboard.P,
-            Phaser.Keyboard.I
-        ];
-        var name = [
-            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P', 'I'
-        ]
-
-        keys = {};
-        inputs.forEach(function (input, i) {
-            keys[name[i]] = game.input.keyboard.addKey(input);
-        });
+        this.initKeys();
 
         keys['SPACE'].onDown.add(unpause, self);
 
         function unpause(event) {
             // Only act if paused
-            if (popup) {
-                console.log('109');
+            if (game.paused) {
+                if (popup) {
+                    console.log('109');
 
 
 
-            } else if (game.paused) {
-                pausedLayer.destroy();
-                currentCard.cancelBtn.destroy();
-                currentCard.destroy();
-                currentCard.txt.destroy();
-                currentCard.resetBtn.destroy();
-                currentCard.resetIcon.destroy();
-                currentCard.mmBtn.destroy();
-                currentCard.mmIcon.destroy();
-                currentCard.inventory.destroy();
-                currentCard.inventoryTxt.destroy();
+                } else if (pause) {
+                    pausedLayer.destroy();
+                    currentCard.cancelBtn.destroy();
+                    currentCard.destroy();
+                    currentCard.txt.destroy();
+                    currentCard.resetBtn.destroy();
+                    currentCard.resetIcon.destroy();
+                    currentCard.mmBtn.destroy();
+                    currentCard.mmIcon.destroy();
+                    currentCard.inventory.destroy();
+                    currentCard.inventoryTxt.destroy();
 
-                for (var i = 0; i < player.itemBtns.length; i++) {
-                    player.itemBtns[i].destroy();
+                    for (var i = 0; i < player.itemBtns.length; i++) {
+                        player.itemBtns[i].destroy();
+                    }
+                    for (var i = 0; i < player.itemNums.length; i++) {
+                        player.itemNums[i].destroy();
+                    }
+                    player.itemBtns = [];
+                    player.itemNums = [];
+
+                    // Unpause the game
+                    game.paused = false;
                 }
-                for (var i = 0; i < player.itemNums.length; i++) {
-                    player.itemNums[i].destroy();
-                }
-                player.itemBtns = [];
-                player.itemNums = [];
-
-                // Unpause the game
-                game.paused = false;
             }
         }
 
@@ -729,6 +708,7 @@ BackTogether.Level1.prototype = {
         pausedLayer.resizeWorld();
         pausedLayer.alpha = 0.6;
         game.paused = true;
+        pause = true;
 
         currentCard = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY, 'pausedBtnCard')
         currentCard.anchor.setTo(0.5, 0.5);
@@ -897,8 +877,8 @@ BackTogether.Level1.prototype = {
         //        console.log('inventory item pressed');
         var message = "Ahhh ... " + e.key + "!\n Want to use it?";
 
-        for (var i = 0; i < pauseScreenBtns.length; i++) {
-            pauseScreenBtns[i].inputEnabled = false;
+        for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
+            currentCard.pauseScreenBtns[i].inputEnabled = false;
         }
 
         popup = true;
@@ -906,7 +886,7 @@ BackTogether.Level1.prototype = {
         confirmCard.anchor.setTo(0.5, 0.5);
         confirmCard.scale.setTo(7, 4);
 
-        confirmCard.image = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY - confirmCard.height / 4, item);
+        confirmCard.image = this.add.sprite(this.camera.view.centerX, this.camera.view.centerY - confirmCard.height / 4, e.key);
         confirmCard.image.anchor.setTo(0.5, 0.5);
         confirmCard.image.scale.setTo(3, 3);
 
@@ -922,10 +902,10 @@ BackTogether.Level1.prototype = {
             confirmCard.image.destroy();
             confirmCard.txt.destroy();
             popup = false;
-            player.items[item]--;
+            player.items[e.key]--;
 
-            for (var i = 0; i < pauseScreenBtns.length; i++) {
-                pauseScreenBtns[i].inputEnabled = true;
+            for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
+                currentCard.pauseScreenBtns[i].inputEnabled = true;
             }
             //            this.game.paused = false;
             //            popup = false;
@@ -946,14 +926,14 @@ BackTogether.Level1.prototype = {
             confirmCard.image.destroy();
             confirmCard.txt.destroy();
             popup = false;
-            for (var i = 0; i < pauseScreenBtns.length; i++) {
-                pauseScreenBtns[i].inputEnabled = true;
+            for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
+                currentCard.pauseScreenBtns[i].inputEnabled = true;
             }
             //            this.game.paused = false;
             //            popup = false;
         }, this, 2, 1, 0);
-        confirmCardnoBtn.anchor.setTo(0.5, 0.5);
-        confirmCardnoBtn.scale.setTo(4, 4);
+        confirmCard.noBtn.anchor.setTo(0.5, 0.5);
+        confirmCard.noBtn.scale.setTo(4, 4);
 
         confirmCard.noIcon = this.add.sprite(this.camera.view.centerX + confirmCard.width / 5, this.camera.view.centerY + confirmCard.height / 3, 'cancelIcon');
         confirmCard.noIcon.anchor.setTo(0.5, 0.5);
@@ -1020,6 +1000,33 @@ BackTogether.Level1.prototype = {
 
 
 
+    },
+    initKeys: function () {
+        var inputs = [
+            Phaser.Keyboard.ONE,
+            Phaser.Keyboard.TWO,
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.SPACEBAR,
+            Phaser.Keyboard.W,
+            Phaser.Keyboard.A,
+            Phaser.Keyboard.S,
+            Phaser.Keyboard.D,
+            Phaser.Keyboard.O,
+            Phaser.Keyboard.P,
+            Phaser.Keyboard.I
+        ];
+        var name = [
+            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P', 'I'
+        ]
+
+        keys = {};
+        var keyboard = this.input.keyboard;
+        inputs.forEach(function (input, i) {
+            keys[name[i]] = keyboard.addKey(input);
+        });
     }
 
 }
