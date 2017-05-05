@@ -17,7 +17,7 @@ var playerEndPos;
 var map;
 
 var gameItems;
-var popup = false;
+var popup = false;      // 'pupup', 'confirm', 'pause' are used in unpause function. these have to be global variables.
 var confirm = false;
 var pause = false;
 var currentCard;        // 'currentCard' is used the objectiveCard, popupCard, confirmCard.
@@ -161,12 +161,12 @@ BackTogether.Level1.prototype = {
             if (tempThis.checkOverlap(player, r)) {
                 // if the player and a robot overlap, 
 
-                if (!r.vulnerable && this.playerAttackFromLeft(r) ) {
+                if (!r.vulnerable && tempThis.playerAttackFromLeft(r) ) {
                     r.vulnerable = true;
                     message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
                     tempThis.initPopupCard(game, message);
                 }
-                else if (!r.vulnerable && playerAttackFromRight(r)) {
+                else if (!r.vulnerable && tempThis.playerAttackFromRight(r)) {
                     r.vulnerable = true;
                     message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
                     tempThis.initPopupCard(game, message);
@@ -581,7 +581,6 @@ BackTogether.Level1.prototype = {
         ['right', 'idle'], ['right', 'right'],
         ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
         r.state = 'idle';
-        r.switchedOff = false;
         r.vulnerable = false;
         r.stateTime = this.time.now;
         return r;
@@ -591,7 +590,7 @@ BackTogether.Level1.prototype = {
         var timeNow = this.time.now;
 
         this.robots.children.forEach(function (r, i, obj) {
-            if (!r.switchedOff) {
+            if (!r.vulnerable) {
 
                 if (timeNow > r.stateTime) {
                     if (r.state == "left") {
