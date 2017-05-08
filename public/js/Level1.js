@@ -12,16 +12,7 @@ var playAgain;
 var mainMenu;
 var next;
 var player;
-var playerStartPos;
-var playerEndPos;
 var map;
-
-var gameItems;
-var popup = false;      // 'pupup', 'confirm', 'pause' are used in unpause function. these have to be global variables.
-var confirm = false;
-var pause = false;
-var popupScreen;        // 'popupScreen' is used the objectiveCard, popupCard, confirmCard.
-var confirmCard;        // 'confirmCard' is used in pausedCard, inventory event.
 
 BackTogether.Level1.prototype = {
 
@@ -44,23 +35,27 @@ BackTogether.Level1.prototype = {
         this.score = 0;
 
         this.physics.p2.convertTilemap(map, platformLayer);
-
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
+
+        // can be Hand, Arm, Torso.
         this.player = new Hand(game);
-        // this.initItems();
-        this.initText();
-        this.initHealthBar();
-        this.initRobots();
-        this.initItemBox();
-        this.initVolIcon();
+
+        // these are general purpose.
+        GameScreenConfig.initText(game);
+        GameScreenConfig.initHealthBar(game);
+        GameScreenConfig.initVolIcon(game);
         this.initKeys();
 
+        // these are stage-specific
+        this.initRobots();
+        this.initItemBox();
+        // this.initItems();
 
-        gameItems = [];
-        gameItems.push('invisible');
-        gameItems.push('stink');
+        this.gameItems = [];
+        this.gameItems.push('invisible');
+        this.gameItems.push('stink');
 
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
@@ -116,8 +111,6 @@ BackTogether.Level1.prototype = {
         if (keys['I'].isUp) {
             iKeyDown = false;
         }
-        // var tempThis = this;
-        // this.game.robots.children.forEach(function (r) {
 
         for (var i = 0; i < this.game.robots.length; i++) {
 
@@ -128,8 +121,6 @@ BackTogether.Level1.prototype = {
 
                 if (!r.vulnerable && this.playerAttackFromLeft(r)) {
                     r.vulnerable = true;
-                    // message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
-                    // this.initPopupCard(game, message);
                     this.popupScreen.setText("CONGRATULATIONS! \n You just defeated your first evil robot!");
                     this.popupScreen.on();
                 }
@@ -168,17 +159,12 @@ BackTogether.Level1.prototype = {
 
                 //player.items will change to gameItems whenever we create more than 2 items
                 var randomItem = Math.floor((Math.random() * Object.keys(this.player.items).length));
-                var item = gameItems[randomItem];
-                console.log(1111);
-                console.log(item);
-                console.log(this.player.items);
+                var item = this.gameItems[randomItem];
+
                 this.player.items[item]++;
 
                 // rest of the code in this collectItem should only be for level 1 after player got his/her very first game item ever
-                // var message = "CONGRATULATIONS! \n You just received your first game item! \n After clicking OK, Press spacebar\n to view inventory."
-                // this.popupScreen = new Popup(game, message);
                 this.popupScreen.setText("CONGRATULATIONS! \n You just received your first game item! \n After clicking OK, Press spacebar\n to view inventory.");
-                console.log('33');
                 this.popupScreen.on();
             }
         }
@@ -195,43 +181,7 @@ BackTogether.Level1.prototype = {
     screenShake: function () {
         this.camera.shake(0.01, 100);
     },
-    propUser: function () {
-        for (var i = 0; i < this.item.length; i++) {
-            if (!this.item.children[i].held) {
-                this.item.children[i].frame = 1;
-            }
-        }
-        if (keys['DOWN'].isDown || keys['S'].isDown) {
-            if (!this.item.children[i].held && this.item.children[i].releaseTime > 10) {
-                this.item.children[i].held = true;
-                this.item.children[i].frame = 0;
-                this.item.children[i].body.gravity.y = 0;
-                this.item.children[i].frame = 0;
-                this.item.children[i].releaseTime = 0;
-                this.item.children[i].holdTime = 0;
-                var dist1 = Math.abs(player.body.x - this.item.children[i].holdbox1);
-                var dist2 = Math.abs(player.body.x - this.item.children[i].holdbox2);
 
-                if (dist2 < dist1) {
-                    this.item.children[i].offset = this.item.children[i].body.width;
-                }
-                else {
-                    this.item.children[i].offset = 0;
-                }
-            }
-            else {
-                if (this.item.children[i].holdTime > 10) {
-                    this.item.children[i].held = false;
-                    this.item.children[i].frame = 1;
-                    this.item.children[i].body.gravity.y = 300;
-                    this.item.children[i].releaseTime = 0;
-                    this.item.children[i].holdTime = 0;
-                }
-
-
-            }
-        }
-    },
     playerDamaged: function () {
         crash.play();  // sound effect 
         this.player.damagedTime = this.time.now + 3000;
@@ -251,23 +201,7 @@ BackTogether.Level1.prototype = {
         this.player.damaged = true;
 
     },
-    initItems: function () {
-        this.items = this.add.group();
 
-        this.items.enableBody = true;
-
-        this.pipe1 = this.items.create(300, 100, 'pipe');
-
-        this.pipe1.body.gravity.y = 300;
-        this.pipe1.body.bounce.y = .1;
-        this.pipe1.held = false;
-        this.pipe1.releaseTime = 0;
-        this.pipe1.holdbox1 = this.pipe1.body.x;
-        this.pipe1.holdbox2 = this.pipe1.body.x + this.pipe1.body.width;
-        this.pipe1.type = "item";
-
-
-    },
     initItemBox: function () {
         var itemBoxPos = Tile.findObjectsByType('itemBox', map, 'objectsLayer')[0];
         this.itemBox = this.add.sprite(itemBoxPos.x, itemBoxPos.y, 'itemBox');
@@ -276,173 +210,6 @@ BackTogether.Level1.prototype = {
         this.itemBox.animations.play('normal');
     },
 
-    initText: function () {
-        // the level
-        this.levelText = this.add.text(100, 70, 'Level:' + Level, { font: '32px Aclonica', fill: '#000' });
-
-        //  The score
-        this.scoreText = this.add.text(100, 100, 'Score: 0', { font: '32px Aclonica', fill: '#000' });
-
-        this.levelText.fixedToCamera = true;
-        this.scoreText.fixedToCamera = true;
-
-        // toggle button for input.
-        this.toggleInputBtnKeyboard = this.add.button(100, 140, 'toggleInputBtnKeyboard', this.toggleOnClick, this, 2, 1, 0);
-        this.toggleInputBtnKeyboard.scale.setTo(0.5, 0.5);
-        this.toggleInputBtnKeyboard.fixedToCamera = true;
-        this.toggleInputBtnKeyboard.WASDIcon = this.add.image(240, 140, 'WASDIcon');
-        this.toggleInputBtnKeyboard.WASDIcon.scale.setTo(0.5, 0.5);
-        this.toggleInputBtnKeyboard.WASDIcon.fixedToCamera = true;
-        this.toggleInputBtnKeyboard.cursorIcon = this.add.image(320, 140, 'cursorIcon');
-        this.toggleInputBtnKeyboard.cursorIcon.scale.setTo(0.5, 0.5);
-        this.toggleInputBtnKeyboard.cursorIcon.fixedToCamera = true;
-
-
-        this.toggleInputBtnMouse = this.add.button(100, 140, 'toggleInputBtnMouse', this.toggleOnClick, this, 2, 1, 0);
-        this.toggleInputBtnMouse.scale.setTo(0.5, 0.5);
-        this.toggleInputBtnMouse.fixedToCamera = true;
-        this.toggleInputBtnMouse.visible = false;
-        this.toggleInputBtnMouse.mouseIcon = this.add.image(240, 140, 'mouseIcon');
-        this.toggleInputBtnMouse.mouseIcon.scale.setTo(0.5, 0.5);
-        this.toggleInputBtnMouse.mouseIcon.fixedToCamera = true;
-        this.toggleInputBtnMouse.mouseIcon.visible = false;
-
-    },
-    toggleOnClick: function () {
-        if (this.toggleInputBtnKeyboard.visible == true) {
-            console.log('toggle keyboard turns Off');
-        } else {
-            console.log('toggle mouse turns off');
-        }
-
-        this.toggleInputBtnKeyboard.visible = !this.toggleInputBtnKeyboard.visible;
-        this.toggleInputBtnKeyboard.WASDIcon.visible = !this.toggleInputBtnKeyboard.WASDIcon.visible;
-        this.toggleInputBtnKeyboard.cursorIcon.visible = !this.toggleInputBtnKeyboard.cursorIcon.visible;
-
-        this.toggleInputBtnMouse.visible = !this.toggleInputBtnMouse.visible;
-        this.toggleInputBtnMouse.mouseIcon.visible = !this.toggleInputBtnMouse.mouseIcon.visible;
-
-    },
-
-    initEnemies: function () {
-
-        this.enemies = this.add.group();
-
-
-        this.enemy1 = this.enemies.create(64 * 1 + 16, -50, 'enemy1');
-        this.physics.p2.enable(this.enemy1, true);
-        this.enemy1.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        this.enemy1.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        this.enemy1.body.clearShapes();
-        this.enemy1.body.addRectangle(86, 256, 5, 11);
-        this.enemy1.body.addRectangle(86, 256, 5, 11);
-        this.enemy1.body.addRectangle(55, 241, 60, 213, 0);
-        this.enemy1.body.addRectangle(55, 241, -30, 203, 0);
-        this.enemy1.body.fixedRotation = true;
-
-
-
-        this.enemy2 = this.enemies.create(64 * 7 + 16, 0, 'enemy1');
-        this.physics.p2.enable(this.enemy2, true);
-        this.enemy2.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        this.enemy2.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        this.enemy2.animations.play('right');
-        this.enemy2.body.clearShapes();
-        this.enemy2.body.addRectangle(86, 256, 5, 11);
-        this.enemy2.body.addRectangle(55, 241, 60, 213, 0);
-        this.enemy2.body.addRectangle(55, 241, -30, 203, 0);
-        this.enemy2.body.fixedRotation = true;
-
-        this.enemy3 = this.enemies.create(64 * 13 + 16, 0, 'enemy1');
-        this.physics.p2.enable(this.enemy3, true);
-        this.enemy3.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 2), 10, true);
-        this.enemy3.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 2), 10, true);
-        this.enemy3.animations.play('right');
-        this.enemy3.body.clearShapes();
-        this.enemy3.body.addRectangle(86, 256, 5, 11);
-        this.enemy3.body.addRectangle(55, 241, 60, 213, 0);
-        this.enemy3.body.addRectangle(55, 241, -30, 203, 0);
-        this.enemy3.body.fixedRotation = true;
-
-    },
-    updateEnemies: function () {
-
-        if (this.enemy1.body.x < 64 * 1 + 2) {
-            this.enemy1.animations.play('right')
-            this.enemy1.body.velocity.x = 100;
-        } else if (this.enemy1.body.x > 64 * 3 + 32 - 2) {
-            this.enemy1.animations.play('left');
-            this.enemy1.body.velocity.x = -100;
-        }
-
-        if (this.enemy2.body.x < 64 * 7 + 2) {
-            this.enemy2.animations.play('right');
-            this.enemy2.body.velocity.x = 100;
-        } else if (this.enemy2.body.x > 64 * 8 + 32 - 2) {
-            this.enemy2.animations.play('left');
-            this.enemy2.body.velocity.x = -100;
-        }
-
-        if (this.enemy3.body.x < 64 * 13 + 2) {
-            this.enemy3.animations.play('right');
-            this.enemy3.body.velocity.x = 100;
-        } else if (this.enemy3.body.x > 64 * 16 + 32 - 2) {
-            this.enemy3.animations.play('left');
-            this.enemy3.body.velocity.x = -100;
-        }
-    },
-    initDrones: function () {
-        this.drones = this.add.group();
-        _drone1Start = Tile.findObjectsByType('drone1Start', map, 'objectsLayer')
-        _drone1Left = Tile.findObjectsByType('drone1Left', map, 'objectsLayer')
-        _drone1Right = Tile.findObjectsByType('drone1Right', map, 'objectsLayer');
-
-        this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone1.leftPos = _drone1Left;
-        this.drone1.rightPos = _drone1Right;
-
-        this.camera.follow(this.drone1);
-
-    },
-
-    factoryDrone: function (x, y) {
-        var d = this.drones.create(x, y, 'drone');
-        this.physics.p2.enable(d, true);
-        d.animations.add('left', [0, 1], 10, true);
-        d.animations.add('left_damaged', [2, 3], 10, true)
-        d.animations.add('right', [4, 5], 10, true);
-        d.animations.add("right_damaged", [6, 7], 10, true);
-
-        d.animations.play("left");
-        d.face = 'left';
-    },
-
-    updateDrones: function () {
-        this.drones.children.forEach(function (d) {
-            if (d.state == 'patrol') {
-                // goomba
-                if (d.body.x < d.leftPos) {
-                    d.face = 'right';
-                    d.body.moveRight(100);
-
-                } else if (d.leftPos < d.body.x < d.rightPos) {
-                    if (d.face == "left") {
-                        d.body.moveLeft(100);
-                    } else {
-                        d.body.moveRight(100);
-                    }
-                }
-
-                else {
-                    d.face = 'left';
-                    d.body.moveLeft(100);
-                }
-
-            } else {
-                // trace player
-            }
-        })
-    },
 
     initRobots: function () {
         this.game.robots = this.add.group();
@@ -456,67 +223,12 @@ BackTogether.Level1.prototype = {
         this.robot1.robot1Right = _robot1Right
     },
 
-    initVolIcon: function () {
-        var volIcon = this.add.sprite(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, icon);
-        volIcon.anchor.setTo(0.5, 0.5);
-
-        var volBtn = this.add.button(this.camera.view.centerX + this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2.5, 'volBtn', function () {
-            if (!volumeOn) {
-                icon = 'volDownIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = true;
-                pop.mute = true;
-                crash.mute = true;
-            }
-            else {
-                icon = 'volUpIcon';
-                volIcon.loadTexture(icon);
-                volumeOn = !volumeOn;
-                music.mute = false;
-                pop.mute = false;
-                crash.mute = false;
-            }
-        }, 2, 1, 0);
-
-        volBtn.anchor.setTo(0.5, 0.5);
-        volBtn.width = 55;
-        volBtn.height = 60;
-        volBtn.fixedToCamera = true;
-        volIcon.fixedToCamera = true;
-        this.world.bringToTop(volIcon);
-    },
     // playerVictory: function () {
     //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
     //         console.log("victory!");
     //     }
     // },
-    initHealthBar: function () {
 
-        this.healthPoint = 6;
-
-        this.healthbar = this.add.image(this.camera.view.width - 120, 120, 'healthbar');
-        this.healthbar.anchor.setTo(0, 0);
-        this.healthbar.scale.setTo(1, this.healthPoint);
-        this.healthbar.fixedToCamera = true;
-
-
-        // console.log(this.camera.view);
-        this.heart = this.add.sprite(this.camera.view.width - 80, 120, 'heartbeat');
-        this.heart.anchor.setTo(0.5, 0.5);
-
-        this.heart.animations.add('normal', [0, 1, 2, 3, 4, 5], 10, true);
-
-        this.heart.animations.add('slow', [0, 0, 1, 2, 3, 3, 4, 5], 10, true);
-        this.heart.animations.add('quick', [0, 2, 4, 5], 10, true);
-
-        this.heart.animations.play('slow');
-
-        this.heart.fixedToCamera = true;
-
-
-
-    },
     initKeys: function () {
         var inputs = [
             Phaser.Keyboard.ONE,
