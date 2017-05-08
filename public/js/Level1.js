@@ -73,7 +73,7 @@ BackTogether.Level1.prototype = {
 
         // adjust the cordinate. 
         // these lines should be stage unique.
-        this.popupScreen.sprite.y  = this.camera.view.centerY + game.world.height / 3; 
+        this.popupScreen.sprite.y = this.camera.view.centerY + game.world.height / 3;
         this.popupScreen.txt.y = this.camera.view.centerY + 260;
         this.popupScreen.okBtn.y = this.camera.view.centerY + 550;
         this.popupScreen.okIcon.y = this.camera.view.centerY + 550;
@@ -82,7 +82,7 @@ BackTogether.Level1.prototype = {
     },
 
     update: function (game) {
-        
+
         this.player.update();
 
         if (keys['SPACE'].isDown) {
@@ -119,14 +119,14 @@ BackTogether.Level1.prototype = {
         // var tempThis = this;
         // this.game.robots.children.forEach(function (r) {
 
-        for (var i = 0; i < this.game.robots.length; i ++ ){
+        for (var i = 0; i < this.game.robots.length; i++) {
 
             var r = this.game.robots.children[i];
 
             if (this.checkOverlap(this.player.sprite, r)) {
                 // if the player and a robot overlap, 
 
-                if (!r.vulnerable && this.playerAttackFromLeft(r) ) {
+                if (!r.vulnerable && this.playerAttackFromLeft(r)) {
                     r.vulnerable = true;
                     // message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
                     // this.initPopupCard(game, message);
@@ -135,8 +135,8 @@ BackTogether.Level1.prototype = {
                 }
                 else if (!r.vulnerable && this.playerAttackFromRight(r)) {
                     r.vulnerable = true;
-                    message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
-                    this.initPopupCard(game, message);
+                    this.popupScreen.setText("CONGRATULATIONS! \n You just defeated your first evil robot!");
+                    this.popupScreen.on();
                 }
 
                 if (!r.vulnerable && !invincibilityOn) {
@@ -169,6 +169,9 @@ BackTogether.Level1.prototype = {
                 //player.items will change to gameItems whenever we create more than 2 items
                 var randomItem = Math.floor((Math.random() * Object.keys(this.player.items).length));
                 var item = gameItems[randomItem];
+                console.log(1111);
+                console.log(item);
+                console.log(this.player.items);
                 this.player.items[item]++;
 
                 // rest of the code in this collectItem should only be for level 1 after player got his/her very first game item ever
@@ -552,31 +555,15 @@ BackTogether.Level1.prototype = {
                 this.popupScreen.off();
 
             } else if (this.pausedScreen.confirmBool) {
-                // this.confirmCard.noBtn.destroy();
-                // this.confirmCard.noIcon.destroy();
-                // this.confirmCard.okBtn.destroy();
-                // this.confirmCard.okIcon.destroy();
-                // this.confirmCard.image.destroy();
-                // this.confirmCard.txt.destroy();
-                // this.confirmCard.sprite.destroy();
-                // this.confirmBool = false;
 
                 this.pausedScreen.confirmOff();
                 console.log(565);
 
-                // this.popupScreen.pauseBool = true;
-                // for (var i = 0; i < popupScreen.pauseScreenBtns.length; i++) {
-                //     popupScreen.pauseScreenBtns[i].inputEnabled = true;
-                // }
             } else if (this.pausedScreen.pauseBool) {
 
                 console.log(573);
                 this.pausedScreen.off();
 
-
-                // Unpause the game
-                // key.game.paused = false; // this has been done in PausedScreen.js
-                // pause = false;// this has been done in PausedScreen.js
             }
         }
     },

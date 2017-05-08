@@ -167,9 +167,12 @@ var PausedScreen = function (game, player) {
         console.log(this.itemBtns);
         for (var i = 0; i < this.itemBtns.length; i++) {
             var x = this.game.camera.view.centerX + i * 32;
-            var y = this.game.camera.view.centerY - 58 + i + 32
+            var y = this.game.camera.view.centerY - 58 + i + 32;
             this.itemBtns[i].visible = true;
-            this.itemBtns[i].reset(x, y)
+            this.itemBtns[i].reset(x, y);
+            // console.log(this.itemBtns[i]);
+            // console.log(this.player.items[this.selectedItem]);
+            this.itemNums[i].setText(this.player.items[this.itemBtns[i].key]);      // we need to update here.
             this.itemNums[i].visible = true;
             this.itemNums[i].reset(x + 16, y + 16);
         }
@@ -177,7 +180,7 @@ var PausedScreen = function (game, player) {
 
     }
 
-    this.confirmScreen = new ConfirmScreen(game, "",  this);
+    this.confirmScreen = new ConfirmScreen(game, "", this);
     this.confirmScreen.off();
     this.confirmBool = false;
 
