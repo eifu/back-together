@@ -48,7 +48,7 @@ BackTogether.Level1.prototype = {
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
-        this.initPlayer();
+        Hand.initPlayer(game);
         // this.initItems();
         this.initText();
         this.initHealthBar();
@@ -321,49 +321,13 @@ BackTogether.Level1.prototype = {
 
     },
     initItemBox: function () {
-        var itemBoxPos = this.findObjectsByType('itemBox', map, 'objectsLayer')[0];
+        var itemBoxPos = Tile.findObjectsByType('itemBox', map, 'objectsLayer')[0];
         this.itemBox = this.add.sprite(itemBoxPos.x, itemBoxPos.y, 'itemBox');
         this.itemBox.taken = false;
         this.itemBox.animations.add('normal', [0, 1, 2, 3], 10, true);
         this.itemBox.animations.play('normal');
     },
 
-    initPlayer: function () {
-        // The player and its settings
-        playerStartPos = this.findObjectsByType('playerStart', map, 'objectsLayer')
-        playerEndPos = this.findObjectsByType('playerEnd', map, 'objectsLayer');
-        player = this.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'hand');
-
-        //  We need to enable physics on the player
-        this.physics.p2.enable(player, true);
-
-        player.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 5), 10, true);
-        player.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
-        player.animations.add('left_damaged', Phaser.Animation.generateFrameNames('left_damaged', 1, 2), 10, true);
-        player.animations.add('right_damaged', Phaser.Animation.generateFrameNames('right_damaged', 1, 2), 10, true);
-
-
-        player.animations.play('left');
-        player.face = 'left';
-
-        player.body.clearShapes();
-        player.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
-
-
-        this.camera.follow(player);
-
-        player.damaged = false;
-        player.damagedTime = 0;
-
-        // player.items = ['invisible', 'stink', 'invisible'];
-        player.items = { 'invisible': 2, 'stink': 1 };
-        player.itemBtns = [];
-        player.itemNums = [];
-
-        gameItems = [];
-        gameItems.push('invisible');
-        gameItems.push('stink');
-    },
     initText: function () {
         // the level
         this.levelText = this.add.text(100, 70, 'Level:' + Level, { font: '32px Aclonica', fill: '#000' });
@@ -409,18 +373,6 @@ BackTogether.Level1.prototype = {
 
         this.toggleInputBtnMouse.visible = !this.toggleInputBtnMouse.visible;
         this.toggleInputBtnMouse.mouseIcon.visible = !this.toggleInputBtnMouse.mouseIcon.visible;
-
-    },
-
-    findObjectsByType: function (type, map, layer) {
-        var result = new Array();
-        map.objects[layer].forEach(function (element) {
-            if (element.properties.type === type) {
-                element.y -= map.tileHeight;
-                result.push(element);
-            }
-        });
-        return result;
 
     },
 
@@ -493,9 +445,9 @@ BackTogether.Level1.prototype = {
     },
     initDrones: function () {
         this.drones = this.add.group();
-        _drone1Start = this.findObjectsByType('drone1Start', map, 'objectsLayer')
-        _drone1Left = this.findObjectsByType('drone1Left', map, 'objectsLayer')
-        _drone1Right = this.findObjectsByType('drone1Right', map, 'objectsLayer');
+        _drone1Start = Tile.findObjectsByType('drone1Start', map, 'objectsLayer')
+        _drone1Left = Tile.findObjectsByType('drone1Left', map, 'objectsLayer')
+        _drone1Right = Tile.findObjectsByType('drone1Right', map, 'objectsLayer');
 
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
         this.drone1.leftPos = _drone1Left;
@@ -546,10 +498,10 @@ BackTogether.Level1.prototype = {
 
     initRobots: function () {
         this.game.robots = this.add.group();
-
-        _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
-        _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
-        _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
+        console.log(Tile);
+        _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
+        _robot1Left = Tile.findObjectsByType('robot1Left', map, 'objectsLayer')
+        _robot1Right = Tile.findObjectsByType('robot1Right', map, 'objectsLayer');
         console.log(this);
         this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
         this.robot1.robot1Left = _robot1Left;

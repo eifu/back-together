@@ -42,7 +42,7 @@ BackTogether.Level2.prototype = {
         this.tableTops = this.game.add.group();
         this.tableTops.enableBody = true;
 
-        result = this.findObjectsByType('tableTop', map, 'objectsLayer');
+        result = Tile.findObjectsByType('tableTop', map, 'objectsLayer');
 
         result.forEach(function (element) {
             this.createFromTiledObject(element, this.tableTops);
@@ -55,7 +55,7 @@ BackTogether.Level2.prototype = {
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
-        this.initPlayer();
+        Arm.initPlayer(game);
         this.initItems();
         this.initText();
         this.initTimer();
@@ -434,8 +434,8 @@ BackTogether.Level2.prototype = {
     },
     initPlayer: function () {
         // The player and its settings
-        playerStartPos = this.findObjectsByType('playerStart', map, 'objectsLayer')
-        playerEndPos = this.findObjectsByType('playerEnd', map, 'objectsLayer');
+        playerStartPos = Tile.findObjectsByType('playerStart', map, 'objectsLayer')
+        playerEndPos = Tile.findObjectsByType('playerEnd', map, 'objectsLayer');
         player = this.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'arm');
 
         //  We need to enable physics on the player
@@ -467,24 +467,6 @@ BackTogether.Level2.prototype = {
         player.itemNums = [];
 
     },
-    findObjectsByType: function (type, map, layer) {
-        var result = new Array();
-        console.log("******looking for ");
-        console.log(type);
-        map.objects[layer].forEach(function (element) {
-
-            console.log(element.properties.type);
-            if (element.properties.type === type) {
-                console.log("!!!!!!!!!!!!!!!!!!!found")
-                element.y -= map.tileHeight;
-                result.push(element);
-            }
-        });
-        console.log("### find")
-        console.log(result);
-        return result;
-
-    },
     //create a sprite from an object
     createFromTiledObject: function (element, group) {
         var sprite = group.create(element.x, element.y, element.properties.sprite);
@@ -511,17 +493,6 @@ BackTogether.Level2.prototype = {
         this.hidePopUp.fixedToCamera = true;
         this.hidePopUp.visible = false;
 
-    },
-
-    findObjectsByType: function (type, map, layer) {
-        var result = new Array();
-        map.objects[layer].forEach(function (element) {
-            if (element.properties.type === type) {
-                element.y -= map.tileHeight;
-                result.push(element);
-            }
-        });
-        return result;
     },
 
     initEnemies: function () {
@@ -593,38 +564,38 @@ BackTogether.Level2.prototype = {
     },
     initDrones: function () {
         this.drones = this.add.group();
-        _drone1Start = this.findObjectsByType('d1s', map, 'objectsLayer')
+        _drone1Start = Tile.findObjectsByType('d1s', map, 'objectsLayer')
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone1.leftPos = this.findObjectsByType('d1l', map, 'objectsLayer')[0];
-        this.drone1.rightPos = this.findObjectsByType('d1r', map, 'objectsLayer')[0];
+        this.drone1.leftPos = Tile.findObjectsByType('d1l', map, 'objectsLayer')[0];
+        this.drone1.rightPos = Tile.findObjectsByType('d1r', map, 'objectsLayer')[0];
         console.log(this.drone1.leftPos);
 
 
-        _drone2Start = this.findObjectsByType('d2s', map, 'objectsLayer')
+        _drone2Start = Tile.findObjectsByType('d2s', map, 'objectsLayer')
         this.drone2 = this.factoryDrone(_drone2Start[0].x, _drone2Start[0].y);
-        this.drone2.leftPos = this.findObjectsByType('d2l', map, 'objectsLayer')[0];
-        this.drone2.rightPos = this.findObjectsByType('d2r', map, 'objectsLayer')[0];
+        this.drone2.leftPos = Tile.findObjectsByType('d2l', map, 'objectsLayer')[0];
+        this.drone2.rightPos = Tile.findObjectsByType('d2r', map, 'objectsLayer')[0];
         console.log(this.drone2.leftPos);
 
 
-        _drone3Start = this.findObjectsByType('d3s', map, 'objectsLayer')
+        _drone3Start = Tile.findObjectsByType('d3s', map, 'objectsLayer')
         this.drone3 = this.factoryDrone(_drone3Start[0].x, _drone3Start[0].y);
-        this.drone3.leftPos = this.findObjectsByType('d3l', map, 'objectsLayer')[0];
-        this.drone3.rightPos = this.findObjectsByType('d3r', map, 'objectsLayer')[0];
+        this.drone3.leftPos = Tile.findObjectsByType('d3l', map, 'objectsLayer')[0];
+        this.drone3.rightPos = Tile.findObjectsByType('d3r', map, 'objectsLayer')[0];
         console.log(this.drone3.leftPos);
 
 
-        _drone4Start = this.findObjectsByType('d4s', map, 'objectsLayer')
+        _drone4Start = Tile.findObjectsByType('d4s', map, 'objectsLayer')
         this.drone4 = this.factoryDrone(_drone4Start[0].x, _drone4Start[0].y);
-        this.drone4.leftPos = this.findObjectsByType('d4l', map, 'objectsLayer')[0];
-        this.drone4.rightPos = this.findObjectsByType('d4r', map, 'objectsLayer')[0];
+        this.drone4.leftPos = Tile.findObjectsByType('d4l', map, 'objectsLayer')[0];
+        this.drone4.rightPos = Tile.findObjectsByType('d4r', map, 'objectsLayer')[0];
         console.log(this.drone4.leftPos);
 
 
-        _drone5Start = this.findObjectsByType('d5s', map, 'objectsLayer')
+        _drone5Start = Tile.findObjectsByType('d5s', map, 'objectsLayer')
         this.drone5 = this.factoryDrone(_drone5Start[0].x, _drone5Start[0].y);
-        this.drone5.leftPos = this.findObjectsByType('d5l', map, 'objectsLayer')[0];
-        this.drone5.rightPos = this.findObjectsByType('d5r', map, 'objectsLayer')[0];
+        this.drone5.leftPos = Tile.findObjectsByType('d5l', map, 'objectsLayer')[0];
+        this.drone5.rightPos = Tile.findObjectsByType('d5r', map, 'objectsLayer')[0];
         console.log(this.drone5.leftPos);
 
 
@@ -753,9 +724,9 @@ BackTogether.Level2.prototype = {
     initRobots: function () {
         this.game.robots = this.add.group();
 
-        // _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
-        // _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
-        // _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
+        // _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
+        // _robot1Left = Tile.findObjectsByType('robot1Left', map, 'objectsLayer')
+        // _robot1Right = Tile.findObjectsByType('robot1Right', map, 'objectsLayer');
 
         // this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
         // this.robot1.robot1Left = _robot1Left[0];
@@ -965,19 +936,19 @@ BackTogether.Level2.prototype = {
 
         this.tables = [];
 
-        var t = [this.findObjectsByType('table1Left', map, 'objectsLayer')[0], this.findObjectsByType('table1Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table1Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table1Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table2Left', map, 'objectsLayer')[0], this.findObjectsByType('table2Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table2Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table2Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table3Left', map, 'objectsLayer')[0], this.findObjectsByType('table3Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table3Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table3Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table4Left', map, 'objectsLayer')[0], this.findObjectsByType('table4Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table4Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table4Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table5Left', map, 'objectsLayer')[0], this.findObjectsByType('table5Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table5Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table5Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
         console.log(this.tables);
