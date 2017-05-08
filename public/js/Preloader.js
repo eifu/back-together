@@ -33,7 +33,7 @@ BackTogether.Preloader.prototype = {
                 this.load.spritesheet('levelBtn', 'assets/images/levelBtn.png', 110, 60);
                 this.load.image('disabledLevelBtn', 'assets/images/disabledLevelBtn.png');
                 this.load.spritesheet('itemBox', 'assets/images/itemBox.png', 32, 32);
-                this.load.spritesheet('heartbeat', 'assets/images/heartbeat.png', 256, 256);
+                this.load.spritesheet('heartbeat', 'assets/images/heartbeat.png', 100, 100);
                 this.load.image('healthbar', 'assets/images/healthbar_green.png');
                 this.load.spritesheet('numbers', 'assets/images/numbers.png', 32, 32);
                 this.load.image('invisible', 'assets/images/invisible.png');
