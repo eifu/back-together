@@ -51,8 +51,7 @@ BackTogether.Preloader.prototype = {
                 this.load.image('nextIcon', 'assets/images/nextIcon.png');
                 this.load.spritesheet('mainMenuBtn', 'assets/images/mainMenuBtn.png', 130, 30);
                 this.load.spritesheet('gameStatusBtn', 'assets/images/gameStatusBtn.png', 110, 60);
-                //        this.load.spritesheet('robot', 'assets/images/robot.png',166,200);
-                //        this.load.spritesheet('drone', 'assets/images/drone.png',256,256);
+
                 this.load.image('droneLight', 'assets/images/droneLight.png');
                 this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
 
@@ -68,15 +67,20 @@ BackTogether.Preloader.prototype = {
                 this.load.audio('bg', ['assets/audio/bgMusic.mp3', 'assets/audio/bgMusic.ogg']);
                 this.load.tilemap('map1', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
-                this.load.tilemap('map3', 'assets/js/test3.json', null, Phaser.Tilemap.TILED_JSON);
+
+                // GAME SCREEN
                 this.load.spritesheet('volBtn', 'assets/images/VolBtn.png', 24, 24);
                 this.load.image('volDownIcon', 'assets/images/VolDownIcon.png');
                 this.load.image('volUpIcon', 'assets/images/VolUpIcon.png');
+
+                // these two are for testing.
                 this.load.tilemap('lvl1', 'assets/js/level1.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('lvl2', 'assets/js/level2.json', null, Phaser.Tilemap.TILED_JSON);
-                this.load.tilemap('lvl3', 'assets/js/level3.json', null, Phaser.Tilemap.TILED_JSON);
 
-                
+                // this is for demo.
+                this.load.tilemap('level1_stage3', 'assets/js/level1_stage3.json', null, Phaser.Tilemap.TILED_JSON);
+                this.load.image('tileset3', 'assets/images/tileset3.png');
+
                 this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
                 this.load.atlasJSONArray('arm', 'assets/images/arm.png', 'assets/js/arm.json');
                 this.load.atlasJSONArray('robot', 'assets/images/robot.png', 'assets/js/robot.json');

@@ -39,6 +39,7 @@ BackTogether.LevelSelecting.prototype = {
         var inputs = [
             Phaser.Keyboard.ONE,
             Phaser.Keyboard.TWO,
+            Phaser.Keyboard.THREE,
             Phaser.Keyboard.UP,
             Phaser.Keyboard.LEFT,
             Phaser.Keyboard.RIGHT,
@@ -52,7 +53,7 @@ BackTogether.LevelSelecting.prototype = {
             Phaser.Keyboard.P
         ];
         var name = [
-            'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
+            'ONE', 'TWO', 'THREE', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
         ]
 
         keys = {};
@@ -120,6 +121,10 @@ BackTogether.LevelSelecting.prototype = {
             Level = 'TWO';
             this.game.state.start('Level2');
         }
+        if (keys['THREE'].isDown) {
+            Level = 'THREE';
+            this.game.state.start('Level1_stage3');
+        }
     },
     createButton: function (game, i, x, y, w, h) {
         var b;
@@ -139,7 +144,7 @@ BackTogether.LevelSelecting.prototype = {
                     console.log("currently rocked.");
                     console.log(this);
                     this.camera.shake(0.01, 100);
-                },this
+                }, this
                 , 2, 1, 0);
 
         }
@@ -163,7 +168,7 @@ BackTogether.LevelSelecting.prototype = {
 
         console.log(user.getLevel());
 
-        this.handAnimation = this.add.sprite(this.camera.view.centerX + (user.getLevel() - 3) * 250, this.camera.view.centerY -  50, 'hand');
+        this.handAnimation = this.add.sprite(this.camera.view.centerX + (user.getLevel() - 3) * 250, this.camera.view.centerY - 50, 'hand');
         this.handAnimation.anchor.setTo(0.5, 0.5);
         this.handAnimation.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
         this.handAnimation.animations.play('right');
