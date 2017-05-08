@@ -256,7 +256,7 @@ BackTogether.Level2.prototype = {
                     c.animations.frame = 4;
                 } else if (t > 0) {
 
-                    tempThis.robot1 = tempThis.factoryRobot(c.x, c.y);
+                    tempThis.robot1 = Robot.factoryRobot(game, c.x, c.y);
                     c.destroy();
 
                     object.slice(i, 1); // remove the capsule from the array;
@@ -349,7 +349,7 @@ BackTogether.Level2.prototype = {
             iKeyDown = false;
         }
 
-        this.updateRobots();
+        Robot.updateRobots(game);
         this.updateDrones();
 
     },
@@ -751,7 +751,7 @@ BackTogether.Level2.prototype = {
 
 
     initRobots: function () {
-        this.robots = this.add.group();
+        this.game.robots = this.add.group();
 
         // _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
         // _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
@@ -760,104 +760,6 @@ BackTogether.Level2.prototype = {
         // this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
         // this.robot1.robot1Left = _robot1Left[0];
         // this.robot1.robot1Right = _robot1Right[0];
-
-    },
-
-    factoryRobot: function (x, y) {
-        var r = this.robots.create(x, y, 'robot');
-        this.physics.p2.enable(r, true);
-
-        r.animations.add('leftIdle', Phaser.Animation.generateFrameNames('l', 1, 22), 10, true);
-        r.animations.add('rightIdle', Phaser.Animation.generateFrameNames('r', 1, 22), 10, true);
-        r.animations.add('left', Phaser.Animation.generateFrameNames('leftWalk', 1, 2), 10, true);
-        r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
-
-        r.animations.play("left");
-        r.state = 'left';
-
-        r.body.clearShapes();
-
-        r.body.addCircle(24, 0, -76);
-        r.body.addRectangle(59, 90, 0, -8);
-        r.body.addRectangle(155, 55, 0, 67);
-
-        r.body.velocity.x = 100;
-        r.body.velocity.y = 0;
-
-        r.states = [['left', 'idle'], ['left', 'left'],
-        ['right', 'idle'], ['right', 'right'],
-        ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
-        r.state = 'idle';
-        r.switchedOff = false;
-        r.vulnerable = false;
-        r.stateTime = this.time.now;
-        return r;
-    },
-    updateRobots: function () {
-
-        var timeNow = this.time.now;
-
-        this.robots.children.forEach(function (r, i, obj) {
-            if (!r.switchedOff) {
-
-                if (timeNow > r.stateTime) {
-                    if (r.state == "left") {
-                        r.state = "leftIdle";
-                        r.stateTime = timeNow + 3000;
-                    } else if (r.state == "right") {
-                        r.state = "rightIdle";
-                        r.stateTime = timeNow + 3000;
-                    } else { // r.state == "leftIdle" or r.state == "rightIdle"
-                        if (Math.random() < 0.9) {
-                            if (r.state == "leftIdle") {
-                                r.state = 'rightIdle';
-                            } else {
-                                r.state = 'leftIdle';
-                            }
-
-                            r.stateTime = timeNow + 2000;
-                        } else {
-                            if (Math.random() < 0.5) {
-                                r.state = 'left';
-                            } else {
-                                r.state = 'right';
-                            }
-
-                            r.stateTime = timeNow + 3000;
-                        }
-
-                    }
-
-
-                } else {
-                    r.animations.play(r.state);
-                    if (r.state == 'left') {
-                        r.body.moveLeft(100);
-                    } else if (r.state == 'right') {
-                        r.body.moveRight(100);
-                    }
-
-                }
-
-            }
-            else {
-                // if the robot is attacked, and it is already dead,
-
-
-                r.body.velocity.x = 0;
-                r.animations.frame = 0;
-                r.alpha -= 0.005;               // change opacity so that it looks like it disappear.
-                if (r.alpha <= 0) {
-                    console.log(obj);
-
-                    console.log('disappear');
-                    r.destroy();
-                    obj.slice(i, 1); // remove the dead robot from the array.
-                    console.log(obj);
-
-                }
-            }
-        });
 
     },
     initPausedScreen: function (game) {
