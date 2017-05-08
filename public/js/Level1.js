@@ -38,20 +38,17 @@ BackTogether.Level1.prototype = {
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
-
         // can be Hand, Arm, Torso.
         this.player = new Hand(game);
+
 
         // these are general purpose.
         GameScreenConfig.initText(game);
         GameScreenConfig.initHealthBar(game);
         GameScreenConfig.initVolIcon(game);
         this.initKeys();
-
-        // these are stage-specific
         this.initRobots();
         this.initItemBox();
-        // this.initItems();
 
         this.gameItems = [];
         this.gameItems.push('invisible');
@@ -228,6 +225,7 @@ BackTogether.Level1.prototype = {
     //         console.log("victory!");
     //     }
     // },
+
 
     initKeys: function () {
         var inputs = [
