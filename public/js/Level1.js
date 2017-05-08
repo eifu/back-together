@@ -48,7 +48,7 @@ BackTogether.Level1.prototype = {
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
-        Hand.initPlayer(game);
+        this.player = new Hand(game);
         // this.initItems();
         this.initText();
         this.initHealthBar();
@@ -56,6 +56,13 @@ BackTogether.Level1.prototype = {
         this.initItemBox();
         this.initVolIcon();
         this.initKeys();
+
+
+        gameItems = [];
+        gameItems.push('invisible');
+        gameItems.push('stink');
+
+
 
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
@@ -65,64 +72,8 @@ BackTogether.Level1.prototype = {
     },
 
     update: function (game) {
-        //  Reset the players velocity (movement)
-        player.body.velocity.x = 0;
-
-        if (this.time.now < player.damagedTime) {
-            // if player gets damaged.
-            if (player.face == 'left') {
-                player.animations.play('left_damaged')
-                player.body.velocity.x = 100;  // player moves back
-            } else {
-                player.animations.play("right_damaged")
-                player.body.velocity.x = -100;  // player moves back
-            }
-
-
-        } else {
-            // if player does not get damaged. 
-
-            if (keys['LEFT'].isDown || keys['A'].isDown) {
-                //  Move to the left
-                if (player.animations.frame == 0) {
-                    player.body.velocity.x = -600;
-                } else if (player.animations.frame == 1) {
-                    player.body.velocity.x = -800;
-                } else if (player.animations.frame == 2) {
-                    player.body.velocity.x = -600;
-                } else {
-                    player.body.velocity.x = -400;
-                }
-                player.animations.play('left');
-                player.face = 'left';
-            }
-            else if (keys['RIGHT'].isDown || keys['D'].isDown) {
-                //  Move to the right
-                if (player.animations.frame == 4) {
-                    player.body.velocity.x = 600;
-                } else if (player.animations.frame == 5) {
-                    player.body.velocity.x = 800;
-                } else if (player.animations.frame == 6) {
-                    player.body.velocity.x = 600;
-                } else {
-                    player.body.velocity.x = 400;
-                }
-                player.animations.play('right');
-                player.face = 'right';
-            } else {
-
-                if (player.damaged) {
-                    if (player.face == 'left') {
-                        player.animations.frame = 0
-                    } else {
-                        player.animations.frame = 4
-                    }
-                } else {
-                    player.animations.stop();
-
-                }
-            }
-        }
+        
+        this.player.update();
 
         if (keys['SPACE'].isDown) {
             this.initPausedScreen(game);
@@ -155,53 +106,58 @@ BackTogether.Level1.prototype = {
         if (keys['I'].isUp) {
             iKeyDown = false;
         }
-        var tempThis = this;
-        this.game.robots.children.forEach(function (r) {
+        // var tempThis = this;
+        // this.game.robots.children.forEach(function (r) {
 
-            if (tempThis.checkOverlap(player, r)) {
+        for (var i = 0; i < this.game.robots.length; i ++ ){
+
+            var r = this.game.robots.children[i];
+
+            if (this.checkOverlap(this.player.sprite, r)) {
                 // if the player and a robot overlap, 
 
-                if (!r.vulnerable && tempThis.playerAttackFromLeft(r) ) {
+                if (!r.vulnerable && this.playerAttackFromLeft(r) ) {
                     r.vulnerable = true;
                     message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
-                    tempThis.initPopupCard(game, message);
+                    this.initPopupCard(game, message);
                 }
-                else if (!r.vulnerable && tempThis.playerAttackFromRight(r)) {
+                else if (!r.vulnerable && this.playerAttackFromRight(r)) {
                     r.vulnerable = true;
                     message = "CONGRATULATIONS! \n You just defeated your first evil robot!"
-                    tempThis.initPopupCard(game, message);
+                    this.initPopupCard(game, message);
                 }
 
                 if (!r.vulnerable && !invincibilityOn) {
-                    tempThis.screenShake();
-                    tempThis.playerDamaged();
+                    this.screenShake();
+                    this.playerDamaged();
                 }
 
             }
-        });
+        }
 
-        this.playerVictory();
+        // this.playerVictory();
         Robot.updateRobots(game);
 
-        this.collectItem(player, this.itemBox, game);
+        this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
-        return player.body.x < r.x && player.body.velocity.x >= 0 && r.body.velocity.x >= 0;
+        console.log(r.body);
+        return this.player.sprite.body.x < r.x && this.player.sprite.body.velocity.x >= 0 && r.body.velocity.x >= 0;
     },
     playerAttackFromRight: function (r) {
-        return player.body.x > r.x && player.body.velocity.x <= 0 && r.body.velocity.x <= 0;
+        return this.player.sprite.body.x > r.x && this.player.sprite.body.velocity.x <= 0 && r.body.velocity.x <= 0;
     },
 
-    collectItem: function (obj1, obj2, game) {
-        if (this.checkOverlap(obj1, obj2)) {
-            if (!obj2.taken) {
-                obj2.taken = true;
-                obj2.visible = false;
+    collectItem: function (itemBox, game) {
+        if (this.checkOverlap(this.player.sprite, itemBox)) {
+            if (!itemBox.taken) {
+                itemBox.taken = true;
+                itemBox.visible = false;
 
                 //player.items will change to gameItems whenever we create more than 2 items
-                var randomItem = Math.floor((Math.random() * Object.keys(obj1.items).length));
+                var randomItem = Math.floor((Math.random() * Object.keys(this.player.items).length));
                 var item = gameItems[randomItem];
-                player.items[item]++;
+                this.player.items[item]++;
 
                 // rest of the code in this collectItem should only be for level 1 after player got his/her very first game item ever
                 var message = "CONGRATULATIONS! \n You just received your first game item! \n After clicking OK, Press spacebar\n to view inventory."
@@ -286,7 +242,7 @@ BackTogether.Level1.prototype = {
     },
     playerDamaged: function () {
         crash.play();  // sound effect 
-        player.damagedTime = this.time.now + 3000;
+        this.player.damagedTime = this.time.now + 3000;
 
         this.healthPoint -= 1;
         if (this.healthPoint == 0) {
@@ -300,7 +256,7 @@ BackTogether.Level1.prototype = {
         }
 
         this.healthbar.scale.setTo(1, this.healthPoint);
-        player.damaged = true;
+        this.player.damaged = true;
 
     },
     initItems: function () {
@@ -523,7 +479,7 @@ BackTogether.Level1.prototype = {
 
         currentCard.pauseScreenBtns = [];
 
-        currentCard.cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, game, 2, 1, 0);
+        currentCard.cancelBtn = this.add.button(this.camera.view.centerX + 235, this.camera.view.centerY - 110, 'cancelIcon', this.resumeOnClick, this, 2, 1, 0);
         currentCard.cancelBtn.anchor.setTo(0.5, 0.5);
         currentCard.cancelBtn.scale.setTo(0.3, 0.3);
         currentCard.pauseScreenBtns.push(currentCard.cancelBtn);
@@ -536,28 +492,30 @@ BackTogether.Level1.prototype = {
             currentCard.cancelBtn.destroy();
             currentCard.destroy();
             currentCard.txt.destroy();
-            currentCardresetBtn.destroy();
+            currentCard.resetBtn.destroy();
             currentCard.resetIcon.destroy();
             currentCard.mmBtn.destroy();
             currentCard.mmIcon.destroy();
             currentCard.inventory.destroy();
             currentCard.inventoryTxt.destroy();
+            console.log("yea");
+            console.log(this.game.state);
 
-            for (var i = 0; i < player.itemBtns.length; i++) {
-                player.itemBtns[i].destroy();
+            for (var i = 0; i < this.player.itemBtns.length; i++) {
+                this.player.itemBtns[i].destroy();
             }
-            for (var i = 0; i < player.itemNums.length; i++) {
-                player.itemNums[i].destroy();
+            for (var i = 0; i < this.player.itemNums.length; i++) {
+                this.player.itemNums[i].destroy();
             }
 
-            player.itemBtns = [];
-            player.itemNums = [];
+            this.player.itemBtns = [];
+            this.player.itemNums = [];
 
             // Unpause the game
-            this.paused = false;
+            this.game.paused = false;
 
-            game.state.start('MainMenu')
-        }, game, 2, 1, 0);
+            this.game.state.start('MainMenu')
+        }, this, 2, 1, 0);
 
         currentCard.mmBtn.anchor.setTo(0.5, 0.5);
         currentCard.mmBtn.scale.setTo(1.6, 1.6);
@@ -586,10 +544,10 @@ BackTogether.Level1.prototype = {
         currentCard.inventoryTxt.anchor.setTo(0.5, 0.5);
 
         var i = 0;
-        for (var key in player.items) {
-            if (!player.items.hasOwnProperty(key)) continue;
+        for (var key in this.player.items) {
+            if (!this.player.items.hasOwnProperty(key)) continue;
 
-            var obj = player.items[key];
+            var obj = this.player.items[key];
 
             var x = this.camera.view.centerX + i * 32;
             var y = this.camera.view.centerY - 58 + i + 32
@@ -598,13 +556,13 @@ BackTogether.Level1.prototype = {
 
             var item1 = this.add.button(x, y, key, this.inventoryItemOnClick, this, 2, 1, 0);
             item1.anchor.setTo(0.5, 0.5);
-            player.itemBtns.push(item1);
+            this.player.itemBtns.push(item1);
             currentCard.pauseScreenBtns.push(item1);
 
             var num = this.add.text(x + 16, y + 16, obj, { font: '32px Aclonica', fill: '#000' });
             num.anchor.setTo(0.5, 0.5);
             num.scale.setTo(0.5, 0.5);
-            player.itemNums.push(num);
+            this.player.itemNums.push(num);
 
             i += 1;
         }
@@ -663,18 +621,18 @@ BackTogether.Level1.prototype = {
         currentCard.inventory.destroy();
         currentCard.inventoryTxt.destroy();
 
-        for (var i = 0; i < player.itemBtns.length; i++) {
-            player.itemBtns[i].destroy();
+        for (var i = 0; i < this.player.itemBtns.length; i++) {
+            this.player.itemBtns[i].destroy();
         }
-        for (var i = 0; i < player.itemNums.length; i++) {
-            player.itemNums[i].destroy();
+        for (var i = 0; i < this.player.itemNums.length; i++) {
+            this.player.itemNums[i].destroy();
         }
 
-        player.itemBtns = [];
-        player.itemNums = [];
+        this.player.itemBtns = [];
+        this.player.itemNums = [];
 
         // Unpause the game
-        this.paused = false;
+        this.game.paused = false;
     },
     inventortOnClick: function () {
         inventoryTxt.visible = !inventoryTxt.visible;
@@ -709,7 +667,7 @@ BackTogether.Level1.prototype = {
             confirmCard.txt.destroy();
             confirmCard.destroy();
             confirm = false;
-            player.items[e.key]--;
+            this.player.items[e.key]--;
 
             for (var i = 0; i < currentCard.pauseScreenBtns.length; i++) {
                 currentCard.pauseScreenBtns[i].inputEnabled = true;
@@ -777,11 +735,11 @@ BackTogether.Level1.prototype = {
         volIcon.fixedToCamera = true;
         this.world.bringToTop(volIcon);
     },
-    playerVictory: function () {
-        if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
-            console.log("victory!");
-        }
-    },
+    // playerVictory: function () {
+    //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
+    //         console.log("victory!");
+    //     }
+    // },
     initHealthBar: function () {
 
         this.healthPoint = 6;
@@ -873,14 +831,14 @@ BackTogether.Level1.prototype = {
                 currentCard.inventoryTxt.destroy();
                 currentCard.destroy();
 
-                for (var i = 0; i < player.itemBtns.length; i++) {
-                    player.itemBtns[i].destroy();
+                for (var i = 0; i < this.player.itemBtns.length; i++) {
+                    this.player.itemBtns[i].destroy();
                 }
-                for (var i = 0; i < player.itemNums.length; i++) {
-                    player.itemNums[i].destroy();
+                for (var i = 0; i < this.player.itemNums.length; i++) {
+                    this.player.itemNums[i].destroy();
                 }
-                player.itemBtns = [];
-                player.itemNums = [];
+                this.player.itemBtns = [];
+                this.player.itemNums = [];
 
                 // Unpause the game
                 key.game.paused = false;

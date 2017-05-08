@@ -11,7 +11,6 @@ var iKeyDown = false;
 var playAgain;
 var mainMenu;
 var next;
-var player;
 
 var playerStartPos;
 var playerEndPos;
@@ -55,7 +54,7 @@ BackTogether.Level2.prototype = {
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
-        Arm.initPlayer(game);
+        this.player = new Arm(game);
         this.initItems();
         this.initText();
         this.initTimer();

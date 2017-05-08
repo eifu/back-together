@@ -1,6 +1,5 @@
 
-Arm = {
- initPlayer: function (game) {
+Arm = function (game) {
         // The player and its settings
         playerStartPos = Tile.findObjectsByType('playerStart', map, 'objectsLayer')
         playerEndPos = Tile.findObjectsByType('playerEnd', map, 'objectsLayer');
@@ -34,5 +33,4 @@ Arm = {
         player.itemBtns = [];
         player.itemNums = [];
 
-    },
 }
