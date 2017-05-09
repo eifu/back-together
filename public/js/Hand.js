@@ -38,6 +38,8 @@ var Hand = function (game, map) {
     this.damaged = false;
     this.damagedTime = 0;
 
+    this.hackingStart = false;
+
     // player.items = ['invisible', 'stink', 'invisible'];
     this.items = { 'invisible': 2, 'stink': 1 };
     this.itemBtns = [];
@@ -51,6 +53,7 @@ var Hand = function (game, map) {
 
         //  Reset the players velocity (movement)
         this.sprite.body.velocity.x = 0;
+        this.hackingStart = false;
 
         if (timeNow < this.damagedTime) {
             // if player gets damaged.
@@ -126,6 +129,10 @@ var Hand = function (game, map) {
                     GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
                 }
             }
+            else if (keys['DOWN'].isDown || keys['S'].isDown){
+                this.hackingStart = true;
+            }
+
             else {
 
                 if (this.damaged) {

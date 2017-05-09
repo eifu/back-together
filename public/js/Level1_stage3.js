@@ -41,7 +41,6 @@ BackTogether.Level1_stage3.prototype = {
         this.pausedScreen.off();
 
         this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 3 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
-        this.popupScreen.on();
 
 
         var collisionObjects = game.physics.p2.convertCollisionObjects(map, 'collision', true);
@@ -84,6 +83,11 @@ BackTogether.Level1_stage3.prototype = {
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
 
+
+
+        this.popupScreen.on();
+
+
     },
 
     update: function (game) {
@@ -105,17 +109,33 @@ BackTogether.Level1_stage3.prototype = {
             if (this.checkOverlap(this.player.sprite, r.sprite)) {
                 // if the player and a robot overlap, 
                 if (r.vulnerable) {
+
                     GameScreenConfig.setObjective("Press down or 'S' to H A C K!");
+
+                    if (this.player.hackingStart){
+                        console.log('yeahhhh');
+
+                        if (r.state == 'switchOffLeft'){
+                            r.state = 'hackLeft'
+                            r.sprite.animations.play('hackLeft');
+                        } else {
+ r.state = 'hackRight';    
+                            r.sprite.animations.play('hackRight');
+                           
+                        }
+                    }
+
+
                 } else {
 
                     if (this.playerAttackFromLeft(r)) {
                         r.vulnerable = true;
-                        this.popupScreen.setText("CONGRATULATIONS! \n You just defeated your first evil robot!");
+                        this.popupScreen.setText("Good job!\n Let's Hack this broken robot! \n Press down cursor or\n press 'S' next to robot!");
                         this.popupScreen.on();
                     }
                     else if (this.playerAttackFromRight(r)) {
                         r.vulnerable = true;
-                        this.popupScreen.setText("CONGRATULATIONS! \n You just defeated your first evil robot!");
+                        this.popupScreen.setText("Good job!\n Let's Hack this broken robot! \n Press down cursor or\n press 'S' next to robot!");
                         this.popupScreen.on();
                     }
 

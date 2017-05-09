@@ -16,7 +16,7 @@ var PopupScreen = function (game, message) {
     this.txt = game.add.text(game.camera.view.centerX, game.camera.view.centerY - this.sprite.height / 3, message, { font: '32px Aclonica', fill: '#FFF' });
     this.txt.anchor.setTo(0.5, 0);
 
-    this.off = function(){
+    this.off = function () {
 
         this.popupBool = false;
 
@@ -28,7 +28,7 @@ var PopupScreen = function (game, message) {
         game.paused = false;
     }
 
-    this.okBtn = game.add.button(game.camera.view.centerX, game.camera.view.centerY + this.sprite.height / 3, 'okBtn', this.off , this, 2, 1, 0);
+    this.okBtn = game.add.button(game.camera.view.centerX, game.camera.view.centerY + this.sprite.height / 3, 'okBtn', this.off, this, 2, 1, 0);
     this.okBtn.anchor.setTo(0.5, 0.5);
     this.okBtn.scale.setTo(4, 4);
 
@@ -52,11 +52,16 @@ var PopupScreen = function (game, message) {
         this.txt.reset(game.camera.view.centerX, game.camera.view.centerY - this.sprite.height / 3);
         game.paused = true;
         this.popupBool = true;
+
+        game.world.bringToTop(this.sprite);
+        game.world.bringToTop(this.txt);
+        game.world.bringToTop(this.okBtn);
+        game.world.bringToTop(this.okIcon);
     }
 
 
 
-    this.setText = function(m){
+    this.setText = function (m) {
         this.txt.setText(m);
     }
 }
