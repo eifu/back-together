@@ -1,11 +1,10 @@
-BackTogether.Level1_stage3 = function (game) {
+BackTogether.Level1_stage2 = function (game) {
 
 };
 
 
 var platformLayer;
 var pausedLayer;
-var collisionLayer;
 var keys;
 var iKeyDown = false;
 var playAgain;
@@ -14,79 +13,40 @@ var next;
 var player;
 var map;
 
-BackTogether.Level1_stage3.prototype = {
+BackTogether.Level1_stage2.prototype = {
 
     create: function (game) {
         game.physics.startSystem(Phaser.Physics.P2JS);
-        game.physics.p2.setImpactEvents(true);
-        game.physics.p2.restitution = 0.8;
+
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
-        map = this.add.tilemap('level1_stage3', 64, 64);
+        map = this.add.tilemap('level1_stage2', 64, 64);
         map.addTilesetImage('tileset2');
         map.addTilesetImage('tileset3');
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
 
+        map.setCollisionBetween(5,7);
 
-        game.physics.p2.setBoundsToWorld()
 
-        game.physics.p2.convertTilemap(map, platformLayer);
-        
-        game.physics.p2.gravity.y = 300;
+        this.physics.p2.convertTilemap(map, platformLayer);
+        this.physics.p2.restitution = 0;
+        this.physics.p2.gravity.y = 300;
 
         // can be Hand, Arm, Torso.
-        this.player = new Hand(game, map);
-        this.pausedScreen = new PausedScreen(game, this.player);
-        this.pausedScreen.off();
-
-        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 3 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
-        this.popupScreen.on();
-
-
-        // map.setCollisionBetween(5,7);
-        // map.setCollisionBetween(8, 10);
-        // map.setCollisionBetween(21, 22);
+        this.player = new Hand(game);
 
 
 
+        game.physics.p2.convertCollisionObjects(map, 'collision', true);
 
-        console.log(map);
-        var collisionObjects = game.physics.p2.convertCollisionObjects(map, 'collision', true);
+        // maybe we should use collision group later.
+        // this.tilesCollisionGroup   = this.physics.p2.createCollisionGroup();    
+        // this.playerCollisionGroup  = this.physics.p2.createCollisionGroup();   
+        // this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);    
+        // this.player.sprite.body.collides(this.tilesCollisionGroup);
 
-        console.log(collisionObjects);
-        // game.physics.p2.clearTilemapLayerBodies(map, layer);
-
-        var tilesCollisionGroup = game.physics.p2.createCollisionGroup();
-        var playerCollisionGroup = game.physics.p2.createCollisionGroup();
-
-        game.physics.p2.updateBoundsCollisionGroup();
-
-        console.log('tileCG');
-        console.log(tilesCollisionGroup);
-        console.log('playerCG');
-        console.log(playerCollisionGroup);
-
-        for (var i = 0; i < collisionObjects.length; i++) {
-
-            
-            collisionObjects[i].setCollisionGroup(tilesCollisionGroup);
-            collisionObjects[i].collides(playerCollisionGroup);
-
-
-            console.log(collisionObjects[i]);
-        }
-
-        this.player.sprite.enableBody = true;
-
-        this.player.sprite.body.setCollisionGroup(playerCollisionGroup);
-        this.player.sprite.body.collides(tilesCollisionGroup, function(){
-
-            console.log('hello');
-        },this);
-
-        console.log(this.player.sprite.body);
 
         // these are general purpose.
         GameScreenConfig.initText(game);
@@ -103,7 +63,11 @@ BackTogether.Level1_stage3.prototype = {
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
 
+        this.pausedScreen = new PausedScreen(game, this.player);
+        this.pausedScreen.off();
 
+        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 3 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
+        this.popupScreen.on();
 
         // adjust the cordinate. 
         // these lines should be stage unique.
@@ -147,20 +111,20 @@ BackTogether.Level1_stage3.prototype = {
                     this.screenShake();
                     this.playerDamaged();
 
-                    if (r.state == 'left') {
+                    if (r.state == 'left'){
                         r.animations.play("leftIdle");
-                    } else {
+                    }else {
                         r.animations.play("rightIdle");
                     }
                     r.stateTime = 0;
-
+                    
                 }
 
             }
         }
 
         // this.playerVictory();
-        Robot.updateRobots(game);
+        // Robot.updateRobots(game);
 
         // this.collectItem(this.itemBox, game);
     },
@@ -217,7 +181,7 @@ BackTogether.Level1_stage3.prototype = {
             GameScreenConfig.heart.animations.play("slow");
         }
 
-        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint, 1);
+        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint,1);
         this.player.damaged = true;
 
     },
@@ -234,10 +198,10 @@ BackTogether.Level1_stage3.prototype = {
     initRobots: function () {
         this.game.robots = this.add.group();
 
-        _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
+        // _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
 
-        console.log(216);
-        this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
+        // console.log(216);
+        // this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
 
     },
 

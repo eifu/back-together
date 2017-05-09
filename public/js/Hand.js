@@ -1,11 +1,11 @@
 
-var Hand = function (game) {
+var Hand = function (game, map) {
 
     this.game = game;
+    this.map = map;
 
     // The player and its settings
     playerStartPos = Tile.findObjectsByType('playerStart', map, 'objectsLayer')
-    playerEndPos = Tile.findObjectsByType('playerEnd', map, 'objectsLayer');
     this.sprite = game.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'hand');
 
     //  We need to enable physics on the player
