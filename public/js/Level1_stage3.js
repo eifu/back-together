@@ -58,21 +58,22 @@ BackTogether.Level1_stage3.prototype = {
         console.log(collisionObjects);
         // game.physics.p2.clearTilemapLayerBodies(map, layer);
 
-        var tilesCollisionGroup = game.physics.p2.createCollisionGroup();
-        var playerCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.tilesCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.robotCollisionGroup = game.physics.p2.createCollisionGroup();
 
         game.physics.p2.updateBoundsCollisionGroup();
 
         console.log('tileCG');
-        console.log(tilesCollisionGroup);
+        console.log(this.tilesCollisionGroup);
         console.log('playerCG');
-        console.log(playerCollisionGroup);
+        console.log(this.playerCollisionGroup);
 
         for (var i = 0; i < collisionObjects.length; i++) {
 
             
-            collisionObjects[i].setCollisionGroup(tilesCollisionGroup);
-            collisionObjects[i].collides(playerCollisionGroup);
+            collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
+            collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup]);
 
 
             console.log(collisionObjects[i]);
@@ -80,8 +81,8 @@ BackTogether.Level1_stage3.prototype = {
 
         this.player.sprite.enableBody = true;
 
-        this.player.sprite.body.setCollisionGroup(playerCollisionGroup);
-        this.player.sprite.body.collides(tilesCollisionGroup, function(){
+        this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
+        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
 
             console.log('hello');
         },this);
@@ -238,6 +239,8 @@ BackTogether.Level1_stage3.prototype = {
 
         console.log(216);
         this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
+        this.robot1.body.setCollisionGroup(this.robotCollisionGroup);
+        this.robot1.body.collides(this.tilesCollisionGroup);
 
     },
 
