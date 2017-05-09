@@ -179,10 +179,10 @@
                  "gid":1,
                  "height":32,
                  "id":6,
-                 "name":"intro5",
+                 "name":"playerGoal",
                  "properties":
                     {
-                     "type":"intro5"
+                     "type":"playerGoal"
                     },
                  "propertytypes":
                     {
@@ -192,8 +192,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":2673.64,
-                 "y":595.682
+                 "x":3105.64,
+                 "y":640.682
                 }, 
                 {
                  "gid":1,
@@ -232,8 +232,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":2582.32822839994,
-                 "y":237.133890380667
+                 "x":2582.33,
+                 "y":237.134
                 }],
          "opacity":1,
          "type":"objectgroup",

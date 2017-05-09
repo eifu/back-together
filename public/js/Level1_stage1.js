@@ -56,17 +56,11 @@ BackTogether.Level1_stage1.prototype = {
         game.physics.p2.updateBoundsCollisionGroup();
 
         for (var i = 0; i < collisionObjects.length; i++) {
-
-
             collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
             collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup, this.capsuleCollisionGroup]);
-
-
-            console.log(collisionObjects[i]);
         }
 
         this.player.sprite.enableBody = true;
-
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
         this.player.sprite.body.collides([this.tilesCollisionGroup, this.capsuleCollisionGroup]);
 
@@ -220,7 +214,7 @@ BackTogether.Level1_stage1.prototype = {
 
                         d.detectTime = 1000;
 
-                        var c = this.add.sprite(d.sprite.x, d.sprite.y - 400, 'capsule');
+                        var c = this.add.sprite(d.sprite.x, d.sprite.y, 'capsule');
                         c.animations.frame = 0;
                         this.physics.p2.enable(c);
                         c.body.data.gravityScale = 10;
@@ -253,14 +247,14 @@ BackTogether.Level1_stage1.prototype = {
             } else if (t > 300) {
                 c.animations.frame = 1;
             } else if (t > 200) {
-                c.animations.frame = 1;
+                c.animations.frame = 2;
             } else if (t > 100) {
                 c.animations.frame = 3;
             } else if (t > 0) {
                 c.animations.frame = 4;
 
             } else {
-                var r = new Robot(game, c.x, c.y - 100);
+                var r = new Robot(game, c.x, c.y - 200);
                 c.destroy();
 
 
@@ -316,11 +310,10 @@ BackTogether.Level1_stage1.prototype = {
             this.intro4_2Bool = true;
         }
 
-        if (this.intro5Bool && this.checkOverlap(this.player.sprite, this.intro5)) {
+        if (this.checkOverlap(this.player.sprite, this.goal)) {
             this.popupScreen.setText("Congratulation!! \nYou just finish\n the first stage of Back together!!");
             this.popupScreen.on();
-            this.intro5.destroy();
-            this.intro5Bool = false;
+            this.game.state.start('Level1_stage2');
         }
 
         // this.playerVictory();
@@ -503,12 +496,9 @@ BackTogether.Level1_stage1.prototype = {
         this.intro4.animations.play('normal');
 
 
-        var intro5 = Tile.findObjectsByType('intro5', map, 'objectsLayer')[0];
-        this.intro5 = this.add.sprite(intro5.x, intro5.y, 'hitBox');
-        this.intro5.anchor.setTo(0.5, 0.5);
-        this.intro5.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
-        this.intro5.animations.play('normal');
-
+        var goalPos = Tile.findObjectsByType('playerGoal', map, 'objectsLayer')[0];
+        this.goal = this.add.sprite(goalPos.x, goalPos.y, 'goal');
+        this.goal.anchor.setTo(0, 1);
     }
 
 

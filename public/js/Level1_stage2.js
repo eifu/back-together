@@ -56,13 +56,8 @@ BackTogether.Level1_stage2.prototype = {
         game.physics.p2.updateBoundsCollisionGroup();
 
         for (var i = 0; i < collisionObjects.length; i++) {
-
-
             collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
             collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup, this.capsuleCollisionGroup]);
-
-
-            console.log(collisionObjects[i]);
         }
 
         this.player.sprite.enableBody = true;
@@ -101,7 +96,6 @@ BackTogether.Level1_stage2.prototype = {
         this.intro4Bool = true;
         this.intro4_2Bool = false;
         this.intro5Bool = true;
-
         this.damageBool = true;
 
 
@@ -384,13 +378,6 @@ BackTogether.Level1_stage2.prototype = {
 
 
     },
-    // playerVictory: function () {
-    //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
-    //         console.log("victory!");
-    //     }
-    // },
-
-
     initKeys: function () {
         var inputs = [
             Phaser.Keyboard.ONE,
@@ -422,8 +409,7 @@ BackTogether.Level1_stage2.prototype = {
     unpause: function (key) {
         // Only act if paused
         if (key.game.paused) {
-            console.log(key);
-            console.log()
+
             if (this.popupScreen.popupBool) {
                 console.log(551);
                 this.popupScreen.off();
@@ -442,7 +428,11 @@ BackTogether.Level1_stage2.prototype = {
         }
     },
     initHitboxs: function () {
-        // later
+        
+        var goalPos = Tile.findObjectsByType('playerGoal', map, 'objectsLayer')[0];
+        this.goal = this.add.sprite(goalPos.x, goalPos.y, 'goal');
+        this.goal.anchor.setTo(0, 1);
+
 
     }
 

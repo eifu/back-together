@@ -34,8 +34,8 @@ BackTogether.Preloader.prototype = {
                 this.load.image('disabledLevelBtn', 'assets/images/disabledLevelBtn.png');
                 this.load.spritesheet('itemBox', 'assets/images/itemBox.png', 32, 32);
                 this.load.spritesheet('heartbeat', 'assets/images/heartbeat.png', 100, 100);
-                
-                
+
+
                 this.load.image('healthbar_green', 'assets/images/healthbar_green.png');
                 this.load.image('healthbar_red', 'assets/images/healthbar_red.png');
 
@@ -61,8 +61,8 @@ BackTogether.Preloader.prototype = {
                 this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
 
                 this.load.image('bodyMap', 'assets/images/bodyMap.png');
-                this.load.image('arrowLeft', 'assets/images/arrowLeft.png');
-                this.load.image('arrowRight', 'assets/images/arrowRight.png');
+                this.load.spritesheet('arrowLeft', 'assets/images/arrowLeft.png', 96, 96);
+                this.load.spritesheet('arrowRight', 'assets/images/arrowRight.png', 96, 96);
                 this.load.spritesheet('capsule', 'assets/images/capsule.png', 50, 50);
 
                 this.load.spritesheet('yesBtn', 'assets/images/yesBtn.png', 24, 24);
@@ -75,6 +75,7 @@ BackTogether.Preloader.prototype = {
 
 
                 this.load.spritesheet('hitBox', 'assets/images/hitBox.png', 64, 64);
+                this.load.image('goal', 'assets/images/goal.png');
 
                 // GAME SCREEN
                 this.load.spritesheet('volBtn', 'assets/images/VolBtn.png', 24, 24);

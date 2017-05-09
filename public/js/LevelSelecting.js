@@ -6,21 +6,9 @@ BackTogether.LevelSelecting = function (game) {
 //  user info. should be Player.js that handles the data.
 // 
 
-User = function () {
 
-};
-
-User.prototype = {
-    setLevel: function (level) {
-        this.myLevel = level;
-    },
-    getLevel: function () {
-        return this.myLevel;
-    }
-}
 
 //
-var user;
 var volDownIcon;
 var Level;
 var wfconfig = {
@@ -30,7 +18,7 @@ var wfconfig = {
 };
 
 var menuLayer;
-
+var levelShowing = 1;
 var itoaArray;
 
 BackTogether.LevelSelecting.prototype = {
@@ -61,14 +49,7 @@ BackTogether.LevelSelecting.prototype = {
             keys[name[i]] = game.input.keyboard.addKey(input);
         });
 
-        // this is temporaly.
-        // user should be initialized at mainmenu. 
-        // mainmenu,
-        //  |--new game
-        //  |--load game
-        //
-        user = new User();
-        user.setLevel(2);
+
 
 
 
@@ -92,48 +73,62 @@ BackTogether.LevelSelecting.prototype = {
 
         this.buttons = [];
         for (var x = 0; x < 3; x++) {
-            this.buttons.push(this.createButton(game, x,
+            this.buttons.push(this.createButton(game, levelShowing, x,
                 this.camera.view.centerX + (x - 1) * 250, this.camera.view.centerY, 200, 100));
         }
 
 
         this.initHandAnimation();
+        this.initArmAnimation();
+        this.initTorsoAnimation();
+        this.armAnimation.visible = false;
         this.initBackBtn(game);
         this.initVolIcon();
+
 
         this.arrowLeft = this.add.button(this.camera.view.centerX - 400, this.camera.view.centerY, 'arrowLeft', this.levelDownOnClick, this, 2, 1, 0);
         this.arrowLeft.scale.setTo(2, 2);
         this.arrowLeft.anchor.setTo(0.5, 0.5);
+        if (levelShowing == 1) {
+            this.arrowLeft.visible = false;
+        }
 
         this.arrowRight = this.add.button(this.camera.view.centerX + 400, this.camera.view.centerY, 'arrowRight', this.levelUpOnClick, this, 2, 1, 0);
         this.arrowRight.scale.setTo(2, 2);
         this.arrowRight.anchor.setTo(0.5, 0.5);
-
-        this.currentLevel = 1;
+        if (levelShowing == 2) {
+            this.arrowRight.visible = false;
+        }
 
     },
     update: function () {
         if (keys['ONE'].isDown) {
             Level = 'ONE';
-            this.game.state.start('Level1_stage1');
+            user.setStage(1);
+            this.game.state.start('LevelSelecting');
         }
         if (keys['TWO'].isDown) {
             Level = 'TWO';
-            this.game.state.start('Level1_stage2');
+            user.setStage(2);
+            this.game.state.start('LevelSelecting');
         }
         if (keys['THREE'].isDown) {
-            Level = 'THREE';
-            this.game.state.start('Level1_stage3');
+            user.setStage(3);
+            this.game.state.start('LevelSelecting');
         }
+
     },
-    createButton: function (game, i, x, y, w, h) {
+    createButton: function (game, currentShowingLevel, StageNum, x, y, w, h) {
         var b;
-        if (i < user.getLevel()) {
+        // console.log(currentShowingLevel);
+        // console.log(StageNum);
+        // console.log(user);
+        if (currentShowingLevel <= user.getLevel() && StageNum < user.getStage()) {
             b = this.add.button(x, y - 50, 'levelBtn',
                 function () {
                     pop.play();
-                    Level = itoaArray[i];
-                    game.state.start("Level1_stage" + (i + 1) );
+                    Level = itoaArray[StageNum];
+                    game.state.start("Level" + currentShowingLevel + "_stage" + (StageNum + 1));
 
                 }
                 , 2, 1, 0);
@@ -154,7 +149,7 @@ BackTogether.LevelSelecting.prototype = {
         b.height = h;
         this.add.tween(b).to({ y: y }, 500, Phaser.Easing.Bounce.Out, true);
 
-        b.txt = this.add.text(b.x, b.y - 50, itoaArray[i], {
+        b.txt = this.add.text(b.x, b.y - 50, itoaArray[StageNum], {
             font: '16px Aclonica', fill: "#ff3823",
             align: "center"
         });
@@ -165,23 +160,26 @@ BackTogether.LevelSelecting.prototype = {
 
     },
     initHandAnimation: function () {
-
-        console.log(user.getLevel());
-
-        this.handAnimation = this.add.sprite(this.camera.view.centerX + (user.getLevel() - 3) * 250, this.camera.view.centerY - 50, 'hand');
+        this.handAnimation = this.add.sprite(this.camera.view.centerX + (user.getStage() - 3) * 250, this.camera.view.centerY - 50, 'hand');
         this.handAnimation.anchor.setTo(0.5, 0.5);
         this.handAnimation.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
         this.handAnimation.animations.play('right');
-        this.add.tween(this.handAnimation).to({ x: this.camera.view.centerX + (user.getLevel() - 2) * 250 }, 1500, "Linear", true);
+        this.add.tween(this.handAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
 
     },
     initArmAnimation: function () {
-        this.armAnimation = this.add.sprite(this.camera.view.centerX + (user.getLevel() - 3) * 250, this.camera.view.centerY - 50, 'arm');
+        this.armAnimation = this.add.sprite(this.camera.view.centerX + (user.getStage() - 3) * 250, this.camera.view.centerY - 50, 'arm');
         this.armAnimation.anchor.setTo(0.5, 0.5);
         this.armAnimation.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
         this.armAnimation.animations.play('right');
-        this.add.tween(this.armAnimation).to({ x: this.camera.view.centerX + (user.getLevel() - 2) * 250 }, 1500, "Linear", true);
-
+        this.add.tween(this.armAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
+    },
+    initTorsoAnimation: function () {
+        this.torsoAnimation = this.add.sprite(this.camera.view.centerX + (user.getStage() - 3) * 250, this.camera.view.centerY - 50, 'torso');
+        this.torsoAnimation.anchor.setTo(0.5, 0.5);
+        this.torsoAnimation.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
+        this.torsoAnimation.animations.play('right');
+        this.add.tween(this.torsoAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
     },
     initBackBtn: function (game) {
         var backBtn = this.add.button(this.camera.view.centerX - this.game.width / 2.5, this.camera.view.centerY + this.game.height / 2, 'backBtn', function () {
@@ -237,57 +235,97 @@ BackTogether.LevelSelecting.prototype = {
     levelDownOnClick: function (levelSelecting) {
         // console.log(this);
         // console.log(a);
-        if (this.currentLevel == 2) {
 
-            this.buttons.forEach(function (e) {
-                var tweenB = levelSelecting.game.add.tween(e).to({ x: levelSelecting.game.width - 100 }, 1000, Phaser.Easing.Default, true);
-                tweenB.onComplete.add(function () {
-                    e.destroy();
-                }, this)
-                var tweenBTxt = levelSelecting.game.add.tween(e.txt).to({ x: levelSelecting.game.width - 100 }, 1000, Phaser.Easing.Default, true);
-                tweenBTxt.onComplete.add(function () {
-                    e.txt.destroy();
-                }, this);
-            });
-            this.armAnimation.destroy();
+        this.buttons.forEach(function (e) {
+            var tweenB = levelSelecting.game.add.tween(e).to({ x: levelSelecting.game.width - 100 }, 1000, Phaser.Easing.Default, true);
+            tweenB.onComplete.add(function () {
+                e.destroy();
+            }, this)
+            var tweenBTxt = levelSelecting.game.add.tween(e.txt).to({ x: levelSelecting.game.width - 100 }, 1000, Phaser.Easing.Default, true);
+            tweenBTxt.onComplete.add(function () {
+                e.txt.destroy();
+            }, this);
+        });
 
-            this.buttons = [];
-            for (var x = 0; x < 3; x++) {
-                this.buttons.push(this.createButton(this, x,
-                    this.camera.view.centerX + (x - 1) * 250, this.camera.view.centerY, 200, 100));
-            }
-            this.initHandAnimation();
+        this.buttons = [];
+        levelShowing = levelShowing - 1;
 
-            this.currentLevel = 1;
+        this.handAnimation.visible = false;
+        this.armAnimation.visible = false;
+
+
+        for (var x = 0; x < 3; x++) {
+            this.buttons.push(this.createButton(this, levelShowing, x,
+                this.camera.view.centerX + (x - 1) * 250, this.camera.view.centerY, 200, 100));
         }
+
+        if (levelShowing <= user.getLevel()) {
+
+            if (levelShowing == 1) {
+                this.arrowLeft.visible = false;
+                this.handAnimation.visible = true;
+                this.add.tween(this.handAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
+                this.game.world.bringToTop(this.handAnimation);
+            } else {
+                this.arrowLeft.visible = true;
+                this.armAnimation.visible = true;
+                this.add.tween(this.armAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
+                this.game.world.bringToTop(this.armAnimation);
+            }
+        }
+
+        this.arrowRight.visible = true;
     },
 
     levelUpOnClick: function (levelSelecting) {
-        if (this.currentLevel == 1) {
 
-            this.buttons.forEach(function (e) {
-                var tweenB = levelSelecting.game.add.tween(e).to({ x: 100 }, 1000, Phaser.Easing.Default, true);
-                tweenB.onComplete.add(function () {
-                    e.destroy();
-                }, this)
-                var tweenBTxt = levelSelecting.game.add.tween(e.txt).to({ x: 100 }, 1000, Phaser.Easing.Default, true);
-                tweenBTxt.onComplete.add(function () {
-                    e.txt.destroy();
-                }, this);
-            });
+        this.buttons.forEach(function (e) {
+            var tweenB = levelSelecting.game.add.tween(e).to({ x: 100 }, 1000, Phaser.Easing.Default, true);
+            tweenB.onComplete.add(function () {
+                e.destroy();
+            }, this)
+            var tweenBTxt = levelSelecting.game.add.tween(e.txt).to({ x: 100 }, 1000, Phaser.Easing.Default, true);
+            tweenBTxt.onComplete.add(function () {
+                e.txt.destroy();
+            }, this);
+        });
 
-            this.handAnimation.destroy();
+        this.handAnimation.visible = false;
+        this.armAnimation.visible = false;
 
 
-            this.buttons = [];
-            for (var x = 0; x < 3; x++) {
-                this.buttons.push(this.createButton(this, x,
-                    this.camera.view.centerX + (x - 1) * 250, this.camera.view.centerY, 200, 100));
-            }
-            this.initArmAnimation();
+        levelShowing = levelShowing + 1;
 
-            this.currentLevel = 2;
+        this.buttons = [];
+        for (var x = 0; x < 3; x++) {
+            this.buttons.push(this.createButton(this, levelShowing, x,
+                this.camera.view.centerX + (x - 1) * 250, this.camera.view.centerY, 200, 100));
         }
+
+        if (levelShowing < user.getLevel()) {
+            if (levelShowing == 3) {
+                this.arrowRight.visible = false;
+                this.armAnimation.visible = true;
+                this.add.tween(this.armAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
+                this.game.world.bringToTop(this.armAnimation);
+
+            } else if (levelShowing == 2) {
+                this.arrowRight.visible = true;
+                this.armAnimation.visible = true;
+                this.add.tween(this.armAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
+                this.game.world.bringToTop(this.armAnimation);
+
+            } else {
+                this.arrowRight.visible = true;
+                this.handAnimation.visible = true;
+                this.add.tween(this.handAnimation).to({ x: this.camera.view.centerX + (user.getStage() - 2) * 250 }, 1500, "Linear", true);
+                this.game.world.bringToTop(this.handAnimation);
+
+            }
+        }
+
+        this.arrowLeft.visible = true;
+
     }
 
 }

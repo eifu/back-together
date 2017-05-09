@@ -44,8 +44,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":50.2197,
-                 "y":583.67
+                 "x":0.219700000000003,
+                 "y":574.67
                 }, 
                 {
                  "gid":1,
@@ -64,8 +64,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":196,
-                 "y":335
+                 "x":159,
+                 "y":331
                 }, 
                 {
                  "gid":1,
@@ -346,6 +346,26 @@
                  "width":32,
                  "x":2248,
                  "y":358
+                }, 
+                {
+                 "gid":1,
+                 "height":32,
+                 "id":40,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"playerGoal"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":3105,
+                 "y":639
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -558,7 +578,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":40,
+ "nextobjectid":41,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,

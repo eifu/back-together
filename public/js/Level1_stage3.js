@@ -214,10 +214,6 @@ BackTogether.Level1_stage3.prototype = {
             this.introBool2_2 = true;
         }
 
-        // this.playerVictory();
-        // Robot.updateRobots(game);
-
-        // this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');

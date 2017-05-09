@@ -56,22 +56,14 @@ BackTogether.Level2_stage1.prototype = {
         game.physics.p2.updateBoundsCollisionGroup();
 
         for (var i = 0; i < collisionObjects.length; i++) {
-
-            
             collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
             collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup]);
-
-
-            console.log(collisionObjects[i]);
         }
 
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
-
-            console.log(this.player.sprite.body.angle);
-        },this);
+        this.player.sprite.body.collides(this.tilesCollisionGroup);
 
 
 
@@ -140,10 +132,6 @@ BackTogether.Level2_stage1.prototype = {
             }
         }
 
-        // this.playerVictory();
-        // Robot.updateRobots(game);
-
-        // this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.x && this.player.sprite.body.velocity.x >= 0 && r.body.velocity.x >= 0;
@@ -222,12 +210,6 @@ BackTogether.Level2_stage1.prototype = {
 
     },
 
-    // playerVictory: function () {
-    //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
-    //         console.log("victory!");
-    //     }
-    // },
-
 
     initKeys: function () {
         var inputs = [
@@ -260,20 +242,18 @@ BackTogether.Level2_stage1.prototype = {
     unpause: function (key) {
         // Only act if paused
         if (key.game.paused) {
-            console.log(key);
-            console.log()
             if (this.popupScreen.popupBool) {
-                console.log(551);
+                // console.log(551);
                 this.popupScreen.off();
 
             } else if (this.pausedScreen.confirmBool) {
 
                 this.pausedScreen.confirmOff();
-                console.log(565);
+                // console.log(565);
 
             } else if (this.pausedScreen.pauseBool) {
 
-                console.log(573);
+                // console.log(573);
                 this.pausedScreen.off();
 
             }
