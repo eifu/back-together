@@ -39,11 +39,15 @@ var Hand = function (game, map) {
     this.damagedTime = 0;
 
     this.hackingStart = false;
+    this.hackingEntTime = 0;
 
     // player.items = ['invisible', 'stink', 'invisible'];
     this.items = { 'invisible': 2, 'stink': 1 };
     this.itemBtns = [];
     this.itemNums = [];
+
+
+    this.hackedRobot = null;
 
 
     this.update = function () {
@@ -53,7 +57,18 @@ var Hand = function (game, map) {
 
         //  Reset the players velocity (movement)
         this.sprite.body.velocity.x = 0;
-        this.hackingStart = false;
+        if (timeNow < this.hackingEndTime) {
+            // this.sprite.body.data.gravityScale = 0;
+            // this.sprite.body.clearShapes();
+
+
+        } else if (this.hackingStart == true) {
+            console.log('hacking finished');
+            this.sprite.body.data.gravityScale = 1;
+            this.hackingStart = false;
+            this.addShape();
+        }
+
 
         if (timeNow < this.damagedTime) {
             // if player gets damaged.
@@ -76,37 +91,66 @@ var Hand = function (game, map) {
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
 
-                //  Move to the left
-                if (this.sprite.animations.frame == 0) {
-                    this.sprite.body.velocity.x = -600;
-                } else if (this.sprite.animations.frame == 1) {
-                    this.sprite.body.velocity.x = -800;
-                } else if (this.sprite.animations.frame == 2) {
-                    this.sprite.body.velocity.x = -600;
-                } else {
-                    this.sprite.body.velocity.x = -400;
-                }
-                this.sprite.animations.play('left');
-                this.face = 'left';
+                if (this.hackingStart) {
 
-                GameScreenConfig.setObjective("<--- Moving Left, goint wrong way");
+                    console.log('left hack');
+
+                    console.log(this.hackedRobot);
+                    this.sprite.body.moveLeft(100);
+                    this.hackedRobot.sprite.body.x = this.sprite.x;
+ 
+                    this.hackedRobot.sprite.animations.play('hackLeft');
+                     this.hackedRobot.state = 'hackLeft';
+                    GameScreenConfig.setObjective("hacking now!! going left!!");
+
+
+                } else {
+                    //  Move to the left
+                    if (this.sprite.animations.frame == 0) {
+                        this.sprite.body.velocity.x = -600;
+                    } else if (this.sprite.animations.frame == 1) {
+                        this.sprite.body.velocity.x = -800;
+                    } else if (this.sprite.animations.frame == 2) {
+                        this.sprite.body.velocity.x = -600;
+                    } else {
+                        this.sprite.body.velocity.x = -400;
+                    }
+                    this.sprite.animations.play('left');
+                    this.face = 'left';
+
+                    GameScreenConfig.setObjective("<--- Moving Left, goint wrong way");
+
+                }
             }
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
-                //  Move to the right
-                if (this.sprite.animations.frame == 4) {
-                    this.sprite.body.velocity.x = 600;
-                } else if (this.sprite.animations.frame == 5) {
-                    this.sprite.body.velocity.x = 800;
-                } else if (this.sprite.animations.frame == 6) {
-                    this.sprite.body.velocity.x = 600;
-                } else {
-                    this.sprite.body.velocity.x = 400;
+
+                if (this.hackingStart) {
+                    console.log('right hack');
+                    console.log(this.hackedRobot);
+                    this.sprite.body.moveRight(100);
+                    this.hackedRobot.sprite.body.x = this.sprite.x;
+                    this.hackedRobot.sprite.animations.play('hackRight');
+                    this.hackedRobot.state = 'hackRight';
+                    GameScreenConfig.setObjective("hacking now! moving Right!!");
                 }
-                this.sprite.animations.play('right');
-                this.face = 'right';
+                else {
+                    //  Move to the right
+                    if (this.sprite.animations.frame == 4) {
+                        this.sprite.body.velocity.x = 600;
+                    } else if (this.sprite.animations.frame == 5) {
+                        this.sprite.body.velocity.x = 800;
+                    } else if (this.sprite.animations.frame == 6) {
+                        this.sprite.body.velocity.x = 600;
+                    } else {
+                        this.sprite.body.velocity.x = 400;
+                    }
+                    this.sprite.animations.play('right');
+                    this.face = 'right';
 
 
-                GameScreenConfig.setObjective("Moving R I G H T ---> Hurry up!!");
+                    GameScreenConfig.setObjective("Moving R I G H T ---> Hurry up!!");
+
+                }
 
             }
             else if (keys['UP'].isDown || keys['W'].isDown) {
@@ -129,8 +173,17 @@ var Hand = function (game, map) {
                     GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
                 }
             }
-            else if (keys['DOWN'].isDown || keys['S'].isDown){
-                this.hackingStart = true;
+            else if (keys['DOWN'].isDown || keys['S'].isDown) {
+
+                this.downInput = true;
+                // this.hackingStart = true;
+                // this.hackingEntTime = this.game.time.now + 5000;
+
+                // this.sprite.body.alpha = 0.2;
+
+                // // console.log(this.sprite.body.data.gravityScale);
+                // this.sprite.body.data.gravityScale = 0;
+
             }
 
             else {
@@ -150,6 +203,19 @@ var Hand = function (game, map) {
                 GameScreenConfig.setObjective();
             }
         }
+    }
+
+    this.addShape = function () {
+        this.sprite.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
+
+        this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
+        this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
+        this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
+        this.sprite.body.adjustCenterOfMass()
+
+        this.sprite.body.setCollisionGroup(this.myCG);
+        this.sprite.body.collides(this.tileCG);
+
     }
 }
 

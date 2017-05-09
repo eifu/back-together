@@ -40,7 +40,7 @@ BackTogether.Level1_stage3.prototype = {
         this.pausedScreen = new PausedScreen(game, this.player);
         this.pausedScreen.off();
 
-        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 3 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
+        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 3 REVENGE!\n let\'s try hacking!\n They find you and send robots to you.');
 
 
         var collisionObjects = game.physics.p2.convertCollisionObjects(map, 'collision', true);
@@ -66,12 +66,15 @@ BackTogether.Level1_stage3.prototype = {
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
         this.player.sprite.body.collides(this.tilesCollisionGroup);
 
+        this.player.myCG = this.playerCollisionGroup;
+        this.player.tileCG = this.tilesCollisionGroup;
+
 
         // these are general purpose.
         GameScreenConfig.initText(game);
         GameScreenConfig.initHealthBar(game);
         GameScreenConfig.initVolIcon(game);
-        GameScreenConfig.initObjective(game, 'Avoid from Drone! Your arm is waitin for you!!');
+        GameScreenConfig.initObjective(game, 'let\'s try hacking!');
         this.initKeys();
         this.initRobots();
         // this.initItemBox();
@@ -93,6 +96,21 @@ BackTogether.Level1_stage3.prototype = {
 
     update: function (game) {
 
+        if (this.introBool1_2) {
+            this.popupScreen.setText("To move robot, \n keep pressing 'S'/↓ with left and right! ");
+            this.popupScreen.on();
+
+            this.introBool1_2 = false;
+        }
+
+        if (this.introBool1) {
+            this.popupScreen.setText("You can disguise as a robot. Yay!");
+            this.popupScreen.on();
+
+            this.introBool1 = false;
+            this.introBool1_2 = true;
+        }
+
         this.player.update();
 
         if (keys['SPACE'].isDown || keys['ENTER'].isDown) {
@@ -106,14 +124,29 @@ BackTogether.Level1_stage3.prototype = {
             var r = this.robots[i];
 
             r.update();
+            
 
             if (this.checkOverlap(this.player.sprite, r.sprite)) {
                 // if the player and a robot overlap, 
+
+
                 if (r.vulnerable) {
+                    if (r.state != 'hackLeft' && r.state != 'hackRight') {
+                        GameScreenConfig.setObjective("Press down or 'S' to H A C K!");
+                    }
+                    if (this.player.downInput) {
 
-                    GameScreenConfig.setObjective("Press down or 'S' to H A C K!");
+                        this.player.sprite.body.y = r.sprite.y - 150;
+                        this.player.hackingStart = true;
+                        this.player.hackingEndTime = this.time.now + 5000;
+                        // this.player.sprite.body.data.gravityScale = 0;
 
-                    if (this.player.hackingStart) {
+                        this.player.hackedRobot = r;
+
+                        this.player.sprite.body.data.gravityScale = 0;
+                        this.player.sprite.body.clearShapes();
+
+
                         console.log('yeahhhh');
 
                         if (r.state == 'switchOffLeft') {
@@ -124,10 +157,12 @@ BackTogether.Level1_stage3.prototype = {
                             r.sprite.animations.play('hackRight');
 
                         }
+
                         this.popupScreen.setText("H A C K E D!!\n Now you know how to hack robots!\n");
                         this.popupScreen.on();
 
                         this.introBool1 = true;
+                        this.player.downInput = false;
 
                     }
 
@@ -161,20 +196,7 @@ BackTogether.Level1_stage3.prototype = {
 
             }
         }
-        if (this.introBool1_2){
-            this.popupScreen.setText("To move robot, \n keep pressing 'S'/↓ with left and right! ");
-            this.popupScreen.on();
-        
-            this.introBool1_2 = false;
-        }
 
-        if (this.introBool1){
-            this.popupScreen.setText("You can disguise as a robot. Yay!");
-            this.popupScreen.on();
-        
-            this.introBool1 = false;
-            this.introBool1_2 =true;
-        }
 
         // this.playerVictory();
         // Robot.updateRobots(game);
@@ -187,7 +209,7 @@ BackTogether.Level1_stage3.prototype = {
     playerAttackFromRight: function (r) {
         return this.player.sprite.body.x > r.sprite.x && (r.state == 'left' || r.state == 'leftIdle');
     },
-    
+
     collectItem: function (itemBox, game) {
         if (this.checkOverlap(this.player.sprite, itemBox)) {
             if (!itemBox.taken) {
