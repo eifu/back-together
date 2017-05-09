@@ -4,7 +4,7 @@ BackTogether.MainMenu = function (game) {
 var play;
 var keys;
 
-var settings;
+var DIFFICULTY;
 
 var menuBtns;
 var helpNodes;
@@ -19,7 +19,7 @@ var wfconfig = {
 
 BackTogether.MainMenu.prototype = {
     create: function (game) {
-       var inputs = [
+        var inputs = [
             Phaser.Keyboard.ONE,
             Phaser.Keyboard.TWO,
             Phaser.Keyboard.UP,
@@ -36,31 +36,31 @@ BackTogether.MainMenu.prototype = {
         ];
         var name = [
             'ONE', 'TWO', 'UP', 'LEFT', 'RIGHT', 'DOWN', 'SPACE', 'W', 'A', 'S', 'D', 'O', 'P'
-        ]      
-        
+        ]
+
         keys = {};
         inputs.forEach(function (input, i) {
             keys[name[i]] = game.input.keyboard.addKey(input);
         });
         WebFont.load(wfconfig);
         game.stage.backgroundColor = "#570e28";
-        
+
         var txt = game.add.text(this.camera.view.centerX, 50, "BACK TOGETHER", {
-        font: '60px Aclonica', fill: "#000",
-        align: "center"
+            font: '60px Aclonica', fill: "#000",
+            align: "center"
         });
-        
+
         txt.anchor.setTo(0.5, 0.5);
 
-        easyGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 170, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
+        easyGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 170, 'mainMenuBtn', easyStartOnClick, this, 2, 1, 0);
         easyGameBtn.anchor.setTo(0.5, 0.5);
         easyGameBtn.scale.setTo(3.0, 3.0);
 
-        normalGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 70, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
+        normalGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 70, 'mainMenuBtn', normalStartOnClick, this, 2, 1, 0);
         normalGameBtn.anchor.setTo(0.5, 0.5);
         normalGameBtn.scale.setTo(3.0, 3.0);
 
-        hardGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
+        hardGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', hardStartOnClick, this, 2, 1, 0);
         hardGameBtn.anchor.setTo(0.5, 0.5);
         hardGameBtn.scale.setTo(3.0, 3.0);
 
@@ -71,7 +71,6 @@ BackTogether.MainMenu.prototype = {
         menuBtns = [];
         menuBtns.push(easyGameBtn);
         menuBtns.push(hardGameBtn);
-//        menuBtns.push(settingBtn);
         menuBtns.push(helpBtn);
 
         titleFontStyle = { font: '60px Aclonica', fill: "#C0C0C0", align: "center" }
@@ -86,20 +85,17 @@ BackTogether.MainMenu.prototype = {
         var normalGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 70, "NORMAL", btnFontStyle);
         normalGameBtnTxt.anchor.setTo(0.5, 0.5);
 
-        var hardGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY +30, "HARD", btnFontStyle);
+        var hardGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "HARD", btnFontStyle);
         hardGameBtnTxt.anchor.setTo(0.5, 0.5);
-
-//        var settingBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "Settings", btnFontStyle);
-//        settingBtnTxt.anchor.setTo(0.5, 0.5);
 
         var helpBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 130, "HELP", btnFontStyle);
         helpBtnTxt.anchor.setTo(0.5, 0.5);
-        
+
         var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
         volIcon.anchor.setTo(0.5, 0.5);
-        
+
         var volBtn = game.add.button(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, 'volBtn', function () {
-            if(!volumeOn){
+            if (!volumeOn) {
                 icon = 'volDownIcon';
                 volIcon.loadTexture(icon);
                 volumeOn = !volumeOn;
@@ -107,7 +103,7 @@ BackTogether.MainMenu.prototype = {
                 pop.mute = true;
                 crash.mute = true;
             }
-            else{
+            else {
                 icon = 'volUpIcon';
                 volIcon.loadTexture(icon);
                 volumeOn = !volumeOn;
@@ -120,10 +116,25 @@ BackTogether.MainMenu.prototype = {
         volBtn.anchor.setTo(0.5, 0.5);
         volBtn.width = 55;
         volBtn.height = 60;
-        
+
         game.world.bringToTop(volIcon);
 
         helpNodes = [];
+
+        function easyStartOnClick() {
+            DIFFICULTY = 'easy';
+            startOnClick();
+        };
+
+        function normalStartOnClick() {
+            DIFFICULTY = 'normal';
+            startOnClick();
+        };
+
+        function hardStartOnClick() {
+            DIFFICULTY = 'hard';
+            startOnClick();
+        };
 
         function startOnClick() {
             pop.play();
@@ -147,7 +158,7 @@ BackTogether.MainMenu.prototype = {
 
             helpLayerCard = game.add.image(this.camera.view.centerX, this.camera.view.centerY, 'menuBtnCard');
             helpLayerCard.anchor.setTo(0.5, 0.5);
-            helpLayerCard.scale.setTo(0.8,0.8)
+            helpLayerCard.scale.setTo(0.8, 0.8)
             helpLayerCard.alpha = 0;
 
             helpFontStyle = { font: '20px Aclonica', fill: "#F00", align: "center" };
@@ -157,11 +168,11 @@ BackTogether.MainMenu.prototype = {
             helpTitleTxt.anchor.setTo(0.5, 0.5);
             helpTitleTxt.alpha = 0;
 
-            helpTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY-30, "Press to exit help screen", helpFontStyle);
+            helpTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 30, "Press to exit help screen", helpFontStyle);
             helpTxt.anchor.setTo(0.5, 0.5);
             helpTxt.alpha = 0;
 
-            helpTxt2 = game.add.text(this.camera.view.centerX, this.camera.view.centerY+ 45, "←:left \n →:right \n ↓:hold item or drop item", helpFontStyle);
+            helpTxt2 = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 45, "←:left \n →:right \n ↓:hold item or drop item", helpFontStyle);
             helpTxt2.anchor.setTo(0.5, 0.5);
             helpTxt2.alpha = 0;
 

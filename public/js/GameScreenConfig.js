@@ -1,7 +1,7 @@
 
 
 var GameScreenConfig = {
-
+    
 
     initText: function (game) {
         // the level
@@ -79,8 +79,15 @@ var GameScreenConfig = {
         game.world.bringToTop(volIcon);
     },
     initHealthBar: function (game) {
+        console.log(DIFFICULTY);
+        if (DIFFICULTY == 'easy') {
+            this.healthPoint = 20;
+        } else if (DIFFICULTY== 'normal') {
+            this.healthPoint = 10;
+        } else {
+            this.healthPoint = 5;
+        }
 
-        this.healthPoint = 20;
 
         this.healthbar = game.add.image(game.camera.view.centerX - 200, game.height - 40, 'healthbar_green');
         this.healthbar.anchor.setTo(0, 0.5);
