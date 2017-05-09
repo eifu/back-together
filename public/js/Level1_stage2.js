@@ -91,15 +91,6 @@ BackTogether.Level1_stage2.prototype = {
         keys['ENTER'].onDown.add(this.unpause, this);
 
 
-
-        // adjust the cordinate. 
-        // these lines should be stage unique.
-        // this.popupScreen.sprite.y = this.camera.view.centerY + game.world.height / 3;
-        // this.popupScreen.txt.y = this.camera.view.centerY + 260;
-        // this.popupScreen.okBtn.y = this.camera.view.centerY + 550;
-        // this.popupScreen.okIcon.y = this.camera.view.centerY + 550;
-        // game.world.bringToTop(this.popupScreen.okIcon);
-
     },
 
     update: function (game) {

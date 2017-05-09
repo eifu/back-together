@@ -15,8 +15,8 @@ var Hand = function (game, map) {
     this.sprite.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
     this.sprite.animations.add('damageL', Phaser.Animation.generateFrameNames('damageL', 1, 4), 10, true);
     this.sprite.animations.add('damageR', Phaser.Animation.generateFrameNames('damageR', 1, 4), 10, true);
-     this.sprite.animations.add('flipL', Phaser.Animation.generateFrameNames('flipL', 1, 3), 10, true);
-    this.sprite.animations.add('flipR', Phaser.Animation.generateFrameNames('flipR', 1, 3), 10, true);   
+    this.sprite.animations.add('flipL', Phaser.Animation.generateFrameNames('flipL', 1, 3), 10, true);
+    this.sprite.animations.add('flipR', Phaser.Animation.generateFrameNames('flipR', 1, 3), 10, true);
     this.sprite.animations.add('dying', Phaser.Animation.generateFrameNames('dying', 1, 6), 10, true);
     this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('die', 1, 6), 10, true);
 
@@ -32,7 +32,7 @@ var Hand = function (game, map) {
     this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
     this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
     this.sprite.body.adjustCenterOfMass()
-    
+
     game.camera.follow(this.sprite);
 
     this.damaged = false;
@@ -97,22 +97,22 @@ var Hand = function (game, map) {
                 }
                 this.sprite.animations.play('right');
                 this.face = 'right';
-            } 
-            else if (keys['UP'].isDown || keys['W'].isDown){
-                if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100){
+            }
+            else if (keys['UP'].isDown || keys['W'].isDown) {
+                if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
                     // the player is flipped.
 
 
                     this.sprite.body.velocity.y = -400;
                     this.sprite.body.angle += 180;
-                    if (this.face == 'left'){
+                    if (this.face == 'left') {
                         this.sprite.animations.play('flipL');
                         this.sprite.body.velocity.x = 200;
-                    }else {
+                    } else {
                         this.sprite.animations.play('flipR');
                         this.sprite.body.velocity.x = -200;
                     }
-                    
+
                 }
             }
             else {

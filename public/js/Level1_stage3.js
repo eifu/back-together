@@ -32,7 +32,7 @@ BackTogether.Level1_stage3.prototype = {
         game.physics.p2.setBoundsToWorld()
 
         game.physics.p2.convertTilemap(map, platformLayer);
-        
+
         game.physics.p2.gravity.y = 800;
 
         // can be Hand, Arm, Torso.
@@ -54,7 +54,7 @@ BackTogether.Level1_stage3.prototype = {
 
         for (var i = 0; i < collisionObjects.length; i++) {
 
-            
+
             collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
             collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup]);
 
@@ -65,10 +65,7 @@ BackTogether.Level1_stage3.prototype = {
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
-
-            console.log('hello');
-        },this);
+        this.player.sprite.body.collides(this.tilesCollisionGroup);
 
 
         // these are general purpose.
@@ -85,16 +82,6 @@ BackTogether.Level1_stage3.prototype = {
 
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
-
-
-
-        // adjust the cordinate. 
-        // these lines should be stage unique.
-        // this.popupScreen.sprite.y = this.camera.view.centerY + game.world.height / 3;
-        // this.popupScreen.txt.y = this.camera.view.centerY + 260;
-        // this.popupScreen.okBtn.y = this.camera.view.centerY + 550;
-        // this.popupScreen.okIcon.y = this.camera.view.centerY + 550;
-        // game.world.bringToTop(this.popupScreen.okIcon);
 
     },
 
