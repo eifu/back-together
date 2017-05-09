@@ -98,9 +98,9 @@ var Hand = function (game, map) {
                     console.log(this.hackedRobot);
                     this.sprite.body.moveLeft(100);
                     this.hackedRobot.sprite.body.x = this.sprite.x;
- 
+
                     this.hackedRobot.sprite.animations.play('hackLeft');
-                     this.hackedRobot.state = 'hackLeft';
+                    this.hackedRobot.state = 'hackLeft';
                     GameScreenConfig.setObjective("hacking now!! going left!!");
 
 
@@ -154,35 +154,51 @@ var Hand = function (game, map) {
 
             }
             else if (keys['UP'].isDown || keys['W'].isDown) {
-                if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
-                    // the player is flipped.
+
+                if (this.hackingStart) {
+                    // this.sprite.body.moveUp(100);
+                    this.hackedRobot.sprite.body.velocity.y = -200;
+                    this.sprite.body.y = this.hackedRobot.sprite.y - 150;
+
+                    GameScreenConfig.setObjective("hacking now! moving UP↑↑↑!!");
+                }
+                else {
+                    if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
+                        // the player is flipped.
 
 
-                    this.sprite.body.velocity.y = -400;
-                    this.sprite.body.angle += 180;
-                    if (this.face == 'left') {
-                        this.sprite.animations.play('flipL');
-                        this.sprite.body.velocity.x = 200;
+                        this.sprite.body.velocity.y = -400;
+                        this.sprite.body.angle += 180;
+                        if (this.face == 'left') {
+                            this.sprite.animations.play('flipL');
+                            this.sprite.body.velocity.x = 200;
+                        } else {
+                            this.sprite.animations.play('flipR');
+                            this.sprite.body.velocity.x = -200;
+                        }
+                        GameScreenConfig.setObjective('back flip~~~ Cool!');
                     } else {
-                        this.sprite.animations.play('flipR');
-                        this.sprite.body.velocity.x = -200;
-                    }
-                    GameScreenConfig.setObjective('back flip~~~ Cool!');
-                } else {
 
-                    GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
+                        GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
+                    }
                 }
             }
             else if (keys['DOWN'].isDown || keys['S'].isDown) {
+                if (this.hackingStart) {
+                    // this.sprite.body.moveDown(100);
+                    this.sprite.body.y = this.hackedRobot.sprite.y - 150;
+                    GameScreenConfig.setObjective("hacking now! moving DOWN↓↓↓!!");
+                }
+                else {
+                    this.downInput = true;
+                    // this.hackingStart = true;
+                    // this.hackingEntTime = this.game.time.now + 5000;
 
-                this.downInput = true;
-                // this.hackingStart = true;
-                // this.hackingEntTime = this.game.time.now + 5000;
+                    // this.sprite.body.alpha = 0.2;
 
-                // this.sprite.body.alpha = 0.2;
-
-                // // console.log(this.sprite.body.data.gravityScale);
-                // this.sprite.body.data.gravityScale = 0;
+                    // // console.log(this.sprite.body.data.gravityScale);
+                    // this.sprite.body.data.gravityScale = 0;
+                }
 
             }
 

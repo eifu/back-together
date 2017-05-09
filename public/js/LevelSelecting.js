@@ -133,7 +133,7 @@ BackTogether.LevelSelecting.prototype = {
                 function () {
                     pop.play();
                     Level = itoaArray[i];
-                    game.state.start("Level" + (i + 1));
+                    game.state.start("Level1_stage" + (i + 1) );
 
                 }
                 , 2, 1, 0);

@@ -78,6 +78,7 @@ BackTogether.Level1_stage3.prototype = {
         this.initKeys();
         this.initRobots();
         // this.initItemBox();
+        this.initHitboxs();
 
         this.gameItems = [];
         this.gameItems.push('invisible');
@@ -91,6 +92,9 @@ BackTogether.Level1_stage3.prototype = {
         this.popupScreen.on();
 
         this.introBool1 = false;
+
+        this.introBool2 = true;
+        this.introBool2_2 = false;
 
     },
 
@@ -124,7 +128,7 @@ BackTogether.Level1_stage3.prototype = {
             var r = this.robots[i];
 
             r.update();
-            
+
 
             if (this.checkOverlap(this.player.sprite, r.sprite)) {
                 // if the player and a robot overlap, 
@@ -197,6 +201,18 @@ BackTogether.Level1_stage3.prototype = {
             }
         }
 
+        if (this.introBool2_2) {
+            his.popupScreen.setText("Try the hacking!\n You cannot jump, but\n Robot can!");
+            this.popupScreen.on();
+        }
+
+        if (this.introBool2 && this.checkOverlap(this.player.sprite, this.intro1)) {
+            this.popupScreen.setText("Hmm.\n It seems you need to\n somehow 'jump' to there.");
+            this.popupScreen.on();
+
+            this.introBool2 = false;
+            this.introBool2_2 = true;
+        }
 
         // this.playerVictory();
         // Robot.updateRobots(game);
@@ -335,6 +351,16 @@ BackTogether.Level1_stage3.prototype = {
             }
         }
     },
+    initHitboxs: function () {
+        var intro1 = Tile.findObjectsByType('intro1', map, 'objectsLayer')[0];
 
+        this.intro1 = this.add.sprite(intro1.x, intro1.y, 'hitBox');
+        this.intro1.anchor.setTo(0.5, 0.5);
+        this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        this.intro1.animations.play('normal');
+
+
+
+    }
 
 }
