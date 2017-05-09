@@ -27,8 +27,10 @@ BackTogether.Level1_stage3.prototype = {
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
 
+        map.setCollisionBetween(5,7);
         map.setCollisionBetween(8, 10);
         map.setCollisionBetween(21, 22);
+
 
         this.physics.p2.convertTilemap(map, platformLayer);
         this.physics.p2.restitution = 0;
@@ -36,6 +38,16 @@ BackTogether.Level1_stage3.prototype = {
 
         // can be Hand, Arm, Torso.
         this.player = new Hand(game);
+
+
+
+        game.physics.p2.convertCollisionObjects(map, 'collision', true);
+
+        // maybe we should use collision group later.
+        // this.tilesCollisionGroup   = this.physics.p2.createCollisionGroup();    
+        // this.playerCollisionGroup  = this.physics.p2.createCollisionGroup();   
+        // this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);    
+        // this.player.sprite.body.collides(this.tilesCollisionGroup);
 
 
         // these are general purpose.
