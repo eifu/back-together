@@ -65,6 +65,8 @@ var Hand = function (game, map) {
                 this.sprite.body.velocity.x = -500;  // player moves back
             }
 
+            GameScreenConfig.setObjective("Damaged!! You can't move (>_<)")
+
 
         } else {
             // if player does not get damaged. 
@@ -83,6 +85,8 @@ var Hand = function (game, map) {
                 }
                 this.sprite.animations.play('left');
                 this.face = 'left';
+
+                GameScreenConfig.setObjective("<--- Moving Left, goint wrong way");
             }
             else if (keys['RIGHT'].isDown || keys['D'].isDown) {
                 //  Move to the right
@@ -97,6 +101,10 @@ var Hand = function (game, map) {
                 }
                 this.sprite.animations.play('right');
                 this.face = 'right';
+
+
+                GameScreenConfig.setObjective("Moving R I G H T ---> Hurry up!!");
+
             }
             else if (keys['UP'].isDown || keys['W'].isDown) {
                 if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
@@ -112,7 +120,10 @@ var Hand = function (game, map) {
                         this.sprite.animations.play('flipR');
                         this.sprite.body.velocity.x = -200;
                     }
+                    GameScreenConfig.setObjective('back flip~~~ Cool!');
+                } else {
 
+                    GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
                 }
             }
             else {
@@ -129,6 +140,7 @@ var Hand = function (game, map) {
                     this.sprite.animations.stop();
 
                 }
+                GameScreenConfig.setObjective();
             }
         }
     }

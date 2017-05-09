@@ -72,6 +72,7 @@ BackTogether.Level1_stage3.prototype = {
         GameScreenConfig.initText(game);
         GameScreenConfig.initHealthBar(game);
         GameScreenConfig.initVolIcon(game);
+        GameScreenConfig.initObjective(game, 'Avoid from Drone! Your arm is waitin for you!!');
         this.initKeys();
         this.initRobots();
         // this.initItemBox();

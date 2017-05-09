@@ -10,10 +10,10 @@ var GameScreenConfig = {
         levelText.fixedToCamera = true;
 
         // toggle button for input.
-        this.toggleInputBtnKeyboard = game.add.button(100, game.height -140, 'toggleInputBtnKeyboard', this.toggleOnClick, this, 2, 1, 0);
+        this.toggleInputBtnKeyboard = game.add.button(100, game.height - 140, 'toggleInputBtnKeyboard', this.toggleOnClick, this, 2, 1, 0);
         this.toggleInputBtnKeyboard.scale.setTo(0.5, 0.5);
         this.toggleInputBtnKeyboard.fixedToCamera = true;
-        this.toggleInputBtnKeyboard.WASDIcon = game.add.image(240,game.height -  140, 'WASDIcon');
+        this.toggleInputBtnKeyboard.WASDIcon = game.add.image(240, game.height - 140, 'WASDIcon');
         this.toggleInputBtnKeyboard.WASDIcon.scale.setTo(0.5, 0.5);
         this.toggleInputBtnKeyboard.WASDIcon.fixedToCamera = true;
         this.toggleInputBtnKeyboard.cursorIcon = game.add.image(320, game.height - 140, 'cursorIcon');
@@ -21,7 +21,7 @@ var GameScreenConfig = {
         this.toggleInputBtnKeyboard.cursorIcon.fixedToCamera = true;
 
 
-        this.toggleInputBtnMouse = game.add.button(100,game.height -  140, 'toggleInputBtnMouse', this.toggleOnClick, this, 2, 1, 0);
+        this.toggleInputBtnMouse = game.add.button(100, game.height - 140, 'toggleInputBtnMouse', this.toggleOnClick, this, 2, 1, 0);
         this.toggleInputBtnMouse.scale.setTo(0.5, 0.5);
         this.toggleInputBtnMouse.fixedToCamera = true;
         this.toggleInputBtnMouse.visible = false;
@@ -84,18 +84,18 @@ var GameScreenConfig = {
 
         this.healthbar = game.add.image(game.camera.view.centerX - 200, game.height - 40, 'healthbar_green');
         this.healthbar.anchor.setTo(0, 0.5);
-        this.healthbar.scale.setTo(this.healthPoint,1);
+        this.healthbar.scale.setTo(this.healthPoint, 1);
         this.healthbar.fixedToCamera = true;
 
-        this.healthbar.shadow = game.add.image(game.camera.view.centerX  - 200, game.height - 40, 'healthbar_red');
+        this.healthbar.shadow = game.add.image(game.camera.view.centerX - 200, game.height - 40, 'healthbar_red');
         this.healthbar.shadow.anchor.setTo(0, 0.5);
-        this.healthbar.shadow.scale.setTo(this.healthPoint,1);
+        this.healthbar.shadow.scale.setTo(this.healthPoint, 1);
         this.healthbar.shadow.fixedToCamera = true;
 
         game.world.bringToTop(this.healthbar);
 
         // console.log(this.camera.view);
-        this.heart = game.add.sprite(game.camera.view.centerX - 200 , game.height - 40, 'heartbeat');
+        this.heart = game.add.sprite(game.camera.view.centerX - 200, game.height - 40, 'heartbeat');
         this.heart.anchor.setTo(0.5, 0.5);
 
         this.heart.animations.add('normal', [0, 1, 2, 3, 4, 5], 10, true);
@@ -110,6 +110,21 @@ var GameScreenConfig = {
 
 
     },
+    initObjective: function (game, obj) {
+        this.objectiveTxt = game.add.text(game.camera.view.centerX + 100, game.height - 100, 'test', { font: '24px Aclonica', fill: '#000' });
+        this.objectiveTxt.anchor.setTo(0.5, 0.5);
+        this.objectiveTxt.fixedToCamera = true;
+        this.objective = obj;
+    },
+    setObjective: function (m) {
+        if (m == null) {
+            this.objectiveTxt.setText(this.objective);
+        } else {
+            this.objectiveTxt.setText(m);
+        }
+    }
+
+
 
 
 
