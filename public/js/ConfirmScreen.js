@@ -85,16 +85,28 @@ var ConfirmScreen = function (game, message, pausedScreen) {
 
         this.sprite.visible = true;
         this.sprite.reset(this.game.camera.view.centerX, this.game.camera.view.centerY);
+        this.game.world.bringToTop(this.sprite);
+
         this.txt.visible = true;
         this.txt.reset(this.game.camera.view.centerX, this.game.camera.view.centerY);
+        this.game.world.bringToTop(this.txt);
+
         this.okBtn.visible = true;
         this.okBtn.reset(this.game.camera.view.centerX - this.sprite.width / 5, this.game.camera.view.centerY + this.sprite.height / 3);
+        this.game.world.bringToTop(this.okBtn);
+
         this.okIcon.visible = true;
         this.okIcon.reset(this.game.camera.view.centerX - this.sprite.width / 5, this.game.camera.view.centerY + this.sprite.height / 3);
+        this.game.world.bringToTop(this.okIcon);
+
         this.noBtn.visible = true;
         this.noBtn.reset(this.game.camera.view.centerX + this.sprite.width / 5, this.game.camera.view.centerY + this.sprite.height / 3);
+        this.game.world.bringToTop(this.noBtn);
+
         this.noIcon.visible = true;
         this.noIcon.reset(this.game.camera.view.centerX + this.sprite.width / 5, this.game.camera.view.centerY + this.sprite.height / 3);
+        this.game.world.bringToTop(this.noIcon);
+
 
     };
 
@@ -106,10 +118,12 @@ var ConfirmScreen = function (game, message, pausedScreen) {
         if (i == 'stink') {
             this.stink.visible = true;
             this.stink.reset(this.game.camera.view.centerX, this.game.camera.view.centerY - this.sprite.height / 4);
+            this.game.world.bringToTop(this.stink);
             this.itemSelected = i;
         } else if (i == 'invisible') {
             this.invisible.visible = true;
             this.invisible.reset(this.game.camera.view.centerX, this.game.camera.view.centerY - this.sprite.height / 4);
+            this.game.world.bringToTop(this.invisible);
             this.itemSelected = i;
         } else {
             console.log("there is bug");
