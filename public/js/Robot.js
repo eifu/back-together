@@ -40,15 +40,15 @@ var Robot= {
                     if (r.state == "left") {
                         // left -> leftIdle
                         r.state = "leftIdle";
-                        r.stateTime = timeNow + 3000;
+                        r.stateTime = timeNow + 1000;
 
                     } else if (r.state == "right") {
                         // right -> rightIdle
                         r.state = "rightIdle";
-                        r.stateTime = timeNow + 3000;
+                        r.stateTime = timeNow + 1000;
 
                     } else { // r.state == "leftIdle" or r.state == "rightIdle"
-                        if (Math.random() < 0.9) {
+                        if (Math.random() < 0.4) {
                             if (r.state == "leftIdle") {
                                 // leftIdle -> rightIdle
                                 r.state = 'rightIdle';

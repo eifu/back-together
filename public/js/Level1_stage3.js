@@ -5,7 +5,6 @@ BackTogether.Level1_stage3 = function (game) {
 
 var platformLayer;
 var pausedLayer;
-var invincibilityOn = false;
 var keys;
 var iKeyDown = false;
 var playAgain;
@@ -28,12 +27,8 @@ BackTogether.Level1_stage3.prototype = {
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
 
-        map.setCollisionBetween(1, 8);
-        // setCollisionBetween takes two indexes, starting and ending position.
-        // BlackTile is at 1st position, RedTile is at 2nd position,
-        // (1,1) makes only BlackTile collidable.
-
-        this.score = 0;
+        map.setCollisionBetween(8, 10);
+        map.setCollisionBetween(21, 22);
 
         this.physics.p2.convertTilemap(map, platformLayer);
         this.physics.p2.restitution = 0;
@@ -61,16 +56,16 @@ BackTogether.Level1_stage3.prototype = {
         this.pausedScreen = new PausedScreen(game, this.player);
         this.pausedScreen.off();
 
-        this.popupScreen = new PopupScreen(game, 'Objective: \n ASSASSINATION STYLE ... \n When the robot turns around, \n run against its butt.\n There is a switch to turn it off.');
+        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 3 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
         this.popupScreen.on();
 
         // adjust the cordinate. 
         // these lines should be stage unique.
-        this.popupScreen.sprite.y = this.camera.view.centerY + game.world.height / 3;
-        this.popupScreen.txt.y = this.camera.view.centerY + 260;
-        this.popupScreen.okBtn.y = this.camera.view.centerY + 550;
-        this.popupScreen.okIcon.y = this.camera.view.centerY + 550;
-        game.world.bringToTop(this.popupScreen.okIcon);
+        // this.popupScreen.sprite.y = this.camera.view.centerY + game.world.height / 3;
+        // this.popupScreen.txt.y = this.camera.view.centerY + 260;
+        // this.popupScreen.okBtn.y = this.camera.view.centerY + 550;
+        // this.popupScreen.okIcon.y = this.camera.view.centerY + 550;
+        // game.world.bringToTop(this.popupScreen.okIcon);
 
     },
 
@@ -78,37 +73,11 @@ BackTogether.Level1_stage3.prototype = {
 
         this.player.update();
 
-        if (keys['SPACE'].isDown) {
+        if (keys['SPACE'].isDown || keys['ENTER'].isDown) {
             this.pausedScreen.on();
         }
 
-        if (keys['O'].isDown) {
-            this.game.state.start('WinScreen');
-        }
 
-        if (keys['P'].isDown) {
-            this.game.state.start('LoseScreen');
-        }
-
-        if (keys['TWO'].isDown) {
-            Level = 'TWO';
-            this.game.state.start('Level2');
-        }
-
-        if (keys['I'].isDown && !iKeyDown) {
-            iKeyDown = true;
-            if (!invincibilityOn) {
-                invincibilityOn = true;
-                this.toggleOnClick();
-            }
-            else {
-                invincibilityOn = false;
-                this.toggleOnClick();
-            }
-        }
-        if (keys['I'].isUp) {
-            iKeyDown = false;
-        }
 
         for (var i = 0; i < this.game.robots.length; i++) {
 
@@ -128,9 +97,17 @@ BackTogether.Level1_stage3.prototype = {
                     this.popupScreen.on();
                 }
 
-                if (!r.vulnerable && !invincibilityOn) {
+                if (!r.vulnerable && !this.player.damaged) {
                     this.screenShake();
                     this.playerDamaged();
+
+                    if (r.state == 'left'){
+                        r.animations.play("leftIdle");
+                    }else {
+                        r.animations.play("rightIdle");
+                    }
+                    r.stateTime = 0;
+                    
                 }
 
             }
@@ -142,7 +119,6 @@ BackTogether.Level1_stage3.prototype = {
         // this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
-        console.log(r.body);
         return this.player.sprite.body.x < r.x && this.player.sprite.body.velocity.x >= 0 && r.body.velocity.x >= 0;
     },
     playerAttackFromRight: function (r) {
@@ -182,20 +158,20 @@ BackTogether.Level1_stage3.prototype = {
 
     playerDamaged: function () {
         crash.play();  // sound effect 
-        this.player.damagedTime = this.time.now + 3000;
-
-        this.healthPoint -= 1;
-        if (this.healthPoint == 0) {
+        this.player.damagedTime = this.time.now + 300;
+        console.log(GameScreenConfig.healthPoint);
+        GameScreenConfig.healthPoint -= 1;
+        if (GameScreenConfig.healthPoint == 0) {
             this.game.state.start('LoseScreen');
-        } else if (this.healthPoint < 2) {
-            this.heart.animations.play("quick");
-        } else if (this.healthPoint < 4) {
-            this.heart.animations.play("normal");
+        } else if (GameScreenConfig.healthPoint < 2) {
+            GameScreenConfig.heart.animations.play("quick");
+        } else if (GameScreenConfig.healthPoint < 4) {
+            GameScreenConfig.heart.animations.play("normal");
         } else {
-            this.heart.animations.play("slow");
+            GameScreenConfig.heart.animations.play("slow");
         }
 
-        this.healthbar.scale.setTo(1, this.healthPoint);
+        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint,1);
         this.player.damaged = true;
 
     },

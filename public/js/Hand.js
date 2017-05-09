@@ -45,12 +45,15 @@ var Hand = function (game) {
 
         if (timeNow < this.damagedTime) {
             // if player gets damaged.
+            // console.log(48);
+            // console.log(timeNow);
+            // console.log(this.damagedTime);
             if (this.face == 'left') {
                 this.sprite.animations.play('left_damaged')
-                this.sprite.body.velocity.x = 100;  // player moves back
+                this.sprite.body.velocity.x = 500;  // player moves back
             } else {
                 this.sprite.animations.play("right_damaged")
-                this.sprite.body.velocity.x = -100;  // player moves back
+                this.sprite.body.velocity.x = -500;  // player moves back
             }
 
 
@@ -58,8 +61,6 @@ var Hand = function (game) {
             // if player does not get damaged. 
 
             if (keys['LEFT'].isDown || keys['A'].isDown) {
-                console.log(54);
-                console.log(timeNow);
 
                 //  Move to the left
                 if (this.sprite.animations.frame == 0) {
@@ -91,10 +92,12 @@ var Hand = function (game) {
 
                 if (this.damaged) {
                     if (this.face == 'left') {
-                        this.sprite.animations.frame = 0
+                        this.sprite.animations.play('left');
                     } else {
-                        this.sprite.animations.frame = 4
+                        this.sprite.animations.play('right');
                     }
+                    this.damaged = false;
+
                 } else {
                     this.sprite.animations.stop();
 
