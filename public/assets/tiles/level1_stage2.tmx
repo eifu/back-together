@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="32" tileheight="32" nextobjectid="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="32" tileheight="32" nextobjectid="19">
  <tileset firstgid="1" name="tileset3" tilewidth="32" tileheight="32" tilecount="30" columns="5">
   <image source="../images/tileset3.png" width="160" height="192"/>
  </tileset>
@@ -30,7 +30,7 @@
 9,10,8,8,8,8,9,10,8,8,8,9,10,8,8,8,8,8,27,29,25,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,10,8,8,8,8,8,8,8,8,8,8,8,9,10,8,8,8,27,29,30,25,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
 </data>
  </layer>
- <layer name="pausedLayer" width="100" height="20">
+ <layer name="pausedLayer" width="100" height="20" opacity="0.41">
   <data encoding="csv">
 48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,
 48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,
@@ -55,45 +55,15 @@
 </data>
  </layer>
  <objectgroup name="objectsLayer">
-  <object id="1" name="playerStart" gid="1" x="110.653" y="450.361" width="32" height="32">
+  <object id="1" name="playerStart" gid="1" x="50.2197" y="583.67" width="32" height="32">
    <properties>
     <property name="type" value="playerStart"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup name="collision">
-  <object id="5" x="0" y="610" width="572.836" height="32">
-   <properties>
-    <property name="type" value="floor"/>
-   </properties>
-  </object>
-  <object id="8" name="floor2" x="576.297" y="609.803">
-   <properties>
-    <property name="type" value="floor"/>
-   </properties>
-   <polygon points="0,0 30.6337,19.1461 63.1821,20.1034 95.7304,-0.957304 94.7731,30.6337 -0.957304,29.6764"/>
-  </object>
-  <object id="11" name="floor3" x="673.942" y="608.845" width="1181.31" height="29.6764">
-   <properties>
-    <property name="type" value="floor"/>
-   </properties>
-  </object>
-  <object id="13" name="floor6" x="1984.49" y="609.803" width="1212.9" height="26.8045">
-   <properties>
-    <property name="type" value="floor"/>
-   </properties>
-  </object>
-  <object id="14" name="floor4" x="865.403" y="578.212">
-   <properties>
-    <property name="type" value="floor"/>
-   </properties>
-   <polygon points="0,0 -65.0967,29.6764 91.9012,30.6337 29.6764,-1.91461"/>
-  </object>
-  <object id="15" name="floor5" x="1858.13" y="610.76">
-   <properties>
-    <property name="type" value="floor"/>
-   </properties>
-   <polygon points="0,0 0,27.7618 124.45,26.8045 124.45,-0.957304 90.9439,19.1461 29.6764,18.1888"/>
+  <object id="18" x="1.77746" y="611.447">
+   <polyline points="0,0 574.12,-3.55492 607.892,17.7746 643.441,19.5521 671.881,-3.55492 803.413,-3.55492 860.292,-37.3267 890.508,-37.3267 954.497,-5.33239 1855.67,-3.55492 1887.66,17.7746 1948.1,19.5521 1980.09,0 3195.88,-1.77746 3197.65,26.6619 -14.2197,31.9943 -5.33239,-3.55492"/>
   </object>
  </objectgroup>
 </map>

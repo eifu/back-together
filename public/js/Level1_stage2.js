@@ -17,7 +17,8 @@ BackTogether.Level1_stage2.prototype = {
 
     create: function (game) {
         game.physics.startSystem(Phaser.Physics.P2JS);
-
+        game.physics.p2.setImpactEvents(true);
+        game.physics.p2.restitution = 0.8;
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
         map = this.add.tilemap('level1_stage2', 64, 64);
@@ -27,25 +28,51 @@ BackTogether.Level1_stage2.prototype = {
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
 
+
+        game.physics.p2.setBoundsToWorld()
+
         map.setCollisionBetween(5,7);
 
 
         this.physics.p2.convertTilemap(map, platformLayer);
         this.physics.p2.restitution = 0;
-        this.physics.p2.gravity.y = 300;
+        this.physics.p2.gravity.y = 800;
 
         // can be Hand, Arm, Torso.
-        this.player = new Hand(game);
+        this.player = new Hand(game, map);
+
+        this.pausedScreen = new PausedScreen(game, this.player);
+        this.pausedScreen.off();
+
+        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 2 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
+        this.popupScreen.on();
+
+        var collisionObjects = game.physics.p2.convertCollisionObjects(map, 'collision', true);
+
+        this.tilesCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.robotCollisionGroup = game.physics.p2.createCollisionGroup();
+
+        game.physics.p2.updateBoundsCollisionGroup();
+
+        for (var i = 0; i < collisionObjects.length; i++) {
+
+            
+            collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
+            collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup]);
 
 
+            console.log(collisionObjects[i]);
+        }
 
-        game.physics.p2.convertCollisionObjects(map, 'collision', true);
+        this.player.sprite.enableBody = true;
 
-        // maybe we should use collision group later.
-        // this.tilesCollisionGroup   = this.physics.p2.createCollisionGroup();    
-        // this.playerCollisionGroup  = this.physics.p2.createCollisionGroup();   
-        // this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);    
-        // this.player.sprite.body.collides(this.tilesCollisionGroup);
+        this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
+        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
+
+            console.log(this.player.sprite.body.angle);
+        },this);
+
 
 
         // these are general purpose.
@@ -63,11 +90,7 @@ BackTogether.Level1_stage2.prototype = {
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
 
-        this.pausedScreen = new PausedScreen(game, this.player);
-        this.pausedScreen.off();
 
-        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 3 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
-        this.popupScreen.on();
 
         // adjust the cordinate. 
         // these lines should be stage unique.

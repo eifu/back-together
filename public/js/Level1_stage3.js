@@ -5,7 +5,6 @@ BackTogether.Level1_stage3 = function (game) {
 
 var platformLayer;
 var pausedLayer;
-var collisionLayer;
 var keys;
 var iKeyDown = false;
 var playAgain;
@@ -19,7 +18,7 @@ BackTogether.Level1_stage3.prototype = {
     create: function (game) {
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.physics.p2.setImpactEvents(true);
-        game.physics.p2.restitution = 0.8;
+        game.physics.p2.restitution = 0;
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
         map = this.add.tilemap('level1_stage3', 64, 64);
@@ -34,7 +33,7 @@ BackTogether.Level1_stage3.prototype = {
 
         game.physics.p2.convertTilemap(map, platformLayer);
         
-        game.physics.p2.gravity.y = 300;
+        game.physics.p2.gravity.y = 800;
 
         // can be Hand, Arm, Torso.
         this.player = new Hand(game, map);
@@ -45,29 +44,13 @@ BackTogether.Level1_stage3.prototype = {
         this.popupScreen.on();
 
 
-        // map.setCollisionBetween(5,7);
-        // map.setCollisionBetween(8, 10);
-        // map.setCollisionBetween(21, 22);
-
-
-
-
-        console.log(map);
         var collisionObjects = game.physics.p2.convertCollisionObjects(map, 'collision', true);
-
-        console.log(collisionObjects);
-        // game.physics.p2.clearTilemapLayerBodies(map, layer);
 
         this.tilesCollisionGroup = game.physics.p2.createCollisionGroup();
         this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
         this.robotCollisionGroup = game.physics.p2.createCollisionGroup();
 
         game.physics.p2.updateBoundsCollisionGroup();
-
-        console.log('tileCG');
-        console.log(this.tilesCollisionGroup);
-        console.log('playerCG');
-        console.log(this.playerCollisionGroup);
 
         for (var i = 0; i < collisionObjects.length; i++) {
 
@@ -87,7 +70,6 @@ BackTogether.Level1_stage3.prototype = {
             console.log('hello');
         },this);
 
-        console.log(this.player.sprite.body);
 
         // these are general purpose.
         GameScreenConfig.initText(game);
