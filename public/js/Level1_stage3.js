@@ -87,6 +87,7 @@ BackTogether.Level1_stage3.prototype = {
 
         this.popupScreen.on();
 
+        this.introBool1 = false;
 
     },
 
@@ -123,6 +124,11 @@ BackTogether.Level1_stage3.prototype = {
                             r.sprite.animations.play('hackRight');
 
                         }
+                        this.popupScreen.setText("H A C K E D!!\n Now you know how to hack robots!\n");
+                        this.popupScreen.on();
+
+                        this.introBool1 = true;
+
                     }
 
 
@@ -155,6 +161,20 @@ BackTogether.Level1_stage3.prototype = {
 
             }
         }
+        if (this.introBool1_2){
+            this.popupScreen.setText("To move robot, \n keep pressing 'S'/↓ with left and right! ");
+            this.popupScreen.on();
+        
+            this.introBool1_2 = false;
+        }
+
+        if (this.introBool1){
+            this.popupScreen.setText("You can disguise as a robot. Yay!");
+            this.popupScreen.on();
+        
+            this.introBool1 = false;
+            this.introBool1_2 =true;
+        }
 
         // this.playerVictory();
         // Robot.updateRobots(game);
@@ -162,12 +182,12 @@ BackTogether.Level1_stage3.prototype = {
         // this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
-        return this.player.sprite.body.x < r.sprite.x && this.player.sprite.body.velocity.x >= 0 && r.sprite.body.velocity.x >= 0;
+        return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');
     },
     playerAttackFromRight: function (r) {
-        return this.player.sprite.body.x > r.sprite.x && this.player.sprite.body.velocity.x <= 0 && r.sprite.body.velocity.x <= 0;
+        return this.player.sprite.body.x > r.sprite.x && (r.state == 'left' || r.state == 'leftIdle');
     },
-
+    
     collectItem: function (itemBox, game) {
         if (this.checkOverlap(this.player.sprite, itemBox)) {
             if (!itemBox.taken) {
@@ -242,13 +262,6 @@ BackTogether.Level1_stage3.prototype = {
         this.robots.push(robot1);
 
     },
-
-    // playerVictory: function () {
-    //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
-    //         console.log("victory!");
-    //     }
-    // },
-
 
     initKeys: function () {
         var inputs = [
