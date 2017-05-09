@@ -31,7 +31,7 @@ BackTogether.Level1_stage1.prototype = {
 
         game.physics.p2.setBoundsToWorld()
 
-        map.setCollisionBetween(5,7);
+        map.setCollisionBetween(5, 7);
 
 
         this.physics.p2.convertTilemap(map, platformLayer);
@@ -44,8 +44,7 @@ BackTogether.Level1_stage1.prototype = {
         this.pausedScreen = new PausedScreen(game, this.player);
         this.pausedScreen.off();
 
-        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 1 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
-        this.popupScreen.on();
+        this.popupScreen = new PopupScreen(game, 'Welcome!\n The objective of stage 1 is\n to get you familiar with the controls. \nPress OK or hit space to continue.');
 
         var collisionObjects = game.physics.p2.convertCollisionObjects(map, 'collision', true);
 
@@ -57,7 +56,7 @@ BackTogether.Level1_stage1.prototype = {
 
         for (var i = 0; i < collisionObjects.length; i++) {
 
-            
+
             collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
             collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup]);
 
@@ -68,12 +67,10 @@ BackTogether.Level1_stage1.prototype = {
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
+        this.player.sprite.body.collides(this.tilesCollisionGroup, function () {
 
             console.log(this.player.sprite.body.angle);
-        },this);
-
-
+        }, this);
 
         // these are general purpose.
         GameScreenConfig.initText(game);
@@ -84,6 +81,7 @@ BackTogether.Level1_stage1.prototype = {
         this.initKeys();
         this.initRobots();
         // this.initItemBox();
+        this.initHitboxs();
 
         this.gameItems = [];
         this.gameItems.push('invisible');
@@ -91,6 +89,21 @@ BackTogether.Level1_stage1.prototype = {
 
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
+
+
+        this.popupScreen.on();
+
+
+        this.intro1Bool = true;
+        this.intro1_2Bool = false;
+        this.intro2Bool = true;
+        this.intro3Bool = true;
+        this.intro3_2Bool = false;
+        this.intro4Bool = true;
+        this.intro4_2Bool = false;
+        this.intro5Bool = true;
+
+        this.damageBool = true;
 
 
     },
@@ -105,11 +118,14 @@ BackTogether.Level1_stage1.prototype = {
 
 
 
-        for (var i = 0; i < this.game.robots.length; i++) {
+        for (var i = 0; i < this.robots.length; i++) {
 
-            var r = this.game.robots.children[i];
+            var r = this.robots[i];
+            if (!this.damageBool){
+                r.update();
+            }
 
-            if (this.checkOverlap(this.player.sprite, r)) {
+            if (this.checkOverlap(this.player.sprite, r.sprite)) {
                 // if the player and a robot overlap, 
 
                 if (!r.vulnerable && this.playerAttackFromLeft(r)) {
@@ -127,16 +143,72 @@ BackTogether.Level1_stage1.prototype = {
                     this.screenShake();
                     this.playerDamaged();
 
-                    if (r.state == 'left'){
-                        r.animations.play("leftIdle");
-                    }else {
-                        r.animations.play("rightIdle");
+                    if (this.damageBool) {
+                        this.popupScreen.setText("Watch out!\n You have to walk up to its back!!\n The life point get reduced,\n and you lose the game!!");
+                        this.popupScreen.on();
+                        this.damageBool = false;
+                    }
+
+                    if (r.state == 'left') {
+                        r.sprite.animations.play("leftIdle");
+                    } else {
+                        r.sprite.animations.play("rightIdle");
                     }
                     r.stateTime = 0;
-                    
+
                 }
 
             }
+        }
+
+        if (this.intro1_2Bool) {
+            this.popupScreen.setText("Space to pause/unpause game");
+            this.popupScreen.on();
+            this.intro1_2Bool = false;
+        }
+
+        if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)) {
+            this.popupScreen.setText("Controls are WASD or arrow keys.\n  A/← is for moving left,\n D/→ is for moving right,\n W/↑ is for flipping back over\n when you fall over backwards.");
+            this.popupScreen.on();
+            this.intro1.destroy();
+            this.intro1Bool = false;
+            this.intro1_2Bool = true;
+        }
+
+        if (this.intro3_2Bool) {
+            this.popupScreen.setText("When the robot is turned away\n from you, you can walk up to\n its back and tap against it\n to trigger shutdown.");
+            this.popupScreen.on();
+            this.intro3_2Bool = false;
+        }
+
+        if (this.intro3Bool && this.checkOverlap(this.player.sprite, this.intro3)) {
+            this.popupScreen.setText("It's an evil robot.\n But don't worry, you're safe for now.\n ");
+            this.popupScreen.on();
+            this.intro3.destroy();
+            this.intro3Bool = false;
+            this.intro3_2Bool = true;
+        }
+
+        if (this.intro4_2Bool) {
+            this.popupScreen.setText("Once it finds you, you can hide \n to get away, but if you're too slow, \n it will spawn robots after you.");
+            this.popupScreen.on();
+            this.intro4_2Bool = false;
+        }
+
+        if (this.intro4Bool && this.checkOverlap(this.player.sprite, this.intro4)) {
+            this.popupScreen.setText("It's a drone on the look-out for you.\n Air drones will fly around seeking you.");
+            this.popupScreen.on();
+            this.intro4.destroy();
+            this.intro4Bool = false;
+
+            this.intro4_2Bool = true;
+        }
+
+        if (this.intro5Bool && this.checkOverlap(this.player.sprite, this.intro5)) {
+            this.popupScreen.setText("Congratulation!! You just finish the first stage of Back together!!");
+            this.popupScreen.on();
+            this.intro5.destroy();
+            this.intro5Bool = false;
         }
 
         // this.playerVictory();
@@ -145,10 +217,10 @@ BackTogether.Level1_stage1.prototype = {
         // this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
-        return this.player.sprite.body.x < r.x && this.player.sprite.body.velocity.x >= 0 && r.body.velocity.x >= 0;
+        return this.player.sprite.body.x < r.sprite.x &&  (r.state == 'right' || r.state == 'rightIdle');
     },
     playerAttackFromRight: function (r) {
-        return this.player.sprite.body.x > r.x && this.player.sprite.body.velocity.x <= 0 && r.body.velocity.x <= 0;
+        return this.player.sprite.body.x > r.sprite.x &&  (r.state =='left' || r.state =='leftIdle');
     },
 
     collectItem: function (itemBox, game) {
@@ -197,7 +269,7 @@ BackTogether.Level1_stage1.prototype = {
             GameScreenConfig.heart.animations.play("slow");
         }
 
-        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint,1);
+        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint, 1);
         this.player.damaged = true;
 
     },
@@ -212,12 +284,17 @@ BackTogether.Level1_stage1.prototype = {
 
 
     initRobots: function () {
-        this.game.robots = this.add.group();
+        this.robots = [];
 
-        // _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
+        var r1 = Tile.findObjectsByType('r', map, 'objectsLayer')[0];
 
-        // console.log(216);
-        // this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
+        console.log(216);
+        this.robot1 = new Robot(this.game, r1.x, r1.y);
+        this.robot1.sprite.animations.play('leftIdle');
+        this.robot1.sprite.body.setCollisionGroup(this.robotCollisionGroup);
+        this.robot1.sprite.body.collides(this.tilesCollisionGroup);
+        this.robots.push(this.robot1);
+
 
     },
 
@@ -278,6 +355,35 @@ BackTogether.Level1_stage1.prototype = {
             }
         }
     },
+    initHitboxs: function () {
+        var intro1 = Tile.findObjectsByType('intro1', map, 'objectsLayer')[0];
+
+        this.intro1 = this.add.sprite(intro1.x, intro1.y, 'hitBox');
+        this.intro1.anchor.setTo(0.5, 0.5);
+        this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        this.intro1.animations.play('normal');
+
+        var intro3 = Tile.findObjectsByType('intro3', map, 'objectsLayer')[0];
+        this.intro3 = this.add.sprite(intro3.x, intro3.y, 'hitBox');
+        this.intro3.anchor.setTo(0.5, 0.5);
+        this.intro3.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        this.intro3.animations.play('normal');
+
+
+        var intro4 = Tile.findObjectsByType('intro4', map, 'objectsLayer')[0];
+        this.intro4 = this.add.sprite(intro4.x, intro4.y, 'hitBox');
+        this.intro4.anchor.setTo(0.5, 0.5);
+        this.intro4.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        this.intro4.animations.play('normal');
+
+
+        var intro5 = Tile.findObjectsByType('intro5', map, 'objectsLayer')[0];
+        this.intro5 = this.add.sprite(intro5.x, intro5.y, 'hitBox');
+        this.intro5.anchor.setTo(0.5, 0.5);
+        this.intro5.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        this.intro5.animations.play('normal');
+
+    }
 
 
 }

@@ -25,8 +25,6 @@ var Robot = function (game, x, y) {
     this.sprite.body.addRectangle(59, 90, 0, -8);
     this.sprite.body.addRectangle(155, 55, 0, 67);
 
-    this.sprite.body.velocity.x = 100;
-    this.sprite.body.velocity.y = 0;
 
     this.sprite.states = [['left', 'idle'], ['left', 'left'],
     ['right', 'idle'], ['right', 'right'],
@@ -41,6 +39,8 @@ var Robot = function (game, x, y) {
     //     game.robots.children.forEach(function (r, i, obj) {
 
     this.update = function () {
+
+        this.sprite.body.velocity.x = 0;
 
         if (!this.vulnerable) {
 

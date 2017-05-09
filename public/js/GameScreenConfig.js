@@ -115,6 +115,8 @@ var GameScreenConfig = {
         this.objectiveTxt.anchor.setTo(0.5, 0.5);
         this.objectiveTxt.fixedToCamera = true;
         this.objective = obj;
+
+        console.log('119');
     },
     setObjective: function (m) {
         if (m == null) {

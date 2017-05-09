@@ -79,9 +79,12 @@ BackTogether.Level2_stage1.prototype = {
         GameScreenConfig.initText(game);
         GameScreenConfig.initHealthBar(game);
         GameScreenConfig.initVolIcon(game);
+        GameScreenConfig.initObjective(game, 'Arm is now on play!!');
+
         this.initKeys();
         this.initRobots();
         // this.initItemBox();
+        this.initHitboxs();
 
         this.gameItems = [];
         this.gameItems.push('invisible');
@@ -275,7 +278,9 @@ BackTogether.Level2_stage1.prototype = {
 
             }
         }
-    },
+    }
+
+
 
 
 }

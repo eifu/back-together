@@ -112,16 +112,16 @@ BackTogether.Level1_stage3.prototype = {
 
                     GameScreenConfig.setObjective("Press down or 'S' to H A C K!");
 
-                    if (this.player.hackingStart){
+                    if (this.player.hackingStart) {
                         console.log('yeahhhh');
 
-                        if (r.state == 'switchOffLeft'){
+                        if (r.state == 'switchOffLeft') {
                             r.state = 'hackLeft'
                             r.sprite.animations.play('hackLeft');
                         } else {
- r.state = 'hackRight';    
+                            r.state = 'hackRight';
                             r.sprite.animations.play('hackRight');
-                           
+
                         }
                     }
 

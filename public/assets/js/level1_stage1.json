@@ -71,26 +71,6 @@
                  "width":0,
                  "x":-1,
                  "y":290
-                }, 
-                {
-                 "gid":1,
-                 "height":32,
-                 "id":12,
-                 "name":"robotStart",
-                 "properties":
-                    {
-                     "type":"r"
-                    },
-                 "propertytypes":
-                    {
-                     "type":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1276,
-                 "y":548
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -132,8 +112,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":12,
-                 "y":278
+                 "x":35.5738,
+                 "y":186.848
                 }, 
                 {
                  "gid":1,
@@ -152,28 +132,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":308,
-                 "y":317
-                }, 
-                {
-                 "gid":1,
-                 "height":32,
-                 "id":3,
-                 "name":"intro2",
-                 "properties":
-                    {
-                     "type":"intro2"
-                    },
-                 "propertytypes":
-                    {
-                     "type":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":985,
-                 "y":603
+                 "x":298.309634544306,
+                 "y":313.999527404833
                 }, 
                 {
                  "gid":1,
@@ -192,8 +152,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1149,
-                 "y":603
+                 "x":946.820249565629,
+                 "y":596.681882798926
                 }, 
                 {
                  "gid":1,
@@ -212,8 +172,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1427,
-                 "y":605
+                 "x":1990.89196019586,
+                 "y":587.625177697046
                 }, 
                 {
                  "gid":1,
@@ -232,17 +192,17 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":1797,
-                 "y":602
+                 "x":2673.63876164903,
+                 "y":595.681882798926
                 }, 
                 {
                  "gid":1,
                  "height":32,
-                 "id":7,
-                 "name":"intro6",
+                 "id":14,
+                 "name":"robotStart",
                  "properties":
                     {
-                     "type":"intro6"
+                     "type":"r"
                     },
                  "propertytypes":
                     {
@@ -252,17 +212,17 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":2335,
-                 "y":602
+                 "x":1492.45059911546,
+                 "y":554.210570841889
                 }, 
                 {
                  "gid":1,
                  "height":32,
-                 "id":8,
-                 "name":"intro8",
+                 "id":15,
+                 "name":"droneStart",
                  "properties":
                     {
-                     "type":"intro8"
+                     "type":"d"
                     },
                  "propertytypes":
                     {
@@ -272,28 +232,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":2847,
-                 "y":604
-                }, 
-                {
-                 "gid":1,
-                 "height":32,
-                 "id":9,
-                 "name":"intro7",
-                 "properties":
-                    {
-                     "type":"intro7"
-                    },
-                 "propertytypes":
-                    {
-                     "type":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":2601,
-                 "y":598
+                 "x":2912.44732269784,
+                 "y":434.575264571158
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -302,7 +242,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":13,
+ "nextobjectid":17,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,

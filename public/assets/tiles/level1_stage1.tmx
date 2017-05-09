@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="32" tileheight="32" nextobjectid="13">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="32" tileheight="32" nextobjectid="17">
  <tileset firstgid="1" name="tileset3" tilewidth="32" tileheight="32" tilecount="42" columns="6">
   <image source="../images/tileset3.png" width="192" height="224"/>
  </tileset>
@@ -37,11 +37,6 @@
    </properties>
    <polyline points="0,0 129,0 192,32 352,31 926,319 3201,319 3201,350 2,351 -2,1"/>
   </object>
-  <object id="12" name="robotStart" gid="1" x="1276" y="548" width="32" height="32">
-   <properties>
-    <property name="type" value="r"/>
-   </properties>
-  </object>
  </objectgroup>
  <layer name="pausedLayer" width="100" height="20" opacity="0.33">
   <data encoding="csv">
@@ -68,49 +63,39 @@
 </data>
  </layer>
  <objectgroup name="objectsLayer">
-  <object id="1" name="playerStart" gid="1" x="12" y="278" width="32" height="32">
+  <object id="1" name="playerStart" gid="1" x="35.5738" y="186.848" width="32" height="32">
    <properties>
     <property name="type" value="playerStart"/>
    </properties>
   </object>
-  <object id="2" name="intro1" gid="1" x="308" y="317" width="32" height="32">
+  <object id="2" name="intro1" gid="1" x="298.31" y="314" width="32" height="32">
    <properties>
     <property name="type" value="intro1"/>
    </properties>
   </object>
-  <object id="3" name="intro2" gid="1" x="985" y="603" width="32" height="32">
-   <properties>
-    <property name="type" value="intro2"/>
-   </properties>
-  </object>
-  <object id="4" name="intro3" gid="1" x="1149" y="603" width="32" height="32">
+  <object id="4" name="intro3" gid="1" x="946.82" y="596.682" width="32" height="32">
    <properties>
     <property name="type" value="intro3"/>
    </properties>
   </object>
-  <object id="5" name="intro4" gid="1" x="1427" y="605" width="32" height="32">
+  <object id="5" name="intro4" gid="1" x="1990.89" y="587.625" width="32" height="32">
    <properties>
     <property name="type" value="intro4"/>
    </properties>
   </object>
-  <object id="6" name="intro5" gid="1" x="1797" y="602" width="32" height="32">
+  <object id="6" name="intro5" gid="1" x="2673.64" y="595.682" width="32" height="32">
    <properties>
     <property name="type" value="intro5"/>
    </properties>
   </object>
-  <object id="7" name="intro6" gid="1" x="2335" y="602" width="32" height="32">
+  <object id="14" name="robotStart" gid="1" x="1492.45" y="554.211" width="32" height="32">
    <properties>
-    <property name="type" value="intro6"/>
+    <property name="type" value="r"/>
    </properties>
   </object>
-  <object id="8" name="intro8" gid="1" x="2847" y="604" width="32" height="32">
+  <object id="15" name="droneStart" gid="1" x="2373.83" y="439.314" width="32" height="32">
    <properties>
-    <property name="type" value="intro8"/>
-   </properties>
-  </object>
-  <object id="9" name="intro7" gid="1" x="2601" y="598" width="32" height="32">
-   <properties>
-    <property name="type" value="intro7"/>
+    <property name="type" value="d"/>
    </properties>
   </object>
  </objectgroup>

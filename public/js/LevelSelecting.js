@@ -115,7 +115,7 @@ BackTogether.LevelSelecting.prototype = {
     update: function () {
         if (keys['ONE'].isDown) {
             Level = 'ONE';
-            this.game.state.start('Level2_stage1');
+            this.game.state.start('Level1_stage1');
         }
         if (keys['TWO'].isDown) {
             Level = 'TWO';

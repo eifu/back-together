@@ -73,6 +73,9 @@ BackTogether.Preloader.prototype = {
                 this.load.tilemap('map1', 'assets/js/test.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('map2', 'assets/js/test2.json', null, Phaser.Tilemap.TILED_JSON);
 
+
+                this.load.spritesheet('hitBox', 'assets/images/hitBox.png', 64, 64);
+
                 // GAME SCREEN
                 this.load.spritesheet('volBtn', 'assets/images/VolBtn.png', 24, 24);
                 this.load.image('volDownIcon', 'assets/images/VolDownIcon.png');
