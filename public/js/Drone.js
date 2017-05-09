@@ -75,7 +75,7 @@ var Drone = function (game, x, y) {
         if (this.state == 'patrol') {
             // goomba
             // console.log(d.rightPos[0].x);
-            if (this.sprite.body.x < this.sprite.leftPos.x) {
+            if (this.sprite.body.x < this.leftPos.x) {
                 this.face = 'right';
                 this.sprite.body.moveRight(100);
                 this.light.body.moveRight(100);
@@ -124,33 +124,46 @@ var Drone = function (game, x, y) {
             }
 
         } else {
-               if (this.game.time.now < this.stateTime) {
-                    if (this.state == 'on'){
-                        this.light.visible = true;
-                        this.lightShadow.visible = true;
-                    } else {
-                        // of 
+            if (this.game.time.now < this.stateTime) {
+                if (this.state == 'on') {
+                    this.light.visible = true;
+                    this.lightShadow.visible = true;
+                } else {
+                    // of 
+                    this.light.visible = false;
+                    this.lightShadow.visible = false;
+
+                }
+
+            } else {
+                if (this.detectTime <= 0) {
+                    this.stateTime = this.game.time.now + 5000;
+                }
+                else {
+                    if (this.state == 'on') {
+                        this.state = 'off';
+                        this.stateTime = this.game.time.now + 5000;
+                        console.log(142);
+
                         this.light.visible = false;
                         this.lightShadow.visible = false;
+                        this.firingRobotCounting1Text.visible = false;
+                        this.firingRobotCounting3Text.visible = false;
+                        this.firingRobotCounting3Text.visible = false;
+                        this.detectTime = 1000;
 
-                    }
-
-               } else {
-                    if (this.state == 'on'){
-                        this.state = 'off';
-                        this.stateTime = this.game.time.now + 2000;
-                        console.log(142);
-                    }else {
+                    } else {
                         // off 
                         this.state = 'on';
-                        this.stateTime = this.game.time.now + 2000;
+                        this.stateTime = this.game.time.now + 5000;
                     }
+                }
 
-               }
+            }
         }
     }
 
-    this.setOnOffMode = function(){
+    this.setOnOffMode = function () {
         this.state = 'on';
     }
 }

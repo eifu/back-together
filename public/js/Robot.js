@@ -25,6 +25,7 @@ var Robot = function (game, x, y) {
     this.sprite.body.addRectangle(59, 90, 0, -8);
     this.sprite.body.addRectangle(155, 55, 0, 67);
 
+    this.sprite.body.fixedRotation = true;
 
     this.sprite.states = [['left', 'idle'], ['left', 'left'],
     ['right', 'idle'], ['right', 'right'],

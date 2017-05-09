@@ -51,6 +51,7 @@ BackTogether.Level1_stage1.prototype = {
         this.tilesCollisionGroup = game.physics.p2.createCollisionGroup();
         this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
         this.robotCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.capsuleCollisionGroup = game.physics.p2.createCollisionGroup();
 
         game.physics.p2.updateBoundsCollisionGroup();
 
@@ -58,7 +59,7 @@ BackTogether.Level1_stage1.prototype = {
 
 
             collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
-            collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup]);
+            collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup, this.capsuleCollisionGroup]);
 
 
             console.log(collisionObjects[i]);
@@ -67,10 +68,7 @@ BackTogether.Level1_stage1.prototype = {
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides(this.tilesCollisionGroup, function () {
-
-            console.log(this.player.sprite.body.angle);
-        }, this);
+        this.player.sprite.body.collides([this.tilesCollisionGroup,this.capsuleCollisionGroup]);
 
         // these are general purpose.
         GameScreenConfig.initText(game);
@@ -106,6 +104,8 @@ BackTogether.Level1_stage1.prototype = {
 
         this.damageBool = true;
 
+
+        this.capsules = [];
 
     },
 
@@ -170,6 +170,106 @@ BackTogether.Level1_stage1.prototype = {
             var d = this.drones[i];
 
             d.update();
+
+            if (d.state == 'on') {
+
+                if (this.checkOverlap(this.player.sprite, d.light)) {
+                    console.log(178);
+                    this.screenShake();
+                    if (d.detectTime > 0) {
+                        this.screenShake();
+
+                        d.detectTime -= 20;
+                        d.light.animations.frame = 1;
+                        d.light.scale.setTo(1 * d.detectTime / 1000, 3 * d.detectTime / 1000)
+                        // hidePopUpBool = true;
+
+
+                        if (d.detectTime <= 0) {
+                            d.firingRobotTime = this.time.now + 3000;
+                            d.light.scale.setTo(1, 3);
+                            d.light.animations.frame = 2;
+
+                        }
+                    } else {
+                        console.log('game over');
+                    }
+
+                } else {
+                    d.light.scale.setTo(1, 3);
+                    d.light.animations.frame = 0;
+                }
+
+                if (d.detectTime <= 0) {
+                    d.light.animations.frame = 2;
+
+                    var t = d.firingRobotTime - this.time.now;
+                    // console.log(t);
+                    if (t > 2000) {
+                        d.firingRobotCounting3Text.visible = true;
+                    } else if (t > 1000) {
+                        d.firingRobotCounting3Text.visible = false;
+                        d.firingRobotCounting2Text.visible = true;
+
+                    } else if (t > 0) {
+                        d.firingRobotCounting2Text.visible = false;
+                        d.firingRobotCounting1Text.visible = true;
+
+                    } else {
+                        d.firingRobotCounting1Text.visible = false;
+
+                        d.detectTime = 1000;
+
+                        var c = this.add.sprite(d.sprite.x, d.sprite.y, 'capsule');
+                        c.animations.frame = 0;
+                        this.physics.p2.enable(c);
+                        c.body.data.gravityScale = 10;
+                        c.body.setCircle(25);
+                        if (d.sprite.body.velocity.x > 0) {
+                            c.body.velocity.x = 400;
+                        } else {
+                            c.body.velocity.x = -400;
+                        }
+
+                        c.body.setCollisionGroup(this.capsuleCollisionGroup);
+                        c.body.collides([this.tilesCollisionGroup,this.playerCollisionGroup]);
+
+                        c.hatchingTime = this.time.now + 10000;
+
+                        this.capsules.push(c);
+
+                        console.log(this.capsules);
+                    }
+                }
+            }
+
+        }
+
+        for (var i = 0; i < this.capsules.length; i++) {
+            var c = this.capsules[i];
+
+            var t = c.hatchingTime - this.time.now;
+            if (t > 400) {
+            } else if (t > 300) {
+                c.animations.frame = 1;
+            } else if (t > 200) {
+                c.animations.frame = 1;
+            } else if (t > 100) {
+                c.animations.frame = 3;
+            } else if (t > 0) {
+                c.animations.frame = 4;
+                
+            } else{
+                var r = new Robot(game, c.x, c.y -  100);
+                c.destroy();
+
+
+                r.sprite.body.setCollisionGroup(this.robotCollisionGroup);
+                r.sprite.body.collides(this.tilesCollisionGroup);
+                this.robots.push(r);
+
+                this.capsules.splice(i, 1); // remove the capsule from the array;
+            }
         }
 
 
@@ -202,7 +302,7 @@ BackTogether.Level1_stage1.prototype = {
         }
 
         if (this.intro4_2Bool) {
-            this.popupScreen.setText("Once it finds you, you can hide \n to get away, but if you're too slow, \n it will spawn robots after you.");
+            this.popupScreen.setText("Once it finds you, you can hide \n to get away");
             this.popupScreen.on();
             this.intro4_2Bool = false;
         }
