@@ -52,25 +52,25 @@ BackTogether.MainMenu.prototype = {
         
         txt.anchor.setTo(0.5, 0.5);
 
-        newGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 170, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
-        newGameBtn.anchor.setTo(0.5, 0.5);
-        newGameBtn.scale.setTo(3.0, 3.0);
+        easyGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 170, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
+        easyGameBtn.anchor.setTo(0.5, 0.5);
+        easyGameBtn.scale.setTo(3.0, 3.0);
 
-        loadGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 70, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
-        loadGameBtn.anchor.setTo(0.5, 0.5);
-        loadGameBtn.scale.setTo(3.0, 3.0);
+        normalGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY - 70, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
+        normalGameBtn.anchor.setTo(0.5, 0.5);
+        normalGameBtn.scale.setTo(3.0, 3.0);
 
-//        settingBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', showSettings, this, 2, 1, 0);
-//        settingBtn.anchor.setTo(0.5, 0.5);
-//        settingBtn.scale.setTo(3.0, 3.0);
+        hardGameBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', startOnClick, this, 2, 1, 0);
+        hardGameBtn.anchor.setTo(0.5, 0.5);
+        hardGameBtn.scale.setTo(3.0, 3.0);
 
-        helpBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 30, 'mainMenuBtn', showHelp, this, 2, 1, 0);
+        helpBtn = game.add.button(this.camera.view.centerX, this.camera.view.centerY + 130, 'mainMenuBtn', showHelp, this, 2, 1, 0);
         helpBtn.anchor.setTo(0.5, 0.5);
         helpBtn.scale.setTo(3.0, 3.0);
 
         menuBtns = [];
-        menuBtns.push(newGameBtn);
-        menuBtns.push(loadGameBtn);
+        menuBtns.push(easyGameBtn);
+        menuBtns.push(hardGameBtn);
 //        menuBtns.push(settingBtn);
         menuBtns.push(helpBtn);
 
@@ -80,16 +80,19 @@ BackTogether.MainMenu.prototype = {
         var titleTxt = game.add.text(this.camera.view.centerX, 50, "BACK TOGETHER", titleFontStyle);
         titleTxt.anchor.setTo(0.5, 0.5);
 
-        var newGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 170, "New Game", btnFontStyle);
-        newGameBtnTxt.anchor.setTo(0.5, 0.5);
+        var easyGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 170, "EASY", btnFontStyle);
+        easyGameBtnTxt.anchor.setTo(0.5, 0.5);
 
-        var loadGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 70, "Load Game", btnFontStyle);
-        loadGameBtnTxt.anchor.setTo(0.5, 0.5);
+        var normalGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY - 70, "NORMAL", btnFontStyle);
+        normalGameBtnTxt.anchor.setTo(0.5, 0.5);
+
+        var hardGameBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY +30, "HARD", btnFontStyle);
+        hardGameBtnTxt.anchor.setTo(0.5, 0.5);
 
 //        var settingBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "Settings", btnFontStyle);
 //        settingBtnTxt.anchor.setTo(0.5, 0.5);
 
-        var helpBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 30, "Help", btnFontStyle);
+        var helpBtnTxt = game.add.text(this.camera.view.centerX, this.camera.view.centerY + 130, "HELP", btnFontStyle);
         helpBtnTxt.anchor.setTo(0.5, 0.5);
         
         var volIcon = this.add.sprite(this.camera.view.centerX + game.width / 2.5, this.camera.view.centerY + game.height / 2.5, icon);
@@ -198,14 +201,6 @@ BackTogether.MainMenu.prototype = {
                     });
                 }
             }
-        }
-        if(keys['ONE'].isDown){
-            Level = 'ONE';
-            this.game.state.start('Level1');
-        }
-        if(keys['TWO'].isDown){
-            Level = 'TWO';
-            this.game.state.start('Level2');
         }
     }
 
