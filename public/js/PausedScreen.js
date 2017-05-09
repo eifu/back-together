@@ -147,22 +147,40 @@ var PausedScreen = function (game, player) {
 
         this.cancelBtn.visible = true;
         this.cancelBtn.reset(this.game.camera.view.centerX + 235, this.game.camera.view.centerY - 110);
+        this.game.world.bringToTop(this.cancelBtn);
+
         this.sprite.visible = true;
         this.sprite.reset(this.game.camera.view.centerX, this.game.camera.view.centerY);
+        this.game.world.bringToTop(this.sprite);
+
         this.txt.visible = true;
         this.txt.reset(this.game.camera.view.centerX, this.game.camera.view.centerY + 260);
+        this.game.world.bringToTop(this.txt);
+
         this.resetBtn.visible = true;
         this.resetBtn.reset(game.camera.view.centerX - 134, game.camera.view.centerY - 55);
+        this.game.world.bringToTop(this.resetBtn);
+
         this.resetIcon.visible = true;
         this.resetIcon.reset(game.camera.view.centerX - 134, game.camera.view.centerY - 55);
+        this.game.world.bringToTop(this.resetIcon);
+
         this.mmBtn.visible = true;
         this.mmBtn.reset(this.game.camera.view.centerX - 134, this.game.camera.view.centerY + 55);
+        this.game.world.bringToTop(this.mmBtn);
+
         this.mmIcon.visible = true;
         this.mmIcon.reset(this.game.camera.view.centerX - 134, this.game.camera.view.centerY + 55);
+        this.game.world.bringToTop(this.mmIcon);
+
         this.inventory.visible = true;
         this.inventory.reset(this.game.camera.view.centerX + 79, this.game.camera.view.centerY);
+        this.game.world.bringToTop(this.inventory);
+
         this.inventoryTxt.visible = true;
         this.inventoryTxt.reset(this.game.camera.view.centerX + 79, this.game.camera.view.centerY - 68);
+        this.game.world.bringToTop(this.inventoryTxt);
+
         console.log(187);
         console.log(this.itemBtns);
         for (var i = 0; i < this.itemBtns.length; i++) {
@@ -170,10 +188,14 @@ var PausedScreen = function (game, player) {
             var y = this.game.camera.view.centerY - 58 + i + 32;
             this.itemBtns[i].visible = true;
             this.itemBtns[i].reset(x, y);
+            this.game.world.bringToTop(this.itemBtns[i]);
+
             // console.log(this.itemBtns[i]);
             // console.log(this.player.items[this.selectedItem]);
             this.itemNums[i].setText(this.player.items[this.itemBtns[i].key]);      // we need to update here.
             this.itemNums[i].visible = true;
+            this.game.world.bringToTop(this.itemNums[i]);
+
             this.itemNums[i].reset(x + 16, y + 16);
         }
 
