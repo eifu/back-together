@@ -255,7 +255,7 @@ BackTogether.Level1_stage2.prototype = {
                 c.animations.frame = 4;
 
             } else {
-                var r = new Robot(game, c.x, c.y - 100);
+                var r = new Robot(game, c.x, c.y - 400);
                 c.destroy();
 
 

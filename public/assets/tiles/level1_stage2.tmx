@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="32" tileheight="32" nextobjectid="37">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="20" tilewidth="32" tileheight="32" nextobjectid="40">
  <tileset firstgid="1" name="tileset3" tilewidth="32" tileheight="32" tilecount="42" columns="6">
   <image source="../images/tileset3.png" width="192" height="224"/>
   <tile id="0">
@@ -146,6 +146,15 @@
  <objectgroup name="collision">
   <object id="19" x="3" y="610">
    <polyline points="0,0 502,-2 539,18 671,19 704,-2 794,-2 863,-36 895,-35 959,-2 1115,-3 1151,19 1180,21 1214,-2 1852,-3 1881,17 1948,21 1985,-3 3195,-2 3198,30 -2,29 1,1"/>
+  </object>
+  <object id="37" x="532" y="548">
+   <polyline points="0,0 -1,27 154,27 154,-2 0,-3"/>
+  </object>
+  <object id="38" x="1153" y="548">
+   <polyline points="0,0 0,57 29,58 30,-2 2,-3"/>
+  </object>
+  <object id="39" x="1905" y="515">
+   <polyline points="0,0 -1,92 30,93 29,2 -1,-1"/>
   </object>
  </objectgroup>
 </map>

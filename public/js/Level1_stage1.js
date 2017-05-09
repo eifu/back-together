@@ -68,7 +68,7 @@ BackTogether.Level1_stage1.prototype = {
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides([this.tilesCollisionGroup,this.capsuleCollisionGroup]);
+        this.player.sprite.body.collides([this.tilesCollisionGroup, this.capsuleCollisionGroup]);
 
         // these are general purpose.
         GameScreenConfig.initText(game);
@@ -220,7 +220,7 @@ BackTogether.Level1_stage1.prototype = {
 
                         d.detectTime = 1000;
 
-                        var c = this.add.sprite(d.sprite.x, d.sprite.y, 'capsule');
+                        var c = this.add.sprite(d.sprite.x, d.sprite.y - 400, 'capsule');
                         c.animations.frame = 0;
                         this.physics.p2.enable(c);
                         c.body.data.gravityScale = 10;
@@ -232,7 +232,7 @@ BackTogether.Level1_stage1.prototype = {
                         }
 
                         c.body.setCollisionGroup(this.capsuleCollisionGroup);
-                        c.body.collides([this.tilesCollisionGroup,this.playerCollisionGroup]);
+                        c.body.collides([this.tilesCollisionGroup, this.playerCollisionGroup]);
 
                         c.hatchingTime = this.time.now + 10000;
 
@@ -258,9 +258,9 @@ BackTogether.Level1_stage1.prototype = {
                 c.animations.frame = 3;
             } else if (t > 0) {
                 c.animations.frame = 4;
-                
-            } else{
-                var r = new Robot(game, c.x, c.y -  100);
+
+            } else {
+                var r = new Robot(game, c.x, c.y - 100);
                 c.destroy();
 
 
