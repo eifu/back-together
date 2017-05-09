@@ -80,15 +80,22 @@ var GameScreenConfig = {
     },
     initHealthBar: function (game) {
 
-        this.healthPoint = 6;
+        this.healthPoint = 20;
 
-        this.healthbar = game.add.image(game.camera.view.centerX , game.height - 20, 'healthbar');
-        this.healthbar.anchor.setTo(0, 0);
+        this.healthbar = game.add.image(game.camera.view.centerX - 200, game.height - 40, 'healthbar_green');
+        this.healthbar.anchor.setTo(0, 0.5);
         this.healthbar.scale.setTo(this.healthPoint,1);
         this.healthbar.fixedToCamera = true;
 
+        this.healthbar.shadow = game.add.image(game.camera.view.centerX  - 200, game.height - 40, 'healthbar_red');
+        this.healthbar.shadow.anchor.setTo(0, 0.5);
+        this.healthbar.shadow.scale.setTo(this.healthPoint,1);
+        this.healthbar.shadow.fixedToCamera = true;
+
+        game.world.bringToTop(this.healthbar);
+
         // console.log(this.camera.view);
-        this.heart = game.add.sprite(game.camera.view.centerX , game.height - 20, 'heartbeat');
+        this.heart = game.add.sprite(game.camera.view.centerX - 200 , game.height - 40, 'heartbeat');
         this.heart.anchor.setTo(0.5, 0.5);
 
         this.heart.animations.add('normal', [0, 1, 2, 3, 4, 5], 10, true);

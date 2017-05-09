@@ -34,7 +34,12 @@ BackTogether.Preloader.prototype = {
                 this.load.image('disabledLevelBtn', 'assets/images/disabledLevelBtn.png');
                 this.load.spritesheet('itemBox', 'assets/images/itemBox.png', 32, 32);
                 this.load.spritesheet('heartbeat', 'assets/images/heartbeat.png', 100, 100);
-                this.load.image('healthbar', 'assets/images/healthbar_green.png');
+                
+                
+                this.load.image('healthbar_green', 'assets/images/healthbar_green.png');
+                this.load.image('healthbar_red', 'assets/images/healthbar_red.png');
+
+
                 this.load.spritesheet('numbers', 'assets/images/numbers.png', 32, 32);
                 this.load.image('invisible', 'assets/images/invisible.png');
                 this.load.image('stink', 'assets/images/stink.png');
@@ -81,7 +86,9 @@ BackTogether.Preloader.prototype = {
                 this.load.tilemap('level1_stage3', 'assets/js/level1_stage3.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('level1_stage2', 'assets/js/level1_stage2.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('level1_stage1', 'assets/js/level1_stage1.json', null, Phaser.Tilemap.TILED_JSON);
+                this.load.tilemap('level2_stage1', 'assets/js/level2_stage1.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.image('tileset3', 'assets/images/tileset3.png');
+                this.load.image('tileset4', 'assets/images/tileset4.png');
 
                 this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
                 this.load.atlasJSONArray('arm', 'assets/images/arm.png', 'assets/js/arm.json');
