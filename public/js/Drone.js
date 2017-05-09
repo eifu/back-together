@@ -15,15 +15,6 @@ var Drone = function (game, x, y) {
     this.sprite.animations.add("right_damaged", [6, 7], 10, true);
     this.sprite.animations.add('idle', [0, 1, 0, 1, 0, 1, 4, 5, 4, 5, 4, 5], 10, true);
 
-    this.light = game.add.sprite(x, y + 30, 'droneLight');
-    game.physics.p2.enable(this.light, true);
-    this.light.body.data.gravityScale = 0;
-    this.light.anchor.setTo(0.5, 0);
-    this.light.scale.setTo(1, 3);
-    this.light.animations.frame = 0;
-    this.light.body.clearShapes();
-    this.light.sendToBack();
-
     this.lightShadow = game.add.sprite(x, y + 30, 'droneLight');
     game.physics.p2.enable(this.lightShadow, true);
     this.lightShadow.body.data.gravityScale = 0;
@@ -32,22 +23,38 @@ var Drone = function (game, x, y) {
     this.lightShadow.animations.frame = 0;
     this.lightShadow.body.clearShapes();
     this.lightShadow.sendToBack();
+    this.game.world.bringToTop(this.lightShadow);
+
+    this.light = game.add.sprite(x, y + 30, 'droneLight');
+    game.physics.p2.enable(this.light, true);
+    this.light.body.data.gravityScale = 0;
+    this.light.anchor.setTo(0.5, 0);
+    this.light.scale.setTo(1, 3);
+    this.light.animations.frame = 0;
+    this.light.body.clearShapes();
+    this.light.sendToBack();
+    this.game.world.bringToTop(this.light);
 
 
     this.firingRobotCounting1Text = game.add.text(x, y + 200, '1', { font: '64px Aclonica', fill: '#B71C1C' });
     this.firingRobotCounting1Text.visible = false;
     this.firingRobotCounting1Text.scale.setTo(3, 3);
     this.firingRobotCounting1Text.anchor.setTo(0.5, 0.5);
+    this.game.world.bringToTop(this.firingRobotCounting1Text);
+
 
     this.firingRobotCounting2Text = game.add.text(x, y + 300, '2', { font: '64px Aclonica', fill: '#B71C1C' });
     this.firingRobotCounting2Text.visible = false;
     this.firingRobotCounting2Text.scale.setTo(3, 3);
     this.firingRobotCounting2Text.anchor.setTo(0.5, 0.5);
+    this.game.world.bringToTop(this.firingRobotCounting2Text);
+
 
     this.firingRobotCounting3Text = game.add.text(x, y + 400, '3', { font: '64px Aclonica', fill: '#B71C1C' });
     this.firingRobotCounting3Text.visible = false;
     this.firingRobotCounting3Text.scale.setTo(3, 3);
     this.firingRobotCounting3Text.anchor.setTo(0.5, 0.5);
+    this.game.world.bringToTop(this.firingRobotCounting3Text);
 
 
 
@@ -59,7 +66,7 @@ var Drone = function (game, x, y) {
     // d.body.mass = 0;
     this.sprite.body.data.gravityScale = 0;
     this.state = 'patrol';
-
+    this.stateTime = 0;
 
     this.update = function () {
 
@@ -117,7 +124,33 @@ var Drone = function (game, x, y) {
             }
 
         } else {
-            // trace player
+               if (this.game.time.now < this.stateTime) {
+                    if (this.state == 'on'){
+                        this.light.visible = true;
+                        this.lightShadow.visible = true;
+                    } else {
+                        // of 
+                        this.light.visible = false;
+                        this.lightShadow.visible = false;
+
+                    }
+
+               } else {
+                    if (this.state == 'on'){
+                        this.state = 'off';
+                        this.stateTime = this.game.time.now + 2000;
+                        console.log(142);
+                    }else {
+                        // off 
+                        this.state = 'on';
+                        this.stateTime = this.game.time.now + 2000;
+                    }
+
+               }
         }
+    }
+
+    this.setOnOffMode = function(){
+        this.state = 'on';
     }
 }

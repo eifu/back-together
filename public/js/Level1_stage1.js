@@ -122,7 +122,7 @@ BackTogether.Level1_stage1.prototype = {
         for (var i = 0; i < this.robots.length; i++) {
 
             var r = this.robots[i];
-            if (!this.damageBool){
+            if (!this.damageBool) {
                 r.update();
             }
 
@@ -152,15 +152,26 @@ BackTogether.Level1_stage1.prototype = {
 
                     if (r.state == 'left') {
                         r.sprite.animations.play("leftIdle");
-                    } else {
+                    } else if (r.state == 'leftIdle') {
+                        r.sprite.animations.play("leftIdle");
+                    } else if (r.state == 'rightIdle') {
+                        r.sprite.animations.play("rightIdle");
+                    } else if (r.state == 'right') {
                         r.sprite.animations.play("rightIdle");
                     }
-                    r.stateTime = 0;
+                    r.stateTime = this.time.now + 1000;
 
                 }
 
             }
         }
+
+        for (var i = 0; i < this.drones.length; i++) {
+            var d = this.drones[i];
+
+            d.update();
+        }
+
 
         if (this.intro1_2Bool) {
             this.popupScreen.setText("Space to pause/unpause game");
@@ -206,7 +217,7 @@ BackTogether.Level1_stage1.prototype = {
         }
 
         if (this.intro5Bool && this.checkOverlap(this.player.sprite, this.intro5)) {
-            this.popupScreen.setText("Congratulation!! You just finish the first stage of Back together!!");
+            this.popupScreen.setText("Congratulation!! \nYou just finish\n the first stage of Back together!!");
             this.popupScreen.on();
             this.intro5.destroy();
             this.intro5Bool = false;
@@ -218,10 +229,10 @@ BackTogether.Level1_stage1.prototype = {
         // this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
-        return this.player.sprite.body.x < r.sprite.x &&  (r.state == 'right' || r.state == 'rightIdle');
+        return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');
     },
     playerAttackFromRight: function (r) {
-        return this.player.sprite.body.x > r.sprite.x &&  (r.state =='left' || r.state =='leftIdle');
+        return this.player.sprite.body.x > r.sprite.x && (r.state == 'left' || r.state == 'leftIdle');
     },
 
     collectItem: function (itemBox, game) {
@@ -299,13 +310,19 @@ BackTogether.Level1_stage1.prototype = {
 
     },
 
-    initDrones: function(){
+    initDrones: function () {
         this.drones = [];
 
         var d1 = Tile.findObjectsByType('d', map, 'objectsLayer')[0];
         this.drone1 = new Drone(this.game, d1.x, d1.y);
         this.drone1.sprite.animations.play('idle');
+
+        this.drone1.setOnOffMode();
+
         this.drones.push(this.drone1);
+
+
+
     },
     // playerVictory: function () {
     //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {

@@ -93,7 +93,7 @@
     <property name="type" value="r"/>
    </properties>
   </object>
-  <object id="15" name="droneStart" gid="1" x="791.142" y="292.417" width="32" height="32">
+  <object id="15" name="droneStart" gid="1" x="2515.99" y="322.428" width="32" height="32">
    <properties>
     <property name="type" value="d"/>
    </properties>
