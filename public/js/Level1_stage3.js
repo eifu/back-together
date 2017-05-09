@@ -96,12 +96,17 @@ BackTogether.Level1_stage3.prototype = {
 
 
 
-        for (var i = 0; i < this.game.robots.length; i++) {
+        for (var i = 0; i < this.robots.length; i++) {
 
-            var r = this.game.robots.children[i];
+            var r = this.robots[i];
 
-            if (this.checkOverlap(this.player.sprite, r)) {
+            r.update();
+
+            if (this.checkOverlap(this.player.sprite, r.sprite)) {
                 // if the player and a robot overlap, 
+                if (r.vulnerable){
+                    console.log('hello 108');
+                }
 
                 if (!r.vulnerable && this.playerAttackFromLeft(r)) {
                     r.vulnerable = true;
@@ -119,9 +124,9 @@ BackTogether.Level1_stage3.prototype = {
                     this.playerDamaged();
 
                     if (r.state == 'left') {
-                        r.animations.play("leftIdle");
+                        r.sprite.animations.play("leftIdle");
                     } else {
-                        r.animations.play("rightIdle");
+                        r.sprite.animations.play("rightIdle");
                     }
                     r.stateTime = 0;
 
@@ -131,15 +136,15 @@ BackTogether.Level1_stage3.prototype = {
         }
 
         // this.playerVictory();
-        Robot.updateRobots(game);
+        // Robot.updateRobots(game);
 
         // this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
-        return this.player.sprite.body.x < r.x && this.player.sprite.body.velocity.x >= 0 && r.body.velocity.x >= 0;
+        return this.player.sprite.body.x < r.sprite.x && this.player.sprite.body.velocity.x >= 0 && r.sprite.body.velocity.x >= 0;
     },
     playerAttackFromRight: function (r) {
-        return this.player.sprite.body.x > r.x && this.player.sprite.body.velocity.x <= 0 && r.body.velocity.x <= 0;
+        return this.player.sprite.body.x > r.sprite.x && this.player.sprite.body.velocity.x <= 0 && r.sprite.body.velocity.x <= 0;
     },
 
     collectItem: function (itemBox, game) {
@@ -203,14 +208,17 @@ BackTogether.Level1_stage3.prototype = {
 
 
     initRobots: function () {
-        this.game.robots = this.add.group();
+        // this.game.robots = this.add.group();
+        this.robots = [];
 
-        _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
+        _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer');
 
         console.log(216);
-        this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
-        this.robot1.body.setCollisionGroup(this.robotCollisionGroup);
-        this.robot1.body.collides(this.tilesCollisionGroup);
+        var robot1 = new Robot(this.game, _robot1Start[0].x, _robot1Start[0].y);
+        robot1.sprite.body.setCollisionGroup(this.robotCollisionGroup);
+        robot1.sprite.body.collides(this.tilesCollisionGroup);
+
+        this.robots.push(robot1);
 
     },
 

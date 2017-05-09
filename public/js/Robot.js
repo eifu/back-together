@@ -1,112 +1,109 @@
 
 
-var Robot= {
-    factoryRobot: function (game, x, y) {
-        var r = game.robots.create(x, y, 'robot');
-        game.physics.p2.enable(r, true);
+var Robot = function (game, x, y) {
 
-        r.animations.add('leftIdle', Phaser.Animation.generateFrameNames('l', 1, 22), 10, true);
-        r.animations.add('rightIdle', Phaser.Animation.generateFrameNames('r', 1, 22), 10, true);
-        r.animations.add('left', Phaser.Animation.generateFrameNames('leftWalk', 1, 2), 10, true);
-        r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
+    this.game = game;
 
-        r.animations.play("left");
-        r.state = 'left';
+    this.sprite = game.add.sprite(x, y, 'robot');
+    game.physics.p2.enable(this.sprite, true);
 
-        r.body.clearShapes();
+    this.sprite.animations.add('leftIdle', Phaser.Animation.generateFrameNames('il', 1, 22), 10, true);
+    this.sprite.animations.add('rightIdle', Phaser.Animation.generateFrameNames('ir', 1, 22), 10, true);
+    this.sprite.animations.add('left', Phaser.Animation.generateFrameNames('l', 1, 2), 10, true);
+    this.sprite.animations.add('right', Phaser.Animation.generateFrameNames('r', 1, 2), 10, true);
+    this.sprite.animations.add('hackLeft', Phaser.Animation.generateFrameNames('dl', 1, 2), 10, true);
+    this.sprite.animations.add('hackRight', Phaser.Animation.generateFrameNames('dr', 1, 2), 10, true);
 
-        r.body.addCircle(24, 0, -76);
-        r.body.addRectangle(59, 90, 0, -8);
-        r.body.addRectangle(155, 55, 0, 67);
+    this.sprite.animations.play("left");
+    this.state = 'left';
 
-        r.body.velocity.x = 100;
-        r.body.velocity.y = 0;
+    this.sprite.body.clearShapes();
 
-        r.states = [['left', 'idle'], ['left', 'left'],
-        ['right', 'idle'], ['right', 'right'],
-        ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
-        r.state = 'idle';
-        r.vulnerable = false;
-        r.stateTime = game.time.now;
-        return r;
-    },
-    updateRobots: function (game) {
-        var timeNow = game.time.now;
+    this.sprite.body.addCircle(24, 0, -76);
+    this.sprite.body.addRectangle(59, 90, 0, -8);
+    this.sprite.body.addRectangle(155, 55, 0, 67);
 
-        game.robots.children.forEach(function (r, i, obj) {
-            if (!r.vulnerable) {
+    this.sprite.body.velocity.x = 100;
+    this.sprite.body.velocity.y = 0;
 
-                if (timeNow > r.stateTime) {
-                    if (r.state == "left") {
-                        // left -> leftIdle
-                        r.state = "leftIdle";
-                        r.stateTime = timeNow + 1000;
+    this.sprite.states = [['left', 'idle'], ['left', 'left'],
+    ['right', 'idle'], ['right', 'right'],
+    ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
+    this.state = 'idle';
+    this.vulnerable = false;
+    this.stateTime = game.time.now;
 
-                    } else if (r.state == "right") {
-                        // right -> rightIdle
-                        r.state = "rightIdle";
-                        r.stateTime = timeNow + 1000;
+    // updateRobots: function (game) {
+    //     var timeNow = game.time.now;
 
-                    } else { // r.state == "leftIdle" or r.state == "rightIdle"
-                        if (Math.random() < 0.4) {
-                            if (r.state == "leftIdle") {
-                                // leftIdle -> rightIdle
-                                r.state = 'rightIdle';
-                                r.stateTime = timeNow + 2000;
+    //     game.robots.children.forEach(function (r, i, obj) {
 
-                            } else {
-                                // rightIdle -> leftIdle
-                                r.state = 'leftIdle';
-                                r.stateTime = timeNow + 2000;
+    this.update = function () {
 
-                            }
+        if (!this.vulnerable) {
 
+            if (this.game.time.now > this.stateTime) {
+                if (this.state == "left") {
+                    // left -> leftIdle
+                    this.state = "leftIdle";
+                    this.stateTime = this.game.time.now + 1000;
+
+                } else if (this.state == "right") {
+                    // right -> rightIdle
+                    this.state = "rightIdle";
+                    this.stateTime = this.game.time.now + 1000;
+
+                } else { // this.state == "leftIdle" or this.state == "rightIdle"
+                    if (Math.random() < 0.4) {
+                        if (this.state == "leftIdle") {
+                            // leftIdle -> rightIdle
+                            this.state = 'rightIdle';
+                            this.stateTime = this.game.time.now + 2000;
 
                         } else {
-                            if (Math.random() < 0.5) {
-                                // leftIdle or rightIdle -> left
-                                r.state = 'left';
-                                r.stateTime = timeNow + 3000;
+                            // rightIdle -> leftIdle
+                            this.state = 'leftIdle';
+                            this.stateTime = this.game.time.now + 2000;
 
-                            } else {
-                                // leftIdle or rightIdle -> right
-                                r.state = 'right';
-                                r.stateTime = timeNow + 3000;
+                        }
 
-                            }
+
+                    } else {
+                        if (Math.random() < 0.5) {
+                            // leftIdle or rightIdle -> left
+                            this.state = 'left';
+                            this.stateTime = this.game.time.now + 3000;
+
+                        } else {
+                            // leftIdle or rightIdle -> right
+                            this.state = 'right';
+                            this.stateTime = this.game.time.now + 3000;
+
                         }
                     }
+                }
 
 
-                } else {
-                    r.animations.play(r.state);
-                    if (r.state == 'left') {
-                        r.body.moveLeft(100);
-                    } else if (r.state == 'right') {
-                        r.body.moveRight(100);
-                    }
-
+            } else {
+                this.sprite.animations.play(this.state);
+                if (this.state == 'left') {
+                    this.sprite.body.moveLeft(100);
+                } else if (this.state == 'right') {
+                    this.sprite.body.moveRight(100);
                 }
 
             }
-            else {
-                // if the robot is attacked, and it is already dead,
 
-
-                r.body.velocity.x = 0;
-                r.animations.frame = 0;
-                r.alpha -= 0.005;               // change opacity so that it looks like it disappear.
-                if (r.alpha <= 0) {
-                    console.log(obj);
-
-                    console.log('disappear');
-                    r.destroy();
-                    obj.slice(i, 1); // remove the dead robot from the array.
-                    console.log(obj);
-
-                }
+        }
+        else {
+            // if the robot is attacked, and it is already dead,
+            if (this.state == 'left' || this.stage == 'leftIdle'){
+                this.sprite.animations.play('hackLeft');
             }
-        });
-
-    },
+                       // if the robot is attacked, and it is already dead,
+            else{
+                this.sprite.animations.play('hackRight');
+            }
+        }
+    }
 }
