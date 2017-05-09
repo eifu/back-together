@@ -80,6 +80,7 @@ BackTogether.Level1_stage1.prototype = {
 
         this.initKeys();
         this.initRobots();
+        this.initDrones();
         // this.initItemBox();
         this.initHitboxs();
 
@@ -298,6 +299,14 @@ BackTogether.Level1_stage1.prototype = {
 
     },
 
+    initDrones: function(){
+        this.drones = [];
+
+        var d1 = Tile.findObjectsByType('d', map, 'objectsLayer')[0];
+        this.drone1 = new Drone(this.game, d1.x, d1.y);
+        this.drone1.sprite.animations.play('idle');
+        this.drones.push(this.drone1);
+    },
     // playerVictory: function () {
     //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
     //         console.log("victory!");
