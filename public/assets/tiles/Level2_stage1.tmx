@@ -33,10 +33,5 @@
     <property name="type" value="playerStart"/>
    </properties>
   </object>
-  <object id="5" gid="6" x="3105" y="641" width="32" height="32">
-   <properties>
-    <property name="type" value="playerGoal"/>
-   </properties>
-  </object>
  </objectgroup>
 </map>
