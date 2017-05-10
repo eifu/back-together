@@ -72,7 +72,7 @@ BackTogether.Level1_stage1.prototype = {
         GameScreenConfig.initObjective(game, 'Get familiar with User Controll!');
         
         // init the "progress bar" of the item you're planning to put into current stage of current level
-        invisBar = GameScreenConfig.initBar(game, game.camera.view.centerX - game.width/5, game.height/1.2, 'bar');
+        invisBar = GameScreenConfig.initBar(game, 'bar');
 
         this.initKeys();
         this.initRobots();
