@@ -27,6 +27,7 @@ Arm = function (game, map) {
 
         this.sprite.body.clearShapes();
         // player.body.addPolygon({}, [[0,54],[128,54],[112,-10],[16,-10]]);
+        this.sprite.body.addRectangle(140, 20, 0, 35);
         this.sprite.body.addRectangle(128, 50, 0, 20);
         this.sprite.body.addRectangle(100, 70, 0, 5);
         this.sprite.body.addRectangle(80, 100, 0, -10);
@@ -43,6 +44,9 @@ Arm = function (game, map) {
         this.itemNums = [];
 
         this.update = function () {
+
+
+                this.sprite.body.velocity.x = 0;
 
 
                 var timeNow = this.game.time.now;

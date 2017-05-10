@@ -26,7 +26,9 @@ var Hand = function (game, map) {
 
     // this.sprite.scale.setTo(0.5,0.5);
     this.sprite.body.clearShapes();
-    this.sprite.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
+    // this.sprite.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
+    this.sprite.body.addRectangle(64, 24, 0,0);
+
 
     this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
     this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
