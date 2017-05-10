@@ -59,6 +59,8 @@ BackTogether.Preloader.prototype = {
                 this.load.image('menuBtnCard', 'assets/images/menuBtnCard.png');
                 this.load.image('pausedBtnCard', 'assets/images/pausedBtnCard.png');
                 this.load.image('popupCard', 'assets/images/popupCard.png');
+                this.load.image('confirmCard', 'assets/images/confirmCard.png');
+
 
                 // Game Assets
                 this.load.spritesheet('hitBox', 'assets/images/hitBox.png', 64, 64);

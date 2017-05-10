@@ -8,7 +8,7 @@ var ConfirmScreen = function (game, message, pausedScreen) {
 
     this.pausedScreen = pausedScreen; // this is bad design.
 
-    this.sprite = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'objectiveCard');
+    this.sprite = game.add.sprite(game.camera.view.centerX, game.camera.view.centerY, 'confirmCard');
     this.sprite.anchor.setTo(0.5, 0.5);
     this.sprite.scale.setTo(7, 4);
 

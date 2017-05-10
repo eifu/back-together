@@ -92,7 +92,7 @@ BackTogether.LevelSelecting.prototype = {
         this.initVolIcon();
 
 
-        this.arrowLeft = this.add.button(this.camera.view.centerX - 400, this.camera.view.centerY, 'arrowLeft', this.levelDownOnClick, this, 2, 1, 0);
+        this.arrowLeft = this.add.button(this.camera.view.centerX - 400, this.camera.view.centerY, 'arrowLeftIcon', this.levelDownOnClick, this, 2, 1, 0);
         this.arrowLeft.scale.setTo(2, 2);
         this.arrowLeft.anchor.setTo(0.5, 0.5);
         if (levelShowing == 1) {
@@ -109,7 +109,7 @@ BackTogether.LevelSelecting.prototype = {
             }
         }
 
-        this.arrowRight = this.add.button(this.camera.view.centerX + 400, this.camera.view.centerY, 'arrowRight', this.levelUpOnClick, this, 2, 1, 0);
+        this.arrowRight = this.add.button(this.camera.view.centerX + 400, this.camera.view.centerY, 'arrowRightIcon', this.levelUpOnClick, this, 2, 1, 0);
         this.arrowRight.scale.setTo(2, 2);
         this.arrowRight.anchor.setTo(0.5, 0.5);
         if (levelShowing == 3) {
