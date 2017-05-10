@@ -1,11 +1,10 @@
-BackTogether.Level1 = function (game) {
+BackTogether.Level2_stage1 = function (game) {
 
 };
 
 
 var platformLayer;
 var pausedLayer;
-var invincibilityOn = false;
 var keys;
 var iKeyDown = false;
 var playAgain;
@@ -14,41 +13,70 @@ var next;
 var player;
 var map;
 
-BackTogether.Level1.prototype = {
+BackTogether.Level2_stage1.prototype = {
 
     create: function (game) {
         game.physics.startSystem(Phaser.Physics.P2JS);
-
+        game.physics.p2.setImpactEvents(true);
+        game.physics.p2.restitution = 0.8;
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
-        map = this.add.tilemap('lvl1', 64, 64);
+        map = this.add.tilemap('level2_stage1', 64, 64);
         map.addTilesetImage('tileset2');
+        map.addTilesetImage('tileset4');
 
         platformLayer = map.createLayer('platformLayer');
         platformLayer.resizeWorld();
 
-        map.setCollisionBetween(1, 8);
-        // setCollisionBetween takes two indexes, starting and ending position.
-        // BlackTile is at 1st position, RedTile is at 2nd position,
-        // (1,1) makes only BlackTile collidable.
 
-        this.score = 0;
+        game.physics.p2.setBoundsToWorld()
+
+        map.setCollisionBetween(5, 7);
+
 
         this.physics.p2.convertTilemap(map, platformLayer);
         this.physics.p2.restitution = 0;
-        this.physics.p2.gravity.y = 300;
+        this.physics.p2.gravity.y = 800;
 
         // can be Hand, Arm, Torso.
-        this.player = new Hand(game);
+        this.player = new Arm(game, map);
+
+        this.pausedScreen = new PausedScreen(game, this.player);
+        this.pausedScreen.off();
+
+        this.popupScreen = new PopupScreen(game, 'Objective: \n Stage 1 ... \n When you find drone, \n run away..\n They find you and send robots to you.');
+        this.popupScreen.on();
+
+        var collisionObjects = game.physics.p2.convertCollisionObjects(map, 'collision', true);
+
+        this.tilesCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
+        this.robotCollisionGroup = game.physics.p2.createCollisionGroup();
+
+        game.physics.p2.updateBoundsCollisionGroup();
+
+        for (var i = 0; i < collisionObjects.length; i++) {
+            collisionObjects[i].setCollisionGroup(this.tilesCollisionGroup);
+            collisionObjects[i].collides([this.playerCollisionGroup, this.robotCollisionGroup]);
+        }
+
+        this.player.sprite.enableBody = true;
+
+        this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
+        this.player.sprite.body.collides(this.tilesCollisionGroup);
+
 
 
         // these are general purpose.
         GameScreenConfig.initText(game);
         GameScreenConfig.initHealthBar(game);
         GameScreenConfig.initVolIcon(game);
+        GameScreenConfig.initObjective(game, 'Arm is now on play!!');
+
         this.initKeys();
         this.initRobots();
-        this.initItemBox();
+        // this.initItemBox();
+        this.initHitboxs();
 
         this.gameItems = [];
         this.gameItems.push('invisible');
@@ -57,19 +85,6 @@ BackTogether.Level1.prototype = {
         keys['SPACE'].onDown.add(this.unpause, this);
         keys['ENTER'].onDown.add(this.unpause, this);
 
-        this.pausedScreen = new PausedScreen(game, this.player);
-        this.pausedScreen.off();
-
-        this.popupScreen = new PopupScreen(game, 'Objective: \n ASSASSINATION STYLE ... \n When the robot turns around, \n run against its butt.\n There is a switch to turn it off.');
-        this.popupScreen.on();
-
-        // adjust the cordinate. 
-        // these lines should be stage unique.
-        this.popupScreen.sprite.y = this.camera.view.centerY + game.world.height / 3;
-        this.popupScreen.txt.y = this.camera.view.centerY + 260;
-        this.popupScreen.okBtn.y = this.camera.view.centerY + 550;
-        this.popupScreen.okIcon.y = this.camera.view.centerY + 550;
-        game.world.bringToTop(this.popupScreen.okIcon);
 
     },
 
@@ -77,37 +92,11 @@ BackTogether.Level1.prototype = {
 
         this.player.update();
 
-        if (keys['SPACE'].isDown) {
+        if (keys['SPACE'].isDown || keys['ENTER'].isDown) {
             this.pausedScreen.on();
         }
 
-        if (keys['O'].isDown) {
-            this.game.state.start('WinScreen');
-        }
 
-        if (keys['P'].isDown) {
-            this.game.state.start('LoseScreen');
-        }
-
-        if (keys['TWO'].isDown) {
-            Level = 'TWO';
-            this.game.state.start('Level2');
-        }
-
-        if (keys['I'].isDown && !iKeyDown) {
-            iKeyDown = true;
-            if (!invincibilityOn) {
-                invincibilityOn = true;
-                this.toggleOnClick();
-            }
-            else {
-                invincibilityOn = false;
-                this.toggleOnClick();
-            }
-        }
-        if (keys['I'].isUp) {
-            iKeyDown = false;
-        }
 
         for (var i = 0; i < this.game.robots.length; i++) {
 
@@ -127,21 +116,24 @@ BackTogether.Level1.prototype = {
                     this.popupScreen.on();
                 }
 
-                if (!r.vulnerable && !invincibilityOn) {
+                if (!r.vulnerable && !this.player.damaged) {
                     this.screenShake();
                     this.playerDamaged();
+
+                    if (r.state == 'left') {
+                        r.animations.play("leftIdle");
+                    } else {
+                        r.animations.play("rightIdle");
+                    }
+                    r.stateTime = 0;
+
                 }
 
             }
         }
 
-        // this.playerVictory();
-        Robot.updateRobots(game);
-
-        this.collectItem(this.itemBox, game);
     },
     playerAttackFromLeft: function (r) {
-        console.log(r.body);
         return this.player.sprite.body.x < r.x && this.player.sprite.body.velocity.x >= 0 && r.body.velocity.x >= 0;
     },
     playerAttackFromRight: function (r) {
@@ -181,20 +173,20 @@ BackTogether.Level1.prototype = {
 
     playerDamaged: function () {
         crash.play();  // sound effect 
-        this.player.damagedTime = this.time.now + 3000;
-
-        this.healthPoint -= 1;
-        if (this.healthPoint == 0) {
+        this.player.damagedTime = this.time.now + 300;
+        console.log(GameScreenConfig.healthPoint);
+        GameScreenConfig.healthPoint -= 1;
+        if (GameScreenConfig.healthPoint == 0) {
             this.game.state.start('LoseScreen');
-        } else if (this.healthPoint < 2) {
-            this.heart.animations.play("quick");
-        } else if (this.healthPoint < 4) {
-            this.heart.animations.play("normal");
+        } else if (GameScreenConfig.healthPoint < 2) {
+            GameScreenConfig.heart.animations.play("quick");
+        } else if (GameScreenConfig.healthPoint < 4) {
+            GameScreenConfig.heart.animations.play("normal");
         } else {
-            this.heart.animations.play("slow");
+            GameScreenConfig.heart.animations.play("slow");
         }
 
-        this.healthbar.scale.setTo(1, this.healthPoint);
+        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint, 1);
         this.player.damaged = true;
 
     },
@@ -210,21 +202,13 @@ BackTogether.Level1.prototype = {
 
     initRobots: function () {
         this.game.robots = this.add.group();
-        console.log(Tile);
-        _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
-        _robot1Left = Tile.findObjectsByType('robot1Left', map, 'objectsLayer')
-        _robot1Right = Tile.findObjectsByType('robot1Right', map, 'objectsLayer');
-        console.log(this);
-        this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
-        this.robot1.robot1Left = _robot1Left;
-        this.robot1.robot1Right = _robot1Right
-    },
 
-    // playerVictory: function () {
-    //     if (playerEndPos[0].x - 5 < player.body.x && playerEndPos[0].x + 5 > player.body.x) {
-    //         console.log("victory!");
-    //     }
-    // },
+        // _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
+
+        // console.log(216);
+        // this.robot1 = Robot.factoryRobot(this.game, _robot1Start[0].x, _robot1Start[0].y);
+
+    },
 
 
     initKeys: function () {
@@ -258,25 +242,36 @@ BackTogether.Level1.prototype = {
     unpause: function (key) {
         // Only act if paused
         if (key.game.paused) {
-            console.log(key);
-            console.log()
             if (this.popupScreen.popupBool) {
-                console.log(551);
+                // console.log(551);
                 this.popupScreen.off();
 
             } else if (this.pausedScreen.confirmBool) {
 
                 this.pausedScreen.confirmOff();
-                console.log(565);
+                // console.log(565);
 
             } else if (this.pausedScreen.pauseBool) {
 
-                console.log(573);
+                // console.log(573);
                 this.pausedScreen.off();
 
             }
         }
     },
+    initHitboxs: function () {
+        // var intro1 = Tile.findObjectsByType('intro1', map, 'objectsLayer')[0];
+
+        // this.intro1 = this.add.sprite(intro1.x, intro1.y, 'hitBox');
+        // this.intro1.anchor.setTo(0.5, 0.5);
+        // this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        // this.intro1.animations.play('normal');
+
+
+
+    }
+
+
 
 
 }

@@ -32,7 +32,7 @@ BackTogether.LoseScreen.prototype = {
         txt.anchor.setTo(0.5, 0.5);
         
         function replay(){
-            game.state.start('Level1');
+            game.state.start('Level1_stage1');
         }
         function mainMenu(){
             game.state.start('MainMenu');

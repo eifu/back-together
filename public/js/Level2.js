@@ -11,7 +11,6 @@ var iKeyDown = false;
 var playAgain;
 var mainMenu;
 var next;
-var player;
 
 var playerStartPos;
 var playerEndPos;
@@ -42,7 +41,7 @@ BackTogether.Level2.prototype = {
         this.tableTops = this.game.add.group();
         this.tableTops.enableBody = true;
 
-        result = this.findObjectsByType('tableTop', map, 'objectsLayer');
+        result = Tile.findObjectsByType('tableTop', map, 'objectsLayer');
 
         result.forEach(function (element) {
             this.createFromTiledObject(element, this.tableTops);
@@ -55,7 +54,7 @@ BackTogether.Level2.prototype = {
         this.physics.p2.restitution = 0;
         this.physics.p2.gravity.y = 300;
 
-        this.initPlayer();
+        this.player = new Arm(game);
         this.initItems();
         this.initText();
         this.initTimer();
@@ -190,17 +189,17 @@ BackTogether.Level2.prototype = {
                     var t = d.firingRobotTime - tempThis.time.now;
                     // console.log(t);
                     if (t > 2000) {
-                        tempThis.firingRobotCounting3Text.visible = true;
+                        d.firingRobotCounting3Text.visible = true;
                     } else if (t > 1000) {
-                        tempThis.firingRobotCounting3Text.visible = false;
-                        tempThis.firingRobotCounting2Text.visible = true;
+                        d.firingRobotCounting3Text.visible = false;
+                        d.firingRobotCounting2Text.visible = true;
 
                     } else if (t > 0) {
-                        tempThis.firingRobotCounting2Text.visible = false;
-                        tempThis.firingRobotCounting1Text.visible = true;
+                        d.firingRobotCounting2Text.visible = false;
+                        d.firingRobotCounting1Text.visible = true;
 
                     } else {
-                        tempThis.firingRobotCounting1Text.visible = false;
+                        d.firingRobotCounting1Text.visible = false;
 
                         d.detectTime = 1000;
 
@@ -256,8 +255,8 @@ BackTogether.Level2.prototype = {
                     c.animations.frame = 4;
                 } else if (t > 0) {
 
-                    tempThis.robot1 = tempThis.factoryRobot(c.x, c.y);
-                    c.destroy(); 
+                    tempThis.robot1 = Robot.factoryRobot(game, c.x, c.y);
+                    c.destroy();
 
                     object.slice(i, 1); // remove the capsule from the array;
                 }
@@ -349,7 +348,7 @@ BackTogether.Level2.prototype = {
             iKeyDown = false;
         }
 
-        this.updateRobots();
+        Robot.updateRobots(game);
         this.updateDrones();
 
     },
@@ -434,8 +433,8 @@ BackTogether.Level2.prototype = {
     },
     initPlayer: function () {
         // The player and its settings
-        playerStartPos = this.findObjectsByType('playerStart', map, 'objectsLayer')
-        playerEndPos = this.findObjectsByType('playerEnd', map, 'objectsLayer');
+        playerStartPos = Tile.findObjectsByType('playerStart', map, 'objectsLayer')
+        playerEndPos = Tile.findObjectsByType('playerEnd', map, 'objectsLayer');
         player = this.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'arm');
 
         //  We need to enable physics on the player
@@ -467,24 +466,6 @@ BackTogether.Level2.prototype = {
         player.itemNums = [];
 
     },
-    findObjectsByType: function (type, map, layer) {
-        var result = new Array();
-        console.log("******looking for ");
-        console.log(type);
-        map.objects[layer].forEach(function (element) {
-
-            console.log(element.properties.type);
-            if (element.properties.type === type) {
-                console.log("!!!!!!!!!!!!!!!!!!!found")
-                element.y -= map.tileHeight;
-                result.push(element);
-            }
-        });
-        console.log("### find")
-        console.log(result);
-        return result;
-
-    },
     //create a sprite from an object
     createFromTiledObject: function (element, group) {
         var sprite = group.create(element.x, element.y, element.properties.sprite);
@@ -511,36 +492,6 @@ BackTogether.Level2.prototype = {
         this.hidePopUp.fixedToCamera = true;
         this.hidePopUp.visible = false;
 
-
-        this.firingRobotCounting1Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '1', { font: '64px Aclonica', fill: '#F00' });
-        this.firingRobotCounting1Text.visible = false;
-        this.firingRobotCounting1Text.scale.setTo(2, 2);
-        this.firingRobotCounting1Text.fixedToCamera = true;
-
-
-        this.firingRobotCounting2Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '2', { font: '64px Aclonica', fill: '#F00' });
-        this.firingRobotCounting2Text.visible = false;
-        this.firingRobotCounting2Text.scale.setTo(2, 2);
-        this.firingRobotCounting2Text.fixedToCamera = true;
-
-
-        this.firingRobotCounting3Text = this.add.text(this.camera.view.centerX, this.camera.view.centerY, '3', { font: '64px Aclonica', fill: '#F00' });
-        this.firingRobotCounting3Text.visible = false;
-        this.firingRobotCounting3Text.scale.setTo(2, 2);
-        this.firingRobotCounting3Text.fixedToCamera = true;
-
-
-    },
-
-    findObjectsByType: function (type, map, layer) {
-        var result = new Array();
-        map.objects[layer].forEach(function (element) {
-            if (element.properties.type === type) {
-                element.y -= map.tileHeight;
-                result.push(element);
-            }
-        });
-        return result;
     },
 
     initEnemies: function () {
@@ -612,38 +563,38 @@ BackTogether.Level2.prototype = {
     },
     initDrones: function () {
         this.drones = this.add.group();
-        _drone1Start = this.findObjectsByType('d1s', map, 'objectsLayer')
+        _drone1Start = Tile.findObjectsByType('d1s', map, 'objectsLayer')
         this.drone1 = this.factoryDrone(_drone1Start[0].x, _drone1Start[0].y);
-        this.drone1.leftPos = this.findObjectsByType('d1l', map, 'objectsLayer')[0];
-        this.drone1.rightPos = this.findObjectsByType('d1r', map, 'objectsLayer')[0];
+        this.drone1.leftPos = Tile.findObjectsByType('d1l', map, 'objectsLayer')[0];
+        this.drone1.rightPos = Tile.findObjectsByType('d1r', map, 'objectsLayer')[0];
         console.log(this.drone1.leftPos);
 
 
-        _drone2Start = this.findObjectsByType('d2s', map, 'objectsLayer')
+        _drone2Start = Tile.findObjectsByType('d2s', map, 'objectsLayer')
         this.drone2 = this.factoryDrone(_drone2Start[0].x, _drone2Start[0].y);
-        this.drone2.leftPos = this.findObjectsByType('d2l', map, 'objectsLayer')[0];
-        this.drone2.rightPos = this.findObjectsByType('d2r', map, 'objectsLayer')[0];
+        this.drone2.leftPos = Tile.findObjectsByType('d2l', map, 'objectsLayer')[0];
+        this.drone2.rightPos = Tile.findObjectsByType('d2r', map, 'objectsLayer')[0];
         console.log(this.drone2.leftPos);
 
 
-        _drone3Start = this.findObjectsByType('d3s', map, 'objectsLayer')
+        _drone3Start = Tile.findObjectsByType('d3s', map, 'objectsLayer')
         this.drone3 = this.factoryDrone(_drone3Start[0].x, _drone3Start[0].y);
-        this.drone3.leftPos = this.findObjectsByType('d3l', map, 'objectsLayer')[0];
-        this.drone3.rightPos = this.findObjectsByType('d3r', map, 'objectsLayer')[0];
+        this.drone3.leftPos = Tile.findObjectsByType('d3l', map, 'objectsLayer')[0];
+        this.drone3.rightPos = Tile.findObjectsByType('d3r', map, 'objectsLayer')[0];
         console.log(this.drone3.leftPos);
 
 
-        _drone4Start = this.findObjectsByType('d4s', map, 'objectsLayer')
+        _drone4Start = Tile.findObjectsByType('d4s', map, 'objectsLayer')
         this.drone4 = this.factoryDrone(_drone4Start[0].x, _drone4Start[0].y);
-        this.drone4.leftPos = this.findObjectsByType('d4l', map, 'objectsLayer')[0];
-        this.drone4.rightPos = this.findObjectsByType('d4r', map, 'objectsLayer')[0];
+        this.drone4.leftPos = Tile.findObjectsByType('d4l', map, 'objectsLayer')[0];
+        this.drone4.rightPos = Tile.findObjectsByType('d4r', map, 'objectsLayer')[0];
         console.log(this.drone4.leftPos);
 
 
-        _drone5Start = this.findObjectsByType('d5s', map, 'objectsLayer')
+        _drone5Start = Tile.findObjectsByType('d5s', map, 'objectsLayer')
         this.drone5 = this.factoryDrone(_drone5Start[0].x, _drone5Start[0].y);
-        this.drone5.leftPos = this.findObjectsByType('d5l', map, 'objectsLayer')[0];
-        this.drone5.rightPos = this.findObjectsByType('d5r', map, 'objectsLayer')[0];
+        this.drone5.leftPos = Tile.findObjectsByType('d5l', map, 'objectsLayer')[0];
+        this.drone5.rightPos = Tile.findObjectsByType('d5r', map, 'objectsLayer')[0];
         console.log(this.drone5.leftPos);
 
 
@@ -679,6 +630,22 @@ BackTogether.Level2.prototype = {
         d.lightShadow.sendToBack();
 
 
+        d.firingRobotCounting1Text = this.add.text(x, y + 200, '1', { font: '64px Aclonica', fill: '#B71C1C' });
+        d.firingRobotCounting1Text.visible = false;
+        d.firingRobotCounting1Text.scale.setTo(3, 3);
+        d.firingRobotCounting1Text.anchor.setTo(0.5,0.5);
+
+        d.firingRobotCounting2Text = this.add.text(x, y + 300, '2', { font: '64px Aclonica', fill: '#B71C1C' });
+        d.firingRobotCounting2Text.visible = false;
+        d.firingRobotCounting2Text.scale.setTo(3, 3);
+        d.firingRobotCounting2Text.anchor.setTo(0.5,0.5);
+
+        d.firingRobotCounting3Text = this.add.text(x, y + 400, '3', { font: '64px Aclonica', fill: '#B71C1C' });
+        d.firingRobotCounting3Text.visible = false;
+        d.firingRobotCounting3Text.scale.setTo(3, 3);
+        d.firingRobotCounting3Text.anchor.setTo(0.5,0.5);
+
+
 
         d.anchor.setTo(0.5, 0.5);
 
@@ -703,14 +670,21 @@ BackTogether.Level2.prototype = {
                     d.body.moveRight(100);
                     d.light.body.moveRight(100);
                     d.lightShadow.body.moveRight(100);
+                    d.firingRobotCounting1Text.x = d.body.x;
+                    d.firingRobotCounting2Text.x = d.body.x;
+                    d.firingRobotCounting3Text.x = d.body.x;
+
                 } else if (d.leftPos.x <= d.body.x && d.body.x <= d.rightPos.x) {
 
                     if (d.face == "left") {
 
                         d.body.moveLeft(100);
-
                         d.light.body.moveLeft(100);
                         d.lightShadow.body.moveLeft(100);
+                        d.firingRobotCounting1Text.x = d.body.x;
+                        d.firingRobotCounting2Text.x = d.body.x;
+                        d.firingRobotCounting3Text.x = d.body.x;
+
                         d.animations.play('left');
 
 
@@ -719,6 +693,10 @@ BackTogether.Level2.prototype = {
                         d.body.moveRight(100);
                         d.light.body.moveRight(100);
                         d.lightShadow.body.moveRight(100);
+                        d.firingRobotCounting1Text.x = d.body.x;
+                        d.firingRobotCounting2Text.x = d.body.x;
+                        d.firingRobotCounting3Text.x = d.body.x;
+
                         d.animations.play('right');
 
                     }
@@ -729,6 +707,10 @@ BackTogether.Level2.prototype = {
                     d.body.moveLeft(100);
                     d.light.body.moveLeft(100);
                     d.lightShadow.body.moveLeft(100);
+                    d.firingRobotCounting1Text.x = d.body.x;
+                    d.firingRobotCounting2Text.x = d.body.x;
+                    d.firingRobotCounting3Text.x = d.body.x;
+
                 }
 
             } else {
@@ -739,113 +721,15 @@ BackTogether.Level2.prototype = {
 
 
     initRobots: function () {
-        this.robots = this.add.group();
+        this.game.robots = this.add.group();
 
-        // _robot1Start = this.findObjectsByType('robot1Start', map, 'objectsLayer')
-        // _robot1Left = this.findObjectsByType('robot1Left', map, 'objectsLayer')
-        // _robot1Right = this.findObjectsByType('robot1Right', map, 'objectsLayer');
+        // _robot1Start = Tile.findObjectsByType('robot1Start', map, 'objectsLayer')
+        // _robot1Left = Tile.findObjectsByType('robot1Left', map, 'objectsLayer')
+        // _robot1Right = Tile.findObjectsByType('robot1Right', map, 'objectsLayer');
 
         // this.robot1 = this.factoryRobot(_robot1Start[0].x, _robot1Start[0].y);
         // this.robot1.robot1Left = _robot1Left[0];
         // this.robot1.robot1Right = _robot1Right[0];
-
-    },
-
-    factoryRobot: function (x, y) {
-        var r = this.robots.create(x, y, 'robot');
-        this.physics.p2.enable(r, true);
-
-        r.animations.add('leftIdle', Phaser.Animation.generateFrameNames('l', 1, 22), 10, true);
-        r.animations.add('rightIdle', Phaser.Animation.generateFrameNames('r', 1, 22), 10, true);
-        r.animations.add('left', Phaser.Animation.generateFrameNames('leftWalk', 1, 2), 10, true);
-        r.animations.add('right', Phaser.Animation.generateFrameNames('rightWalk', 1, 2), 10, true);
-
-        r.animations.play("left");
-        r.state = 'left';
-
-        r.body.clearShapes();
-
-        r.body.addCircle(24, 0, -76);
-        r.body.addRectangle(59, 90, 0, -8);
-        r.body.addRectangle(155, 55, 0, 67);
-
-        r.body.velocity.x = 100;
-        r.body.velocity.y = 0;
-
-        r.states = [['left', 'idle'], ['left', 'left'],
-        ['right', 'idle'], ['right', 'right'],
-        ['idle', 'idle'], ['idle', 'left'], ['idle', 'right']];
-        r.state = 'idle';
-        r.switchedOff = false;
-        r.vulnerable = false;
-        r.stateTime = this.time.now;
-        return r;
-    },
-    updateRobots: function () {
-
-        var timeNow = this.time.now;
-
-        this.robots.children.forEach(function (r, i, obj) {
-            if (!r.switchedOff) {
-               
-                if (timeNow > r.stateTime){
-                    if (r.state == "left"){
-                        r.state = "leftIdle";
-                        r.stateTime = timeNow + 3000;
-                    }else if (r.state == "right"){
-                        r.state = "rightIdle";
-                        r.stateTime = timeNow + 3000;
-                    }else { // r.state == "leftIdle" or r.state == "rightIdle"
-                        if (Math.random() < 0.9){
-                            if (r.state == "leftIdle"){
-                                r.state = 'rightIdle';
-                            }else {
-                                r.state = 'leftIdle';
-                            }
-
-                            r.stateTime = timeNow + 2000;
-                        } else {
-                            if (Math.random() < 0.5) {
-                                r.state = 'left';
-                            }else {
-                                r.state = 'right';
-                            }
-
-                            r.stateTime = timeNow + 3000;
-                        }
-
-                    }
-
-
-                }else{
-                    r.animations.play(r.state);
-                    if (r.state == 'left'){
-                        r.body.moveLeft(100);
-                    } else if (r.state == 'right'){
-                        r.body.moveRight(100);
-                    }
-        
-                }
-
-            }
-            else {
-                // if the robot is attacked, and it is already dead,
-
-
-                r.body.velocity.x = 0;
-                r.animations.frame = 0;
-                r.alpha -= 0.005;               // change opacity so that it looks like it disappear.
-                if (r.alpha <= 0) {
-                    console.log(obj);
-
-                    console.log('disappear');
-                    r.destroy();
-                    obj.slice(i, 1); // remove the dead robot from the array.
-                    console.log(obj);
-
-                }
-            }
-        });
 
     },
     initPausedScreen: function (game) {
@@ -1051,19 +935,19 @@ BackTogether.Level2.prototype = {
 
         this.tables = [];
 
-        var t = [this.findObjectsByType('table1Left', map, 'objectsLayer')[0], this.findObjectsByType('table1Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table1Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table1Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table2Left', map, 'objectsLayer')[0], this.findObjectsByType('table2Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table2Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table2Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table3Left', map, 'objectsLayer')[0], this.findObjectsByType('table3Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table3Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table3Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table4Left', map, 'objectsLayer')[0], this.findObjectsByType('table4Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table4Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table4Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
-        var t = [this.findObjectsByType('table5Left', map, 'objectsLayer')[0], this.findObjectsByType('table5Right', map, 'objectsLayer')[0]];
+        var t = [Tile.findObjectsByType('table5Left', map, 'objectsLayer')[0], Tile.findObjectsByType('table5Right', map, 'objectsLayer')[0]];
         this.tables.push(t);
 
         console.log(this.tables);
