@@ -135,7 +135,7 @@ var GameScreenConfig = {
     
     initBar: function(game, imageKey){
 //        var bar = game.add.image(game.camera.view.centerX - game.width/2.1, game.height/2.70, 'bar');
-        this.bar = game.add.image(game.camera.view.centerX - 190, game.height/1.2, imageKey);    // imageKey is icon of bar
+        this.bar = game.add.image(game.camera.view.centerX - 210, game.height/1.2, imageKey);    // imageKey is icon of bar
         this.bar.anchor.setTo(0, 0);
         
         if(DIFFICULTY == 'easy'){
@@ -155,7 +155,7 @@ var GameScreenConfig = {
     
     initBarIcon: function(game, imageKey){
         if(this.icon == null){
-            this.icon = game.add.image(game.camera.view.centerX - 190, game.height/1.25, imageKey);
+            this.icon = game.add.image(game.camera.view.centerX - 210, game.height/1.25, imageKey);
             this.icon.anchor.setTo(0, 0);
             this.icon.fixedToCamera = true;
             this.icon.visible = false;
