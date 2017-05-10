@@ -39,7 +39,7 @@ BackTogether.Level3_stage1.prototype = {
         this.physics.p2.gravity.y = 800;
 
         // can be Hand, Arm, Torso.
-        this.player = new Arm(game, map);
+        this.player = new Torso(game, map);
 
         this.pausedScreen = new PausedScreen(game, this.player);
         this.pausedScreen.off();
