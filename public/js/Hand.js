@@ -9,7 +9,7 @@ var Hand = function (game, map) {
     this.sprite = game.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'hand');
 
     //  We need to enable physics on the player
-    game.physics.p2.enable(this.sprite, true);
+    game.physics.p2.enable(this.sprite, false);
 
     this.sprite.animations.add('left', Phaser.Animation.generateFrameNames('left', 1, 5), 10, true);
     this.sprite.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);

@@ -5,7 +5,7 @@ var Robot = function (game, x, y) {
     this.game = game;
 
     this.sprite = game.add.sprite(x, y, 'robot');
-    game.physics.p2.enable(this.sprite, true);
+    game.physics.p2.enable(this.sprite, false);
 
     this.sprite.animations.add('leftIdle', Phaser.Animation.generateFrameNames('il', 1, 22), 10, true);
     this.sprite.animations.add('rightIdle', Phaser.Animation.generateFrameNames('ir', 1, 22), 10, true);
