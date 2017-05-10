@@ -1,7 +1,6 @@
 
 
 var PausedScreen = function (game, player) {
-
     this.player = player;
     this.game = game;
 

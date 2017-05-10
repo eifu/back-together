@@ -114,7 +114,7 @@ BackTogether.Level1_stage2.prototype = {
                 r.update();
             }
 
-            if (this.checkOverlap(this.player.sprite, r.sprite)) {
+            if (this.checkOverlap(this.player.sprite, r.sprite) && !this.currentlyInvisible) {
                 // if the player and a robot overlap, 
 
                 if (!r.vulnerable && this.playerAttackFromLeft(r)) {
@@ -156,7 +156,7 @@ BackTogether.Level1_stage2.prototype = {
             d.update();
 
 
-            if (this.checkOverlap(this.player.sprite, d.light)) {
+            if (this.checkOverlap(this.player.sprite, d.light) && !this.currentlyInvisible) {
                 this.screenShake();
                 if (d.detectTime > 0) {
                     this.screenShake();
@@ -254,6 +254,7 @@ BackTogether.Level1_stage2.prototype = {
             }
         }
 
+        if(!this.currentlyInvisible){
         if (this.flipBool && (this.player.sprite.animations.name == 'flipR' || this.player.sprite.animations.name == 'flipL')){
             this.popupScreen.setText("Flipping!! \n Yes, when player is upside down, \n you can press 'S'/↓ to\n get away");
             this.popupScreen.on();
@@ -283,8 +284,28 @@ BackTogether.Level1_stage2.prototype = {
 
             this.game.state.start('Level1_stage3');
         }
+        }
 
-
+        this.enableItem(itemSelected);
+        this.decrementCoolDowns();
+    },
+    enableItem: function(item){
+      if(item == "invisible"){
+          this.currentlyInvisible = true;
+          this.invisCoolDown = 50;
+          itemSelected = "x";
+      }  
+    },
+    decrementCoolDowns: function(){
+      if(this.invisCoolDown > 0){
+          this.invisCoolDown = this.invisCoolDown - .166;
+          this.player.sprite.alpha = 0.1;
+      }
+      else if(this.invisCoolDown <= 0){
+          this.invisCoolDown = 0;
+          this.currentlyInvisible = false;
+          this.player.sprite.alpha = 1;
+      }
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');

@@ -105,7 +105,6 @@ BackTogether.Level1_stage1.prototype = {
     },
 
     update: function (game) {
-
         this.player.update();
 
         if (keys['SPACE'].isDown || keys['ENTER'].isDown) {
@@ -121,7 +120,7 @@ BackTogether.Level1_stage1.prototype = {
                 r.update();
             }
 
-            if (this.checkOverlap(this.player.sprite, r.sprite)) {
+            if (this.checkOverlap(this.player.sprite, r.sprite) && !this.currentlyInvisible) {
                 // if the player and a robot overlap, 
 
                 if (!r.vulnerable && this.playerAttackFromLeft(r)) {
@@ -168,7 +167,7 @@ BackTogether.Level1_stage1.prototype = {
 
             if (d.state == 'on') {
 
-                if (this.checkOverlap(this.player.sprite, d.light)) {
+                if (this.checkOverlap(this.player.sprite, d.light) && !this.currentlyInvisible) {
                     console.log(178);
                     this.screenShake();
                     if (d.detectTime > 0) {
@@ -277,6 +276,8 @@ BackTogether.Level1_stage1.prototype = {
             this.intro0_2Bool = true;
             this.intro0Bool = false;
         }
+        
+        if(!this.currentlyInvisible){
 
         if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)) {
             this.popupScreen.setText("Space to pause/unpause game");
@@ -290,7 +291,6 @@ BackTogether.Level1_stage1.prototype = {
             this.popupScreen.on();
             this.intro3_2Bool = false;
         }
-
         if (this.intro3Bool && this.checkOverlap(this.player.sprite, this.intro3)) {
             this.popupScreen.setText("It's an evil robot.\n But don't worry, you're safe for now.\n ");
             this.popupScreen.on();
@@ -319,11 +319,32 @@ BackTogether.Level1_stage1.prototype = {
             this.popupScreen.on();
             this.game.state.start('Level1_stage2');
         }
+        }
 
         // this.playerVictory();
         // Robot.updateRobots(game);
 
         // this.collectItem(this.itemBox, game);
+        this.enableItem(itemSelected);
+        this.decrementCoolDowns();
+    },
+    enableItem: function(item){
+      if(item == "invisible"){
+          this.currentlyInvisible = true;
+          this.invisCoolDown = 50;
+          itemSelected = "x";
+      }  
+    },
+    decrementCoolDowns: function(){
+      if(this.invisCoolDown > 0){
+          this.invisCoolDown = this.invisCoolDown - .166;
+          this.player.sprite.alpha = 0.1;
+      }
+      else if(this.invisCoolDown <= 0){
+          this.invisCoolDown = 0;
+          this.currentlyInvisible = false;
+          this.player.sprite.alpha = 1;
+      }
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');
@@ -466,7 +487,6 @@ BackTogether.Level1_stage1.prototype = {
                 this.popupScreen.off();
 
             } else if (this.pausedScreen.confirmBool) {
-
                 this.pausedScreen.confirmOff();
                 console.log(565);
 

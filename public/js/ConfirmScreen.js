@@ -1,8 +1,6 @@
-
+var itemSelected = "not yet";
 
 var ConfirmScreen = function (game, message, pausedScreen) {
-
-    this.itemSelected = 'not yet';
 
     this.game = game;
 
@@ -28,9 +26,9 @@ var ConfirmScreen = function (game, message, pausedScreen) {
     this.off = function () {
         this.sprite.visible = false;
 
-        if (this.itemSelected == 'stink') {
+        if (itemSelected == 'stink') {
             this.stink.visible = false;
-        } else if (this.itemSelected == 'invisible') {
+        } else if (itemSelected == 'invisible') {
             this.invisible.visible = false;
         }
 
@@ -119,12 +117,12 @@ var ConfirmScreen = function (game, message, pausedScreen) {
             this.stink.visible = true;
             this.stink.reset(this.game.camera.view.centerX, this.game.camera.view.centerY - this.sprite.height / 4);
             this.game.world.bringToTop(this.stink);
-            this.itemSelected = i;
+            itemSelected = i;
         } else if (i == 'invisible') {
             this.invisible.visible = true;
             this.invisible.reset(this.game.camera.view.centerX, this.game.camera.view.centerY - this.sprite.height / 4);
             this.game.world.bringToTop(this.invisible);
-            this.itemSelected = i;
+            itemSelected = i;
         } else {
             console.log("there is bug");
         }
