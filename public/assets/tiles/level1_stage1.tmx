@@ -63,7 +63,7 @@
 </data>
  </layer>
  <objectgroup name="objectsLayer">
-  <object id="1" name="playerStart" gid="1" x="35.5738" y="186.848" width="32" height="32">
+  <object id="1" name="playerStart" gid="1" x="50.5738" y="280.848" width="32" height="32">
    <properties>
     <property name="type" value="playerStart"/>
    </properties>

@@ -86,7 +86,8 @@ BackTogether.Level1_stage1.prototype = {
 
         this.popupScreen.on();
 
-
+        this.intro0Bool = true;
+        this.intro0_2Bool = false;
         this.intro1Bool = true;
         this.intro1_2Bool = false;
         this.intro2Bool = true;
@@ -266,19 +267,22 @@ BackTogether.Level1_stage1.prototype = {
             }
         }
 
-
-        if (this.intro1_2Bool) {
-            this.popupScreen.setText("Space to pause/unpause game");
+        if (this.intro0_2Bool) {
+            this.popupScreen.setText("Controls are WASD or arrow keys.\n  A/← is for moving left,\n D/→ is for moving right,\n W/↑ is for flipping back over\n when you fall over backwards.");
             this.popupScreen.on();
-            this.intro1_2Bool = false;
+            this.intro0_2Bool = false;
+        }
+
+        if (this.intro0Bool) {
+            this.intro0_2Bool = true;
+            this.intro0Bool = false;
         }
 
         if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)) {
-            this.popupScreen.setText("Controls are WASD or arrow keys.\n  A/← is for moving left,\n D/→ is for moving right,\n W/↑ is for flipping back over\n when you fall over backwards.");
+            this.popupScreen.setText("Space to pause/unpause game");
             this.popupScreen.on();
             this.intro1.destroy();
             this.intro1Bool = false;
-            this.intro1_2Bool = true;
         }
 
         if (this.intro3_2Bool) {
