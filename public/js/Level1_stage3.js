@@ -184,7 +184,7 @@ BackTogether.Level1_stage3.prototype = {
                         this.popupScreen.on();
                     }
 
-                    if (!this.player.damaged) {
+                    else if (!this.player.damaged) {
                         this.screenShake();
                         this.playerDamaged();
 
@@ -204,6 +204,7 @@ BackTogether.Level1_stage3.prototype = {
         if (this.introBool2_2) {
             this.popupScreen.setText("Try the hacking!\n You cannot jump, but\n Robot can!");
             this.popupScreen.on();
+            this.introBool2_2 = false;
         }
 
         if (this.introBool2 && this.checkOverlap(this.player.sprite, this.intro1)) {

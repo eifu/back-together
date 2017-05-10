@@ -280,6 +280,8 @@ BackTogether.Level1_stage2.prototype = {
         if (this.checkOverlap(this.player.sprite, this.goal)){
             this.popupScreen.setText("Clear!!  Let's move on!");
             this.popupScreen.on();
+
+            this.game.state.start('Level1_stage3');
         }
 
 
