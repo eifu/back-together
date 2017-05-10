@@ -254,58 +254,60 @@ BackTogether.Level1_stage2.prototype = {
             }
         }
 
-        if(!this.currentlyInvisible){
-        if (this.flipBool && (this.player.sprite.animations.name == 'flipR' || this.player.sprite.animations.name == 'flipL')){
-            this.popupScreen.setText("Flipping!! \n Yes, when player is upside down, \n you can press 'S'/↓ to\n get away");
-            this.popupScreen.on();
+        if (!this.currentlyInvisible) {
+            if (this.flipBool && (this.player.sprite.animations.name == 'flipR' || this.player.sprite.animations.name == 'flipL')) {
+                this.popupScreen.setText("Flipping!! \n Yes, when player is upside down, \n you can press 'S'/↓ to\n get away");
+                this.popupScreen.on();
 
-            this.flipBool = false;
-        }
+                this.flipBool = false;
+            }
 
-        if (this.intro1_2Bool){
-            this.popupScreen.setText("1st, there might be a \n space below the wall. Try to\n slowly dig into it");
-            this.popupScreen.on();
+            if (this.intro1_2Bool) {
+                this.popupScreen.setText("1st, there might be a \n space below the wall. Try to\n slowly dig into it");
+                this.popupScreen.on();
 
-            this.intro1_2Bool = false;
+                this.intro1_2Bool = false;
 
-        }
+            }
 
-        if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)){
-            this.popupScreen.setText("Look out! \n That is a high wall.\n There are several ways\n to go through a wall.");
-            this.popupScreen.on();
-            this.intro1.destroy();
-            this.intro1Bool = false;
-            this.intro1_2Bool = true;
-        }
+            if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)) {
+                this.popupScreen.setText("Look out! \n That is a high wall.\n There are several ways\n to go through a wall.");
+                this.popupScreen.on();
+                this.intro1.destroy();
+                this.intro1Bool = false;
+                this.intro1_2Bool = true;
+            }
 
-        if (this.checkOverlap(this.player.sprite, this.goal)){
-            this.popupScreen.setText("Clear!!  Let's move on!");
-            this.popupScreen.on();
+            if (this.checkOverlap(this.player.sprite, this.goal)) {
+                this.popupScreen.setText("Clear!!  Let's move on!");
+                this.popupScreen.on();
 
-            this.game.state.start('Level1_stage3');
-        }
+                user.setStage(3);
+
+                this.game.state.start('Level1_stage3');
+            }
         }
 
         this.enableItem(itemSelected);
         this.decrementCoolDowns();
     },
-    enableItem: function(item){
-      if(item == "invisible"){
-          this.currentlyInvisible = true;
-          this.invisCoolDown = 50;
-          itemSelected = "x";
-      }  
+    enableItem: function (item) {
+        if (item == "invisible") {
+            this.currentlyInvisible = true;
+            this.invisCoolDown = 50;
+            itemSelected = "x";
+        }
     },
-    decrementCoolDowns: function(){
-      if(this.invisCoolDown > 0){
-          this.invisCoolDown = this.invisCoolDown - .166;
-          this.player.sprite.alpha = 0.1;
-      }
-      else if(this.invisCoolDown <= 0){
-          this.invisCoolDown = 0;
-          this.currentlyInvisible = false;
-          this.player.sprite.alpha = 1;
-      }
+    decrementCoolDowns: function () {
+        if (this.invisCoolDown > 0) {
+            this.invisCoolDown = this.invisCoolDown - .166;
+            this.player.sprite.alpha = 0.1;
+        }
+        else if (this.invisCoolDown <= 0) {
+            this.invisCoolDown = 0;
+            this.currentlyInvisible = false;
+            this.player.sprite.alpha = 1;
+        }
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');
@@ -478,7 +480,7 @@ BackTogether.Level1_stage2.prototype = {
         this.intro1.anchor.setTo(0.5, 0.5);
         this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
         this.intro1.animations.play('normal');
-        
+
         var goalPos = Tile.findObjectsByType('playerGoal', map, 'objectsLayer')[0];
         this.goal = this.add.sprite(goalPos.x, goalPos.y, 'goal');
         this.goal.anchor.setTo(0, 1);

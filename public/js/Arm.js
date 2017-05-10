@@ -43,6 +43,9 @@ Arm = function (game, map) {
         this.itemBtns = [];
         this.itemNums = [];
 
+
+        this.isJumping = false;
+
         this.update = function () {
 
 
@@ -111,26 +114,27 @@ Arm = function (game, map) {
                         else if (keys['UP'].isDown || keys['W'].isDown) {
 
 
-                                if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
-                                        // the player is flipped.
-
-                                        this.sprite.body.velocity.y = -400;
-                                        this.sprite.body.angle += 180;
+                                if (!this.isJumping) {
                                         if (this.face == 'left') {
-                                                this.sprite.animations.play('flipL');
-                                                this.sprite.body.velocity.x = 200;
+                                                this.sprite.animations.play('jumpL');
+                                                 this.sprite.body.moveLeft(500);
                                         } else {
-                                                this.sprite.animations.play('flipR');
-                                                this.sprite.body.velocity.x = -200;
+                                                this.sprite.animations.play('jumpR');
+                                                this.sprite.body.moveRight(500)
                                         }
-                                        console.log(179);
-                                        console.log(this.sprite.animations);
 
-                                }
-                                else {
+                                        this.sprite.body.velocity.y = -700;
 
-                                        GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
+                                       console.log(this.sprite.body.velocity.x);
+                                        // this.UPinput = true;
+
+                                        GameScreenConfig.setObjective('↑ is for Jump! Torso can jump!')
+
+                                        this.isJumping = true;
                                 }
+
+                                GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
+                                
 
                         }
                         else if (keys['DOWN'].isDown || keys['S'].isDown) {

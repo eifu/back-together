@@ -321,7 +321,7 @@ BackTogether.Level1_stage1.prototype = {
             this.popupScreen.setText("Congratulation!! \nYou just finish\n the first stage of Back together!!");
             this.popupScreen.on();
 
-            user.setLevel(2);
+            user.setStage(2);
 
             this.game.state.start('Level1_stage2');
         }
