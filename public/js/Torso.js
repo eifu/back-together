@@ -10,7 +10,7 @@ Torso = function (game, map) {
         this.sprite = game.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'torso');
 
         //  We need to enable physics on the player
-        game.physics.p2.enable(this.sprite, true);
+        game.physics.p2.enable(this.sprite, false);
 
         this.sprite.animations.add('left', Phaser.Animation.generateFrameNames('l', 1, 4), 10, true);
         this.sprite.animations.add('right', Phaser.Animation.generateFrameNames('r', 1, 4), 10, true);

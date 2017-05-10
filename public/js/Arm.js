@@ -10,7 +10,7 @@ Arm = function (game, map) {
         this.sprite = game.add.sprite(playerStartPos[0].x, playerStartPos[0].y, 'arm');
 
         //  We need to enable physics on the player
-        game.physics.p2.enable(this.sprite, true);
+        game.physics.p2.enable(this.sprite, false);
 
         this.sprite.animations.add('left', Phaser.Animation.generateFrameNames('l', 1, 6), 10, true);
         this.sprite.animations.add('right', Phaser.Animation.generateFrameNames('r', 1, 6), 10, true);
