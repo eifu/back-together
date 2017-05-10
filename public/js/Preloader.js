@@ -40,8 +40,10 @@ BackTogether.Preloader.prototype = {
                 this.load.image('mouseIcon', 'assets/images/mouseIcon.png');
                 this.load.image('WASDIcon', 'assets/images/WASDIcon.png');
                 this.load.image('cursorIcon', 'assets/images/cursorIcon.png');
+                this.load.image('hackIcon', 'assets/images/hackIcon.png');
                 this.load.spritesheet('arrowLeftIcon', 'assets/images/arrowLeftIcon.png', 96, 96);
                 this.load.spritesheet('arrowRightIcon', 'assets/images/arrowRightIcon.png', 96, 96);
+
 
                 // BUTTONs in general
                 this.load.spritesheet('yesBtn', 'assets/images/yesBtn.png', 24, 24);
