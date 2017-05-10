@@ -12,6 +12,7 @@ var mainMenu;
 var next;
 var player;
 var map;
+var invisBar;
 
 BackTogether.Level1_stage1.prototype = {
 
@@ -69,6 +70,9 @@ BackTogether.Level1_stage1.prototype = {
         GameScreenConfig.initHealthBar(game);
         GameScreenConfig.initVolIcon(game);
         GameScreenConfig.initObjective(game, 'Get familiar with User Controll!');
+        
+        // init the "progress bar" of the item you're planning to put into current stage of current level
+        invisBar = GameScreenConfig.initBar(game, game.camera.view.centerX - game.width/5, game.height/1.2, 'bar');
 
         this.initKeys();
         this.initRobots();
@@ -338,6 +342,7 @@ BackTogether.Level1_stage1.prototype = {
     decrementCoolDowns: function(){
       if(this.invisCoolDown > 0){
           this.invisCoolDown = this.invisCoolDown - .166;
+          GameScreenConfig.updateBar(invisBar, this.invisCoolDown/10);
           this.player.sprite.alpha = 0.1;
       }
       else if(this.invisCoolDown <= 0){
