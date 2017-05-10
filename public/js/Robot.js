@@ -11,10 +11,10 @@ var Robot = function (game, x, y) {
     this.sprite.animations.add('rightIdle', Phaser.Animation.generateFrameNames('ir', 1, 22), 10, true);
     this.sprite.animations.add('left', Phaser.Animation.generateFrameNames('l', 1, 2), 10, true);
     this.sprite.animations.add('right', Phaser.Animation.generateFrameNames('r', 1, 2), 10, true);
-    this.sprite.animations.add('switchOffLeft', Phaser.Animation.generateFrameNames('ddl', 1, 2), 10, true);
-    this.sprite.animations.add('switchOffRight', Phaser.Animation.generateFrameNames('ddr', 1, 2), 10, true);
-    this.sprite.animations.add('hackLeft', Phaser.Animation.generateFrameNames('dl', 1, 2), 10, true);
-    this.sprite.animations.add('hackRight', Phaser.Animation.generateFrameNames('dr', 1, 2), 10, true);
+    this.sprite.animations.add('switchOffLeft', Phaser.Animation.generateFrameNames('dl', 1, 4), 10, true);
+    this.sprite.animations.add('switchOffRight', Phaser.Animation.generateFrameNames('dr', 1, 4), 10, true);
+    this.sprite.animations.add('hackLeft', Phaser.Animation.generateFrameNames('hl', 1, 2), 10, true);
+    this.sprite.animations.add('hackRight', Phaser.Animation.generateFrameNames('hr', 1, 2), 10, true);
 
     this.sprite.animations.play("left");
     this.state = 'left';

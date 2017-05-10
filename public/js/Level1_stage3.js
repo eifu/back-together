@@ -142,7 +142,7 @@ BackTogether.Level1_stage3.prototype = {
 
                         this.player.sprite.body.y = r.sprite.y - 150;
                         this.player.hackingStart = true;
-                        this.player.hackingEndTime = this.time.now + 5000;
+                        this.player.hackingEndTime = this.time.now + 10000;
                         // this.player.sprite.body.data.gravityScale = 0;
 
                         this.player.hackedRobot = r;
@@ -256,7 +256,7 @@ BackTogether.Level1_stage3.prototype = {
 
     playerDamaged: function () {
         crash.play();  // sound effect 
-        this.player.damagedTime = this.time.now + 300;
+        this.player.damagedTime = this.time.now + 500;
         console.log(GameScreenConfig.healthPoint);
         GameScreenConfig.healthPoint -= 1;
         if (GameScreenConfig.healthPoint == 0) {

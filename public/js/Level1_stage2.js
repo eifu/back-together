@@ -326,7 +326,7 @@ BackTogether.Level1_stage2.prototype = {
 
     playerDamaged: function () {
         crash.play();  // sound effect 
-        this.player.damagedTime = this.time.now + 300;
+        this.player.damagedTime = this.time.now + 500;
         console.log(GameScreenConfig.healthPoint);
         GameScreenConfig.healthPoint -= 1;
         if (GameScreenConfig.healthPoint == 0) {
