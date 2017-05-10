@@ -18,7 +18,7 @@ BackTogether.Level1_stage1.prototype = {
     create: function (game) {
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.physics.p2.setImpactEvents(true);
-        game.physics.p2.restitution = 0.8;
+        game.physics.p2.restitution = 0;
         WebFont.load(wfconfig);
         this.stage.backgroundColor = "#3A5963";
         map = this.add.tilemap('level1_stage1', 64, 64);
@@ -217,7 +217,6 @@ BackTogether.Level1_stage1.prototype = {
                         var c = this.add.sprite(d.sprite.x, d.sprite.y, 'capsule');
                         c.animations.frame = 0;
                         this.physics.p2.enable(c);
-                        c.body.data.gravityScale = 10;
                         c.body.setCircle(25);
                         if (d.sprite.body.velocity.x > 0) {
                             c.body.velocity.x = 400;
