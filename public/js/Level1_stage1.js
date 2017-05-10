@@ -72,8 +72,8 @@ BackTogether.Level1_stage1.prototype = {
         GameScreenConfig.initObjective(game, 'Get familiar with User Controll!');
         
         // init the "progress bar" of the item you're planning to put into current stage of current level
-        invisBar = GameScreenConfig.initBar(game, 'bar');
-
+        GameScreenConfig.initBar(game, 'bar');
+        
         this.initKeys();
         this.initRobots();
         this.initDrones();
@@ -331,20 +331,21 @@ BackTogether.Level1_stage1.prototype = {
         // Robot.updateRobots(game);
 
         // this.collectItem(this.itemBox, game);
-        this.enableItem(itemSelected);
+        this.enableItem(game, itemSelected);
         this.decrementCoolDowns();
     },
-    enableItem: function(item){
+    enableItem: function(game, item){
       if(item == "invisible"){
           this.currentlyInvisible = true;
-          this.invisCoolDown = 50;
+          this.invisCoolDown = GameScreenConfig.difficultyNum;
+          GameScreenConfig.initBarIcon(game, "invisible");
           itemSelected = "x";
       }  
     },
     decrementCoolDowns: function(){
       if(this.invisCoolDown > 0){
-          this.invisCoolDown = this.invisCoolDown - .166;
-          GameScreenConfig.updateBar(invisBar, this.invisCoolDown/10);
+          this.invisCoolDown = this.invisCoolDown - .0166;
+          GameScreenConfig.updateBar(this.invisCoolDown);
           this.player.sprite.alpha = 0.1;
       }
       else if(this.invisCoolDown <= 0){
