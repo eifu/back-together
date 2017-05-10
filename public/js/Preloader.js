@@ -69,7 +69,7 @@ BackTogether.Preloader.prototype = {
                 this.load.spritesheet('itemBox', 'assets/images/itemBox.png', 32, 32);
                 this.load.image('invisible', 'assets/images/invisible.png');
                 this.load.image('stink', 'assets/images/stink.png');
-                this.load.spritesheet('droneLight', 'assets/images/droneLight.png',100,200);
+                this.load.spritesheet('droneLight', 'assets/images/droneLight.png', 100, 200);
                 this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
                 this.load.image('bodyMap', 'assets/images/bodyMap.png');
                 this.load.image('logo', 'assets/images/logo.jpg');
@@ -90,12 +90,18 @@ BackTogether.Preloader.prototype = {
                 this.load.tilemap('level1_stage3', 'assets/js/level1_stage3.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('level1_stage2', 'assets/js/level1_stage2.json', null, Phaser.Tilemap.TILED_JSON);
                 this.load.tilemap('level1_stage1', 'assets/js/level1_stage1.json', null, Phaser.Tilemap.TILED_JSON);
-                this.load.tilemap('level2_stage1', 'assets/js/level2_stage1.json', null, Phaser.Tilemap.TILED_JSON);
+                this.load.tilemap('level2_stage1', 'assets/js/level2_stage0.json', null, Phaser.Tilemap.TILED_JSON);
+                this.load.tilemap('level2_stage2', 'assets/js/level2_stage2.json', null, Phaser.Tilemap.TILED_JSON);
+                this.load.tilemap('level2_stage3', 'assets/js/level2_stage3.json', null, Phaser.Tilemap.TILED_JSON);
+                this.load.tilemap('level3_stage1', 'assets/js/level3_stage1.json', null, Phaser.Tilemap.TILED_JSON);
+                this.load.tilemap('level3_stage2', 'assets/js/level3_stage2.json', null, Phaser.Tilemap.TILED_JSON);
+
                 this.load.image('tileset', 'assets/images/tileset.png');
                 this.load.image('tileset2', 'assets/images/tileset2.png');
                 this.load.image('tileset3', 'assets/images/tileset3.png');
                 this.load.image('tileset4', 'assets/images/tileset4.png');
-
+                this.load.image('tileset5', 'assets/images/tileset5.png');
+                this.load.image('tileset6', 'assets/images/tileset6.png');
 
                 // Sprite Animations with JSON file
                 this.load.atlasJSONArray('hand', 'assets/images/hand.png', 'assets/js/hand.json');
