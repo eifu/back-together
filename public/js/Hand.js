@@ -166,7 +166,6 @@ var Hand = function (game, map) {
                     if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
                         // the player is flipped.
 
-
                         this.sprite.body.velocity.y = -400;
                         this.sprite.body.angle += 180;
                         if (this.face == 'left') {
@@ -176,8 +175,11 @@ var Hand = function (game, map) {
                             this.sprite.animations.play('flipR');
                             this.sprite.body.velocity.x = -200;
                         }
-                        GameScreenConfig.setObjective('back flip~~~ Cool!');
-                    } else {
+                        console.log(179);
+                        console.log(this.sprite.animations);
+                        
+                    }
+                     else {
 
                         GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
                     }

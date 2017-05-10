@@ -69,7 +69,7 @@ BackTogether.Preloader.prototype = {
                 this.load.spritesheet('itemBox', 'assets/images/itemBox.png', 32, 32);
                 this.load.image('invisible', 'assets/images/invisible.png');
                 this.load.image('stink', 'assets/images/stink.png');
-                this.load.image('droneLight', 'assets/images/droneLight.png');
+                this.load.spritesheet('droneLight', 'assets/images/droneLight.png',100,200);
                 this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
                 this.load.image('bodyMap', 'assets/images/bodyMap.png');
                 this.load.image('logo', 'assets/images/logo.jpg');
@@ -85,11 +85,6 @@ BackTogether.Preloader.prototype = {
                 this.load.image('healthbar_green', 'assets/images/healthbar_green.png');
                 this.load.image('healthbar_red', 'assets/images/healthbar_red.png');
                 this.load.spritesheet('heartbeat', 'assets/images/heartbeat.png', 100, 100);
-
-
-                // these two are for testing.
-                this.load.tilemap('lvl1', 'assets/js/level1.json', null, Phaser.Tilemap.TILED_JSON);
-                this.load.tilemap('lvl2', 'assets/js/level2.json', null, Phaser.Tilemap.TILED_JSON);
 
                 // this is for demo.
                 this.load.tilemap('level1_stage3', 'assets/js/level1_stage3.json', null, Phaser.Tilemap.TILED_JSON);

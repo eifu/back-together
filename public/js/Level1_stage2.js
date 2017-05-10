@@ -73,9 +73,9 @@ BackTogether.Level1_stage2.prototype = {
 
         this.initKeys();
         this.initRobots();
+        this.initHitboxs();
         this.initDrones();
         // this.initItemBox();
-        this.initHitboxs();
 
         this.gameItems = [];
         this.gameItems.push('invisible');
@@ -90,13 +90,7 @@ BackTogether.Level1_stage2.prototype = {
 
         this.intro1Bool = true;
         this.intro1_2Bool = false;
-        this.intro2Bool = true;
-        this.intro3Bool = true;
-        this.intro3_2Bool = false;
-        this.intro4Bool = true;
-        this.intro4_2Bool = false;
-        this.intro5Bool = true;
-        this.damageBool = true;
+        this.flipBool = true;
 
 
         this.capsules = [];
@@ -163,7 +157,6 @@ BackTogether.Level1_stage2.prototype = {
 
 
             if (this.checkOverlap(this.player.sprite, d.light)) {
-                console.log(178);
                 this.screenShake();
                 if (d.detectTime > 0) {
                     this.screenShake();
@@ -259,6 +252,34 @@ BackTogether.Level1_stage2.prototype = {
 
                 this.capsules.splice(i, 1); // remove the capsule from the array;
             }
+        }
+
+        if (this.flipBool && (this.player.sprite.animations.name == 'flipR' || this.player.sprite.animations.name == 'flipL')){
+            this.popupScreen.setText("Flipping!! \n Yes, when player is upside down, \n you can press 'S'/↓ to\n get away");
+            this.popupScreen.on();
+
+            this.flipBool = false;
+        }
+
+        if (this.intro1_2Bool){
+            this.popupScreen.setText("1st, there might be a \n space below the wall. Try to\n slowly dig into it");
+            this.popupScreen.on();
+
+            this.intro1_2Bool = false;
+
+        }
+
+        if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)){
+            this.popupScreen.setText("Look out! \n That is a high wall.\n There are several ways\n to go through a wall.");
+            this.popupScreen.on();
+            this.intro1.destroy();
+            this.intro1Bool = false;
+            this.intro1_2Bool = true;
+        }
+
+        if (this.checkOverlap(this.player.sprite, this.goal)){
+            this.popupScreen.setText("Clear!!  Let's move on!");
+            this.popupScreen.on();
         }
 
 
@@ -428,6 +449,12 @@ BackTogether.Level1_stage2.prototype = {
         }
     },
     initHitboxs: function () {
+
+        var intro1 = Tile.findObjectsByType('intro1', map, 'objectsLayer')[0];
+        this.intro1 = this.add.sprite(intro1.x, intro1.y, 'hitBox');
+        this.intro1.anchor.setTo(0.5, 0.5);
+        this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        this.intro1.animations.play('normal');
         
         var goalPos = Tile.findObjectsByType('playerGoal', map, 'objectsLayer')[0];
         this.goal = this.add.sprite(goalPos.x, goalPos.y, 'goal');
