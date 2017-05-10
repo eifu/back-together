@@ -27,7 +27,7 @@ var Hand = function (game, map) {
     // this.sprite.scale.setTo(0.5,0.5);
     this.sprite.body.clearShapes();
     // this.sprite.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
-    this.sprite.body.addRectangle(64, 24, 0,0);
+    this.sprite.body.addRectangle(64, 24, 0, 0);
 
 
     this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
@@ -179,9 +179,9 @@ var Hand = function (game, map) {
                         }
                         console.log(179);
                         console.log(this.sprite.animations);
-                        
+
                     }
-                     else {
+                    else {
 
                         GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
                     }
@@ -217,7 +217,15 @@ var Hand = function (game, map) {
                     this.damaged = false;
 
                 } else {
-                    this.sprite.animations.stop();
+                    if (this.sprite.animations.name == 'flipL') {
+                        this.sprite.animations.play('left');
+                    } else if (this.sprite.animations.name == 'flipR') {
+                        this.sprite.animations.play('right');
+                    } else {
+                        this.sprite.animations.stop();
+                    }
+
+
 
                 }
                 GameScreenConfig.setObjective();
@@ -226,10 +234,9 @@ var Hand = function (game, map) {
     }
 
     this.addShape = function () {
-        this.sprite.body.addPolygon({}, [[1, 42], [1, 29], [32, 20], [63, 29], [63, 42]]);
-
+        this.sprite.body.addRectangle(64, 24, 0, 0);
         this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
-        this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
+        this.sprite.body.addCapsule(-32, 4, 0, 5, 0);
         this.sprite.body.addCapsule(-16, 4, 0, 5, 0);
         this.sprite.body.adjustCenterOfMass()
 

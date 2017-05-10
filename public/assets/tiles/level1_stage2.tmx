@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="20" tilewidth="32" tileheight="32" nextobjectid="49">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="20" tilewidth="32" tileheight="32" nextobjectid="51">
  <tileset firstgid="1" name="tileset3" tilewidth="32" tileheight="32" tilecount="42" columns="6">
   <image source="../images/tileset3.png" width="192" height="224"/>
   <tile id="0">
@@ -169,11 +169,11 @@
   <object id="43" x="3354.93" y="625.419">
    <polyline points="0,0 37.9719,-29.0373 263.569,-29.0373 301.541,4.46728 -4.46728,0"/>
   </object>
-  <object id="46" x="3841.86" y="624.674">
-   <polyline points="0,0 29.0373,-38.7164 60.3082,-41.6946 98.2801,2.97818 -2.23364,-2.97818"/>
+  <object id="49" x="3875.64" y="650.756">
+   <polyline points="0,0 0,-60.5428 28.49,-57.6598 28.49,-2.88299 1.05519,-2.88299"/>
   </object>
-  <object id="47" x="4016.08" y="634.353">
-   <polyline points="0,0 17.8691,-58.0746 44.6728,-51.9615 80.411,-6.11312 0,-9.16967"/>
+  <object id="50" x="4031.91" y="635.12">
+   <polyline points="0,0 0,-44.6728 28.5291,-42.4391 28.5291,0 3.29183,0"/>
   </object>
  </objectgroup>
 </map>
