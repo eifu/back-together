@@ -132,6 +132,12 @@ BackTogether.Level2_stage1.prototype = {
             }
         }
 
+        if (this.checkOverlap(this.player.sprite, this.goal)){
+             this.popupScreen.setText("Let's go to next level");
+            this.popupScreen.on();
+            this.game.state.start('Level2_stage2');
+        }
+
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.x && this.player.sprite.body.velocity.x >= 0 && r.body.velocity.x >= 0;
@@ -260,13 +266,12 @@ BackTogether.Level2_stage1.prototype = {
         }
     },
     initHitboxs: function () {
-        // var intro1 = Tile.findObjectsByType('intro1', map, 'objectsLayer')[0];
 
-        // this.intro1 = this.add.sprite(intro1.x, intro1.y, 'hitBox');
-        // this.intro1.anchor.setTo(0.5, 0.5);
-        // this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
-        // this.intro1.animations.play('normal');
 
+
+        var goalPos = Tile.findObjectsByType('playerGoal', map, 'objectsLayer')[0];
+        this.goal = this.add.sprite(goalPos.x, goalPos.y, 'goal');
+        this.goal.anchor.setTo(0, 1);
 
 
     }
