@@ -39,7 +39,7 @@ BackTogether.Level3_stage2.prototype = {
         this.physics.p2.gravity.y = 800;
 
         // can be Hand, Arm, Torso.
-        this.player = new Arm(game, map);
+        this.player = new Torso(game, map);
 
         this.pausedScreen = new PausedScreen(game, this.player);
         this.pausedScreen.off();
@@ -63,7 +63,11 @@ BackTogether.Level3_stage2.prototype = {
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides(this.tilesCollisionGroup);
+        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
+            if (this.player.isJumping){
+                this.player.isJumping = false;
+            }
+        }, this);
 
 
 
