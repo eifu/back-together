@@ -85,6 +85,7 @@ BackTogether.Preloader.prototype = {
                 this.load.image('healthbar_green', 'assets/images/healthbar_green.png');
                 this.load.image('healthbar_red', 'assets/images/healthbar_red.png');
                 this.load.spritesheet('heartbeat', 'assets/images/heartbeat.png', 100, 100);
+                this.load.image('bar', 'assets/images/bar.png');
 
                 // this is for demo.
                 this.load.tilemap('level1_stage3', 'assets/js/level1_stage3.json', null, Phaser.Tilemap.TILED_JSON);

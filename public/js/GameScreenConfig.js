@@ -131,9 +131,27 @@ var GameScreenConfig = {
         } else {
             this.objectiveTxt.setText(m);
         }
-    }
+    },
+    
+    initBar: function(game, imageKey){
+//        var bar = game.add.image(game.camera.view.centerX - game.width/2.1, game.height/2.70, 'bar');
+        var bar = game.add.image(game.camera.view.centerX - game.width/5, game.height/1.2, imageKey);
+        bar.anchor.setTo(0, 0);
+        bar.scale.setTo(5, 1);
+        bar.fixedToCamera = true;
+        bar.visible = false;
+        game.world.bringToTop(bar);
+        return bar;
+    },
 
-
+    updateBar: function(bar, time){
+        bar.visible = true;
+        bar.scale.setTo(time, 1);
+        if(time <= 0){
+            bar.visible = false;
+        }
+},
+//    updateBar:function()  
 
 
 
