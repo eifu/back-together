@@ -202,7 +202,7 @@ BackTogether.Level1_stage3.prototype = {
         }
 
         if (this.introBool2_2) {
-            his.popupScreen.setText("Try the hacking!\n You cannot jump, but\n Robot can!");
+            this.popupScreen.setText("Try the hacking!\n You cannot jump, but\n Robot can!");
             this.popupScreen.on();
         }
 

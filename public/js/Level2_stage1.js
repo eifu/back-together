@@ -31,7 +31,7 @@ BackTogether.Level2_stage1.prototype = {
 
         game.physics.p2.setBoundsToWorld()
 
-        map.setCollisionBetween(5,7);
+        map.setCollisionBetween(5, 7);
 
 
         this.physics.p2.convertTilemap(map, platformLayer);
@@ -39,7 +39,7 @@ BackTogether.Level2_stage1.prototype = {
         this.physics.p2.gravity.y = 800;
 
         // can be Hand, Arm, Torso.
-        this.player = new Hand(game, map);
+        this.player = new Arm(game, map);
 
         this.pausedScreen = new PausedScreen(game, this.player);
         this.pausedScreen.off();
@@ -120,13 +120,13 @@ BackTogether.Level2_stage1.prototype = {
                     this.screenShake();
                     this.playerDamaged();
 
-                    if (r.state == 'left'){
+                    if (r.state == 'left') {
                         r.animations.play("leftIdle");
-                    }else {
+                    } else {
                         r.animations.play("rightIdle");
                     }
                     r.stateTime = 0;
-                    
+
                 }
 
             }
@@ -186,7 +186,7 @@ BackTogether.Level2_stage1.prototype = {
             GameScreenConfig.heart.animations.play("slow");
         }
 
-        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint,1);
+        GameScreenConfig.healthbar.scale.setTo(GameScreenConfig.healthPoint, 1);
         this.player.damaged = true;
 
     },
@@ -258,6 +258,17 @@ BackTogether.Level2_stage1.prototype = {
 
             }
         }
+    },
+    initHitboxs: function () {
+        // var intro1 = Tile.findObjectsByType('intro1', map, 'objectsLayer')[0];
+
+        // this.intro1 = this.add.sprite(intro1.x, intro1.y, 'hitBox');
+        // this.intro1.anchor.setTo(0.5, 0.5);
+        // this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
+        // this.intro1.animations.play('normal');
+
+
+
     }
 
 

@@ -21,8 +21,8 @@ var Hand = function (game, map) {
     this.sprite.animations.add('die', Phaser.Animation.generateFrameNames('die', 1, 6), 10, true);
 
 
-    this.sprite.animations.play('left');
-    this.face = 'left';
+    this.sprite.animations.play('right');
+    this.face = 'right';
 
     // this.sprite.scale.setTo(0.5,0.5);
     this.sprite.body.clearShapes();

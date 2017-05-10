@@ -248,7 +248,7 @@ BackTogether.LevelSelecting.prototype = {
 
         this.armAnimation = this.add.sprite(this.camera.view.centerX + (pos - 3) * 250, this.camera.view.centerY - 50, 'arm');
         this.armAnimation.anchor.setTo(0.5, 0.5);
-        this.armAnimation.animations.add('right', Phaser.Animation.generateFrameNames('right', 1, 5), 10, true);
+        this.armAnimation.animations.add('right', Phaser.Animation.generateFrameNames('r', 1, 6), 10, true);
         this.armAnimation.animations.play('right');
         this.add.tween(this.armAnimation).to({ x: this.camera.view.centerX + (pos - 2) * 250 }, 1500, "Linear", true);
     },
