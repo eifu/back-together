@@ -149,6 +149,7 @@ BackTogether.Level1_stage3.prototype = {
 
                         this.player.sprite.body.data.gravityScale = 0;
                         this.player.sprite.body.clearShapes();
+                        this.player.sprite.visible = false;
 
 
                         console.log('yeahhhh');
@@ -210,6 +211,8 @@ BackTogether.Level1_stage3.prototype = {
         if (this.introBool2 && this.checkOverlap(this.player.sprite, this.intro1)) {
             this.popupScreen.setText("Hmm.\n It seems you need to\n somehow 'jump' to there.");
             this.popupScreen.on();
+
+            this.intro1.destroy();
 
             this.introBool2 = false;
             this.introBool2_2 = true;

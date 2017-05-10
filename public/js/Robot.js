@@ -110,6 +110,7 @@ var Robot = function (game, x, y) {
                        // if the robot is attacked, and it is already dead,
             else{
                 this.sprite.animations.play('switchOffRight');
+                console.log(113);
             }
         }
     }

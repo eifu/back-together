@@ -62,13 +62,26 @@ var Hand = function (game, map) {
         if (timeNow < this.hackingEndTime) {
             // this.sprite.body.data.gravityScale = 0;
             // this.sprite.body.clearShapes();
-
+            this.game.camera.follow(this.hackedRobot.sprite);
 
         } else if (this.hackingStart == true) {
+            this.game.camera.follow(this.sprite);
             console.log('hacking finished');
             this.sprite.body.data.gravityScale = 1;
+            this.sprite.body.x = this.hackedRobot.sprite.body.x;
+            this.sprite.body.y = this.hackedRobot.sprite.body.y;
             this.hackingStart = false;
             this.addShape();
+            this.sprite.visible = true;
+            if (this.hackedRobot.sprite.animations.name == 'hackLeft'){
+                this.hackedRobot.state = 'switchOffLeft';
+                this.hackedRobot.sprite.animations.play('switchOffLeft');
+                console.log('76')
+            }else {
+                this.hackedRobot.state = 'switchOffRight';
+                this.hackedRobot.sprite.animations.play('switchOffRight');
+                console.log(79);
+            }
         }
 
 
@@ -159,7 +172,7 @@ var Hand = function (game, map) {
 
                 if (this.hackingStart) {
                     // this.sprite.body.moveUp(100);
-                    this.hackedRobot.sprite.body.velocity.y = -200;
+                    this.hackedRobot.sprite.body.velocity.y = -400;
                     this.sprite.body.y = this.hackedRobot.sprite.y - 150;
 
                     GameScreenConfig.setObjective("hacking now! moving UP↑↑↑!!");
