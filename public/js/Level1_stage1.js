@@ -12,7 +12,6 @@ var mainMenu;
 var next;
 var player;
 var map;
-var currentlyInvisible = false;
 
 BackTogether.Level1_stage1.prototype = {
 
@@ -121,7 +120,7 @@ BackTogether.Level1_stage1.prototype = {
                 r.update();
             }
 
-            if (this.checkOverlap(this.player.sprite, r.sprite) && !currentlyInvisible) {
+            if (this.checkOverlap(this.player.sprite, r.sprite) && !this.currentlyInvisible) {
                 // if the player and a robot overlap, 
 
                 if (!r.vulnerable && this.playerAttackFromLeft(r)) {
@@ -168,7 +167,7 @@ BackTogether.Level1_stage1.prototype = {
 
             if (d.state == 'on') {
 
-                if (this.checkOverlap(this.player.sprite, d.light) && !currentlyInvisible) {
+                if (this.checkOverlap(this.player.sprite, d.light) && !this.currentlyInvisible) {
                     console.log(178);
                     this.screenShake();
                     if (d.detectTime > 0) {
@@ -278,7 +277,7 @@ BackTogether.Level1_stage1.prototype = {
             this.intro0Bool = false;
         }
         
-        if(!currentlyInvisible){
+        if(!this.currentlyInvisible){
 
         if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)) {
             this.popupScreen.setText("Space to pause/unpause game");
@@ -331,7 +330,7 @@ BackTogether.Level1_stage1.prototype = {
     },
     enableItem: function(item){
       if(item == "invisible"){
-          currentlyInvisible = true;
+          this.currentlyInvisible = true;
           this.invisCoolDown = 50;
           itemSelected = "x";
       }  
@@ -339,11 +338,12 @@ BackTogether.Level1_stage1.prototype = {
     decrementCoolDowns: function(){
       if(this.invisCoolDown > 0){
           this.invisCoolDown = this.invisCoolDown - .166;
-          console.log(this.invisCoolDown);
+          this.player.sprite.alpha = 0.1;
       }
       else if(this.invisCoolDown <= 0){
           this.invisCoolDown = 0;
-          currentlyInvisible = false;
+          this.currentlyInvisible = false;
+          this.player.sprite.alpha = 1;
       }
     },
     playerAttackFromLeft: function (r) {
