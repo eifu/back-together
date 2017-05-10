@@ -135,20 +135,44 @@ var GameScreenConfig = {
     
     initBar: function(game, imageKey){
 //        var bar = game.add.image(game.camera.view.centerX - game.width/2.1, game.height/2.70, 'bar');
-        var bar = game.add.image(game.camera.view.centerX - game.width/5, game.height/1.2, imageKey);
-        bar.anchor.setTo(0, 0);
-        bar.scale.setTo(5, 1);
-        bar.fixedToCamera = true;
-        bar.visible = false;
-        game.world.bringToTop(bar);
-        return bar;
+        this.bar = game.add.image(game.camera.view.centerX - 190, game.height/1.2, imageKey);    // imageKey is icon of bar
+        this.bar.anchor.setTo(0, 0);
+        
+        if(DIFFICULTY == 'easy'){
+            this.difficultyNum = 20;
+        }
+        else if (DIFFICULTY == 'normal'){
+            this.difficultyNum = 10;
+        }
+        else{
+            this.difficultyNum = 5;
+        }
+        this.bar.scale.setTo(DIFFICULTY, .5);
+        this.bar.fixedToCamera = true;
+        this.bar.visible = false;
+        game.world.bringToTop(this.bar);
+    },
+    
+    initBarIcon: function(game, imageKey){
+        if(this.icon == null){
+            this.icon = game.add.image(game.camera.view.centerX - 190, game.height/1.25, imageKey);
+            this.icon.anchor.setTo(0, 0);
+            this.icon.fixedToCamera = true;
+            this.icon.visible = false;
+            game.world.bringToTop(this.icon);
+        }
+        else{
+            this.icon.loadTexture(imageKey);
+        }
     },
 
-    updateBar: function(bar, time){
-        bar.visible = true;
-        bar.scale.setTo(time, 1);
+    updateBar: function(time){
+        this.bar.visible = true;
+        this.icon.visible = true;
+        this.bar.scale.setTo(time, .5);
         if(time <= 0){
-            bar.visible = false;
+            this.bar.visible = false;
+            this.icon.visible = false;
         }
 },
 //    updateBar:function()  
