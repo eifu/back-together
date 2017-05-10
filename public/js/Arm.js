@@ -31,6 +31,7 @@ Arm = function (game, map) {
         this.sprite.body.addRectangle(128, 50, 0, 20);
         this.sprite.body.addRectangle(100, 70, 0, 5);
         this.sprite.body.addRectangle(80, 100, 0, -10);
+        this.sprite.body.fixedRotation = true;
 
 
         game.camera.follow(this.sprite);
@@ -43,14 +44,20 @@ Arm = function (game, map) {
         this.itemBtns = [];
         this.itemNums = [];
 
+
+        this.isJumping = false;
+
         this.update = function () {
 
 
-                this.sprite.body.velocity.x = 0;
+
 
 
                 var timeNow = this.game.time.now;
-                if (timeNow < this.damagedTime) {
+                if (this.isJumping) {
+
+                }
+                else if (timeNow < this.damagedTime) {
                         // if player gets damaged.
                         // console.log(48);
                         // console.log(timeNow);
@@ -67,6 +74,7 @@ Arm = function (game, map) {
 
 
                 } else {
+                        this.sprite.body.velocity.x = 0;
                         if (keys['LEFT'].isDown || keys['A'].isDown) {
 
 
@@ -111,26 +119,29 @@ Arm = function (game, map) {
                         else if (keys['UP'].isDown || keys['W'].isDown) {
 
 
-                                if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
-                                        // the player is flipped.
-
-                                        this.sprite.body.velocity.y = -400;
-                                        this.sprite.body.angle += 180;
+                                if (!this.isJumping) {
                                         if (this.face == 'left') {
-                                                this.sprite.animations.play('flipL');
-                                                this.sprite.body.velocity.x = 200;
+                                                this.sprite.animations.play('jumpL');
+                                                this.sprite.body.moveLeft(500);
                                         } else {
-                                                this.sprite.animations.play('flipR');
-                                                this.sprite.body.velocity.x = -200;
+                                                this.sprite.animations.play('jumpR');
+                                                this.sprite.body.moveRight(500)
                                         }
-                                        console.log(179);
-                                        console.log(this.sprite.animations);
 
-                                }
-                                else {
+                                        this.sprite.body.velocity.y = -700;
 
-                                        GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
+                                        console.log(this.sprite.body.velocity.x);
+                                        // this.UPinput = true;
+
+                                        GameScreenConfig.setObjective('↑ is for Jump! Arm can jump!')
+
+                                        this.isJumping = true;
+                                } else {
+                                        GameScreenConfig.setObjective('↑ is for jump. But you have to be on the ground');
                                 }
+
+
+
 
                         }
                         else if (keys['DOWN'].isDown || keys['S'].isDown) {

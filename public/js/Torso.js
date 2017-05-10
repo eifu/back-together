@@ -21,6 +21,8 @@ Torso = function (game, map) {
 
         this.sprite.animations.play('right');
         this.sprite.face = 'right';
+        
+        this.sprite.body.fixedRotation = true;
 
         this.sprite.body.clearShapes();
         // player.body.addPolygon({}, [[0,54],[128,54],[112,-10],[16,-10]]);
@@ -40,14 +42,21 @@ Torso = function (game, map) {
         this.itemBtns = [];
         this.itemNums = [];
 
+        this.isJumping = false;
+
         this.update = function () {
 
 
-                this.sprite.body.velocity.x = 0;
+                
+
 
 
                 var timeNow = this.game.time.now;
-                if (timeNow < this.damagedTime) {
+                if (this.isJumping){
+
+                }
+
+                else if (timeNow < this.damagedTime) {
                         // if player gets damaged.
                         // console.log(48);
                         // console.log(timeNow);
@@ -64,6 +73,7 @@ Torso = function (game, map) {
 
 
                 } else {
+                        this.sprite.body.velocity.x = 0;
                         if (keys['LEFT'].isDown || keys['A'].isDown) {
 
 
@@ -106,40 +116,32 @@ Torso = function (game, map) {
 
                         }
                         else if (keys['UP'].isDown || keys['W'].isDown) {
+                                console.log(109);
+                                console.log(this.sprite.body.velocity.y);
 
-
-                                if (this.sprite.body.angle > 100 || this.sprite.body.angle < -100) {
-                                        // the player is flipped.
-
-                                        this.sprite.body.velocity.y = -400;
-                                        this.sprite.body.angle += 180;
+                                if (!this.isJumping) {
                                         if (this.face == 'left') {
-                                                this.sprite.animations.play('flipL');
-                                                this.sprite.body.velocity.x = 200;
+                                                this.sprite.animations.play('jumpL');
+                                                 this.sprite.body.moveLeft(500);
                                         } else {
-                                                this.sprite.animations.play('flipR');
-                                                this.sprite.body.velocity.x = -200;
+                                                this.sprite.animations.play('jumpR');
+                                                this.sprite.body.moveRight(500)
                                         }
-                                        console.log(179);
-                                        console.log(this.sprite.animations);
 
-                                }
-                                else {
+                                        this.sprite.body.velocity.y = -700;
 
-                                        GameScreenConfig.setObjective('↑ is for back flip. You use it when you are upside-down!')
+                                       console.log(this.sprite.body.velocity.x);
+                                        // this.UPinput = true;
+
+                                        GameScreenConfig.setObjective('↑ is for Jump! Torso can jump!')
+
+                                        this.isJumping = true;
                                 }
 
                         }
                         else if (keys['DOWN'].isDown || keys['S'].isDown) {
 
                                 this.downInput = true;
-                                // this.hackingStart = true;
-                                // this.hackingEntTime = this.game.time.now + 5000;
-
-                                // this.sprite.body.alpha = 0.2;
-
-                                // // console.log(this.sprite.body.data.gravityScale);
-                                // this.sprite.body.data.gravityScale = 0;
 
 
                         }
@@ -155,6 +157,11 @@ Torso = function (game, map) {
                                         this.damaged = false;
 
                                 } else {
+                                        if (this.sprite.animations.name == 'jumpL'){
+                                                this.sprite.animations.play('left');
+                                        }else if (this.sprite.animations.name == 'jumpR'){
+                                                this.sprite.animations.play('right');
+                                        }
                                         this.sprite.animations.stop();
 
                                 }

@@ -63,7 +63,12 @@ BackTogether.Level2_stage2.prototype = {
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides(this.tilesCollisionGroup);
+        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
+            if (this.player.isJumping){
+                this.player.isJumping = false;
+            }
+        }, this);
+
 
 
 

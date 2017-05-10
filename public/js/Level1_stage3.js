@@ -218,6 +218,16 @@ BackTogether.Level1_stage3.prototype = {
             this.introBool2_2 = true;
         }
 
+        if (this.checkOverlap(this.player.sprite, this.goal)) {
+            this.popupScreen.setText("Level 1 Clear!!\n Now you get A R M!!\n  Next level is in Commuter lounge!");
+            this.popupScreen.on();
+
+            user.setLevel(2);
+            user.setStage(1);
+
+            this.game.state.start('Level2_stage1');
+        }
+
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');
@@ -359,6 +369,11 @@ BackTogether.Level1_stage3.prototype = {
         this.intro1.animations.add('normal', [0, 1, 2, 3, 4], 10, true);
         this.intro1.animations.play('normal');
 
+        var goalPos = Tile.findObjectsByType('playerGoal', map, 'objectsLayer')[0];
+        this.goal = this.add.sprite(goalPos.x, goalPos.y, 'arm_noHand');
+        this.goal.animations.add("normal", [0,1,2,3],10,true);
+        this.goal.animations.play('normal');
+        this.goal.anchor.setTo(0.5, 0.5);
 
 
     }

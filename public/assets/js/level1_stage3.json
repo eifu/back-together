@@ -155,6 +155,26 @@
                  "width":32,
                  "x":1414,
                  "y":605
+                }, 
+                {
+                 "gid":1,
+                 "height":32,
+                 "id":51,
+                 "name":"",
+                 "properties":
+                    {
+                     "type":"playerGoal"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":3017,
+                 "y":517
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -414,7 +434,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":50,
+ "nextobjectid":53,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,

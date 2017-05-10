@@ -5,7 +5,6 @@ var play;
 var keys;
 
 var DIFFICULTY;
-var user;
 
 var menuBtns;
 var helpNodes;
@@ -18,24 +17,7 @@ var wfconfig = {
     }
 };
 
-User = function () {
 
-};
-
-User.prototype = {
-    setLevel: function (level) {
-        this.myLevel = level;
-    },
-    getLevel: function () {
-        return this.myLevel;
-    },
-    setStage: function(stage){
-        this.stage = stage;
-    },
-    getStage: function(stage){
-        return this.stage;
-    }
-}
 
 BackTogether.MainMenu.prototype = {
     create: function (game) {
@@ -46,9 +28,7 @@ BackTogether.MainMenu.prototype = {
         //  |--new game
         //  |--load game
         //
-        user = new User();
-        user.setLevel(1);
-        user.setStage(1);
+
 
         var inputs = [
             Phaser.Keyboard.ONE,

@@ -7,6 +7,25 @@ var pop;
 var volumeOn = false;
 var icon = 'volUpIcon';
 
+User = function () {
+
+};
+
+User.prototype = {
+        setLevel: function (level) {
+                this.myLevel = level;
+        },
+        getLevel: function () {
+                return this.myLevel;
+        },
+        setStage: function (stage) {
+                this.stage = stage;
+        },
+        getStage: function (stage) {
+                return this.stage;
+        }
+}
+
 BackTogether.Preloader.prototype = {
 
         preload: function (game) {
@@ -75,6 +94,7 @@ BackTogether.Preloader.prototype = {
                 this.load.image('hidePopUp', 'assets/images/hidePopUp.png');
                 this.load.image('bodyMap', 'assets/images/bodyMap.png');
                 this.load.image('logo', 'assets/images/logo.jpg');
+                this.load.spritesheet('arm_noHand', 'assets/images/arm_noHand.png', 256,256);
 
 
 
@@ -121,6 +141,10 @@ BackTogether.Preloader.prototype = {
         },
 
         create: function () {
+                user = new User();
+                user.setLevel(1);
+                user.setStage(1);
+
                 WebFont.load(wfconfig);
                 music = this.add.audio('bg');
                 music.loop = true;
