@@ -12,6 +12,8 @@ var mainMenu;
 var next;
 var player;
 var map;
+var user;
+
 
 BackTogether.Level3_stage2.prototype = {
 
