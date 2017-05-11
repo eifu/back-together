@@ -11,6 +11,7 @@ BackTogether.LevelSelecting = function (game) {
 //
 var volDownIcon;
 var Level;
+var Stage;
 var wfconfig = {
     google: {
         families: ['Aclonica']
@@ -184,7 +185,8 @@ BackTogether.LevelSelecting.prototype = {
             b = this.add.button(x, y - 50, 'levelBtn',
                 function () {
                     pop.play();
-                    Level = itoaArray[StageNum];
+                    Stage = itoaArray[StageNum];
+                    Level = itoaArray[currentShowingLevel-1];
                     game.state.start("Level" + currentShowingLevel + "_stage" + (StageNum + 1));
 
                 }
@@ -194,7 +196,8 @@ BackTogether.LevelSelecting.prototype = {
             b = this.add.button(x, y - 50, 'levelBtn',
                 function () {
                     pop.play();
-                    Level = itoaArray[StageNum];
+                    Stage = itoaArray[StageNum];
+                    Level = itoaArray[currentShowingLevel-1];
                     game.state.start("Level" + currentShowingLevel + "_stage" + (StageNum + 1));
 
                 }

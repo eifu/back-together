@@ -1,13 +1,15 @@
 
 
 var GameScreenConfig = {
-    
+
 
     initText: function (game) {
         // the level
-        var levelText = game.add.text(100, game.height - 70, 'Level:' + Level, { font: '32px Aclonica', fill: '#000' });
-
+        var levelText = game.add.text(100, game.height - 70, 'Level:' + Level, { font: '24px Aclonica', fill: '#000' });
         levelText.fixedToCamera = true;
+
+        var stageText = game.add.text(100, game.height - 40, 'Stage:' + Stage, { font: '24px Aclonica', fill: '#000' });
+        stageText.fixedToCamera = true;
 
         // toggle button for input.
         this.toggleInputBtnKeyboard = game.add.button(100, game.height - 140, 'toggleInputBtnKeyboard', this.toggleOnClick, this, 2, 1, 0);
@@ -82,7 +84,7 @@ var GameScreenConfig = {
         console.log(DIFFICULTY);
         if (DIFFICULTY == 'easy') {
             this.healthPoint = 20;
-        } else if (DIFFICULTY== 'normal') {
+        } else if (DIFFICULTY == 'normal') {
             this.healthPoint = 10;
         } else {
             this.healthPoint = 5;
@@ -132,19 +134,19 @@ var GameScreenConfig = {
             this.objectiveTxt.setText(m);
         }
     },
-    
-    initBar: function(game, imageKey){
-//        var bar = game.add.image(game.camera.view.centerX - game.width/2.1, game.height/2.70, 'bar');
-        this.bar = game.add.image(game.camera.view.centerX - 210, game.height/1.2, imageKey);    // imageKey is icon of bar
+
+    initBar: function (game, imageKey) {
+        //        var bar = game.add.image(game.camera.view.centerX - game.width/2.1, game.height/2.70, 'bar');
+        this.bar = game.add.image(game.camera.view.centerX - 210, game.height / 1.2, imageKey);    // imageKey is icon of bar
         this.bar.anchor.setTo(0, 0);
-        
-        if(DIFFICULTY == 'easy'){
+
+        if (DIFFICULTY == 'easy') {
             this.difficultyNum = 20;
         }
-        else if (DIFFICULTY == 'normal'){
+        else if (DIFFICULTY == 'normal') {
             this.difficultyNum = 10;
         }
-        else{
+        else {
             this.difficultyNum = 5;
         }
         this.bar.scale.setTo(DIFFICULTY, .5);
@@ -152,30 +154,30 @@ var GameScreenConfig = {
         this.bar.visible = false;
         game.world.bringToTop(this.bar);
     },
-    
-    initBarIcon: function(game, imageKey){
-        if(this.icon == null){
-            this.icon = game.add.image(game.camera.view.centerX - 210, game.height/1.25, imageKey);
+
+    initBarIcon: function (game, imageKey) {
+        if (this.icon == null) {
+            this.icon = game.add.image(game.camera.view.centerX - 210, game.height / 1.25, imageKey);
             this.icon.anchor.setTo(0, 0);
             this.icon.fixedToCamera = true;
             this.icon.visible = false;
             game.world.bringToTop(this.icon);
         }
-        else{
+        else {
             this.icon.loadTexture(imageKey);
         }
     },
 
-    updateBar: function(time){
+    updateBar: function (time) {
         this.bar.visible = true;
         this.icon.visible = true;
         this.bar.scale.setTo(time, .5);
-        if(time <= 0){
+        if (time <= 0) {
             this.bar.visible = false;
             this.icon.visible = false;
         }
-},
-//    updateBar:function()  
+    },
+    //    updateBar:function()  
 
 
 

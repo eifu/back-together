@@ -283,7 +283,8 @@ BackTogether.Level1_stage2.prototype = {
                 this.popupScreen.on();
 
                 user.setStage(3);
-
+                Level = 'ONE';
+                Stage = 'THREE';
                 this.game.state.start('Level1_stage3');
             }
         }

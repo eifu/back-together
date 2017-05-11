@@ -70,10 +70,10 @@ BackTogether.Level1_stage1.prototype = {
         GameScreenConfig.initHealthBar(game);
         GameScreenConfig.initVolIcon(game);
         GameScreenConfig.initObjective(game, 'Get familiar with User Controll!');
-        
+
         // init the "progress bar" of the item you're planning to put into current stage of current level
         GameScreenConfig.initBar(game, 'bar');
-        
+
         this.initKeys();
         this.initRobots();
         this.initDrones();
@@ -279,52 +279,54 @@ BackTogether.Level1_stage1.prototype = {
             this.intro0_2Bool = true;
             this.intro0Bool = false;
         }
-        
-        if(!this.currentlyInvisible){
 
-        if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)) {
-            this.popupScreen.setText("Space to pause/unpause game");
-            this.popupScreen.on();
-            this.intro1.destroy();
-            this.intro1Bool = false;
-        }
+        if (!this.currentlyInvisible) {
 
-        if (this.intro3_2Bool) {
-            this.popupScreen.setText("When the robot is turned away\n from you, you can walk up to\n its back and tap against it\n to trigger shutdown.");
-            this.popupScreen.on();
-            this.intro3_2Bool = false;
-        }
-        if (this.intro3Bool && this.checkOverlap(this.player.sprite, this.intro3)) {
-            this.popupScreen.setText("It's an evil robot.\n But don't worry, you're safe for now.\n ");
-            this.popupScreen.on();
-            this.intro3.destroy();
-            this.intro3Bool = false;
-            this.intro3_2Bool = true;
-        }
+            if (this.intro1Bool && this.checkOverlap(this.player.sprite, this.intro1)) {
+                this.popupScreen.setText("Space to pause/unpause game");
+                this.popupScreen.on();
+                this.intro1.destroy();
+                this.intro1Bool = false;
+            }
 
-        if (this.intro4_2Bool) {
-            this.popupScreen.setText("Once it finds you, you can hide \n to get away");
-            this.popupScreen.on();
-            this.intro4_2Bool = false;
-        }
+            if (this.intro3_2Bool) {
+                this.popupScreen.setText("When the robot is turned away\n from you, you can walk up to\n its back and tap against it\n to trigger shutdown.");
+                this.popupScreen.on();
+                this.intro3_2Bool = false;
+            }
+            if (this.intro3Bool && this.checkOverlap(this.player.sprite, this.intro3)) {
+                this.popupScreen.setText("It's an evil robot.\n But don't worry, you're safe for now.\n ");
+                this.popupScreen.on();
+                this.intro3.destroy();
+                this.intro3Bool = false;
+                this.intro3_2Bool = true;
+            }
 
-        if (this.intro4Bool && this.checkOverlap(this.player.sprite, this.intro4)) {
-            this.popupScreen.setText("It's a drone on the look-out for you.\n Air drones will fly around seeking you.");
-            this.popupScreen.on();
-            this.intro4.destroy();
-            this.intro4Bool = false;
+            if (this.intro4_2Bool) {
+                this.popupScreen.setText("Once it finds you, you can hide \n to get away");
+                this.popupScreen.on();
+                this.intro4_2Bool = false;
+            }
 
-            this.intro4_2Bool = true;
-        }
+            if (this.intro4Bool && this.checkOverlap(this.player.sprite, this.intro4)) {
+                this.popupScreen.setText("It's a drone on the look-out for you.\n Air drones will fly around seeking you.");
+                this.popupScreen.on();
+                this.intro4.destroy();
+                this.intro4Bool = false;
 
-        if (this.checkOverlap(this.player.sprite, this.goal)) {
-            this.popupScreen.setText("Congratulation!! \nYou just finish\n the first stage of Back together!!");
-            this.popupScreen.on();
+                this.intro4_2Bool = true;
+            }
 
-            user.setStage(2);
+            if (this.checkOverlap(this.player.sprite, this.goal)) {
+                this.popupScreen.setText("Congratulation!! \nYou just finish\n the first stage of Back together!!");
+                this.popupScreen.on();
 
-            this.game.state.start('Level1_stage2');
-        }
+                user.setStage(2);
+                Level = 'ONE';
+                Stage = 'TWO';
+
+                this.game.state.start('Level1_stage2');
+            }
         }
 
         // this.playerVictory();
@@ -334,25 +336,25 @@ BackTogether.Level1_stage1.prototype = {
         this.enableItem(game, itemSelected);
         this.decrementCoolDowns();
     },
-    enableItem: function(game, item){
-      if(item == "invisible"){
-          this.currentlyInvisible = true;
-          this.invisCoolDown = GameScreenConfig.difficultyNum;
-          GameScreenConfig.initBarIcon(game, "invisible");
-          itemSelected = "x";
-      }  
+    enableItem: function (game, item) {
+        if (item == "invisible") {
+            this.currentlyInvisible = true;
+            this.invisCoolDown = GameScreenConfig.difficultyNum;
+            GameScreenConfig.initBarIcon(game, "invisible");
+            itemSelected = "x";
+        }
     },
-    decrementCoolDowns: function(){
-      if(this.invisCoolDown > 0){
-          this.invisCoolDown = this.invisCoolDown - .0166;
-          GameScreenConfig.updateBar(this.invisCoolDown);
-          this.player.sprite.alpha = 0.1;
-      }
-      else if(this.invisCoolDown <= 0){
-          this.invisCoolDown = 0;
-          this.currentlyInvisible = false;
-          this.player.sprite.alpha = 1;
-      }
+    decrementCoolDowns: function () {
+        if (this.invisCoolDown > 0) {
+            this.invisCoolDown = this.invisCoolDown - .0166;
+            GameScreenConfig.updateBar(this.invisCoolDown);
+            this.player.sprite.alpha = 0.1;
+        }
+        else if (this.invisCoolDown <= 0) {
+            this.invisCoolDown = 0;
+            this.currentlyInvisible = false;
+            this.player.sprite.alpha = 1;
+        }
     },
     playerAttackFromLeft: function (r) {
         return this.player.sprite.body.x < r.sprite.x && (r.state == 'right' || r.state == 'rightIdle');

@@ -224,7 +224,8 @@ BackTogether.Level1_stage3.prototype = {
 
             user.setLevel(2);
             user.setStage(1);
-
+            Level = 'TWO';
+            Stage = 'ONE';
             this.game.state.start('Level2_stage1');
         }
 
@@ -371,7 +372,7 @@ BackTogether.Level1_stage3.prototype = {
 
         var goalPos = Tile.findObjectsByType('playerGoal', map, 'objectsLayer')[0];
         this.goal = this.add.sprite(goalPos.x, goalPos.y, 'arm_noHand');
-        this.goal.animations.add("normal", [0,1,2,3],10,true);
+        this.goal.animations.add("normal", [0, 1, 2, 3], 10, true);
         this.goal.animations.play('normal');
         this.goal.anchor.setTo(0.5, 0.5);
 

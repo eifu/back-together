@@ -1,4 +1,4 @@
-BackTogether.Level3_stage1= function (game) {
+BackTogether.Level3_stage1 = function (game) {
 
 };
 
@@ -63,8 +63,8 @@ BackTogether.Level3_stage1.prototype = {
         this.player.sprite.enableBody = true;
 
         this.player.sprite.body.setCollisionGroup(this.playerCollisionGroup);
-        this.player.sprite.body.collides(this.tilesCollisionGroup, function(){
-            if (this.player.isJumping){
+        this.player.sprite.body.collides(this.tilesCollisionGroup, function () {
+            if (this.player.isJumping) {
                 this.player.isJumping = false;
             }
         }, this);
@@ -136,9 +136,14 @@ BackTogether.Level3_stage1.prototype = {
             }
         }
 
-        if (this.checkOverlap(this.player.sprite, this.goal)){
-             this.popupScreen.setText("Let's go to next level");
+        if (this.checkOverlap(this.player.sprite, this.goal)) {
+            this.popupScreen.setText("Let's go to next level");
             this.popupScreen.on();
+
+            use.setStage(2);
+            Level = 'THREE';
+            Stage = 'TWO';
+
             this.game.state.start('Level3_stage2');
         }
 
